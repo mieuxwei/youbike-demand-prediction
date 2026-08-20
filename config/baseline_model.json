@@ -1,0 +1,11 @@
+{
+  "target": "borrow_count",
+  "scope": "Top 100 stations ranked by training-period transfer-related borrowing activity",
+  "top_station_count": 100,
+  "train_end": "2023-09-30T23:00:00+08:00",
+  "validation_end": "2023-11-30T23:00:00+08:00",
+  "test_end": "2023-12-31T23:00:00+08:00",
+  "ridge_alphas": [0.1, 1.0, 10.0, 100.0],
+  "prediction_floor": 0.0,
+  "scope_note": "The target is hourly transfer-related borrowing demand, not total YouBike demand or 30/60-minute station availability."
+}

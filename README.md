@@ -150,8 +150,8 @@ python src/build_features.py
 
 The pipeline prevents predictor features from looking forward in time and
 writes a coverage audit to `results/feature_coverage.csv`. Current fixed samples
-do not yet contain 30/60-minute targets, so model training has intentionally not
-started. See the
+do not yet contain 30/60-minute targets, so short-term station-availability model
+training has intentionally not started. See the
 [Stage 3 history and feature guide](docs/STAGE_3_HISTORY_AND_FEATURES.md).
 
 ## Full-year Historical Demand and Weather
@@ -172,13 +172,40 @@ processes one month at a time, builds full-year hourly station demand, joins
 [weather integration notebook](notebooks/05_weather_integration.ipynb) and the
 [Stage 5 full-year weather guide](docs/STAGE_5_FULL_YEAR_WEATHER.md).
 
+## Baseline Model and Evaluation
+
+Train chronological hourly baselines for the 100 highest-demand training-period
+stations:
+
+```bash
+python src/train_baseline.py
+```
+
+The experiment uses January–September for training, October–November for
+validation, and December for a final holdout test. The best current baseline is
+Ridge regression with station, calendar, lag, rolling, and weather features:
+
+| Model | Test MAE | Test RMSE | Test R² |
+|---|---:|---:|---:|
+| Previous hour | 2.441 | 4.129 | 0.460 |
+| Previous week, same hour | 2.176 | 3.701 | 0.566 |
+| Ridge without weather | 1.810 | 2.911 | 0.731 |
+| Ridge with weather | **1.793** | **2.889** | **0.736** |
+
+These metrics apply only to hourly transfer-related borrowing demand in the
+defined 100-station experiment. See the executed
+[baseline notebook](notebooks/06_baseline_model.ipynb) and the
+[Stage 6 baseline guide](docs/STAGE_6_BASELINE_MODEL.md) for leakage controls,
+limitations, and error analysis.
+
 ## Project Status
 
 🚧 **In development**
 
-Milestones 1 and 2 plus Stage 3 through 5 tooling are complete. The repository now
+Milestones 1 and 2 plus Stage 3 through 6 are complete. The repository now
 includes reproducible API samples, validated collection and cleaning pipelines,
 leakage-aware time-series feature engineering, automated tests, quality reports,
-official full-year 2023 transfer-demand and weather analysis, and five executed
-notebooks. Multi-day live snapshot coverage is still being accumulated; models,
-optimization, and evaluation results have not been completed.
+official full-year 2023 transfer-demand and weather analysis, a chronological
+hourly Ridge baseline, and six executed notebooks. Multi-day live snapshot
+coverage, broader machine-learning comparisons, deep learning, and optimization
+are still in development.

@@ -501,7 +501,7 @@ README 最終至少需要包含：
 
 目前只處理：
 
-> Historical Data Integration + Extended EDA + Feature Engineering
+> Time-aware Baseline Modeling + Model Evaluation
 
 請不要提前：
 
@@ -550,10 +550,12 @@ Completed Stage:
 > Stage 4 — Official Historical Transfer-Demand Integration
 >
 > Stage 5 — Full-year Historical Demand + Weather Integration
+>
+> Stage 6 — Time-aware Hourly Baseline Model
 
 Current Stage:
 
-> Baseline Model Readiness + Historical Snapshot Accumulation
+> Traditional Machine Learning Comparison + Historical Snapshot Accumulation
 
 ### Milestone 2 Deliverables
 
@@ -571,7 +573,7 @@ Current Stage:
 
 Next Stage:
 
-> Time-aware Hourly Baseline Model
+> Tree-based Model Comparison + Rolling-origin Evaluation
 
 ### Stage 3 Deliverables
 
@@ -589,7 +591,7 @@ Next Stage:
 
 ### Model Readiness
 
-兩份公開固定樣本的 30／60 分鐘 future target coverage 為 0%；本機一小時蒐集測試已使 30 分鐘 coverage 達 42.16%，但 60 分鐘仍為 0%。目前資料期間仍不足，因此尚未進入模型訓練。待多日歷史資料累積且完成擴充 EDA 後，才建立 Baseline Model。
+兩份公開固定樣本的 30／60 分鐘 future target coverage 為 0%；本機一小時蒐集測試已使 30 分鐘 coverage 達 42.16%，但 60 分鐘仍為 0%。因此短期 station availability 模型仍未開始。另一方面，2023 全年 hourly transfer-demand 已具備足夠期間，Stage 6 已針對此獨立 target 建立 Baseline Model，兩者不可混為同一模型成果。
 
 ### Stage 4 Deliverables
 
@@ -626,3 +628,21 @@ Next Stage:
 ### Weather Dataset Scope
 
 目前天氣使用 Open-Meteo Historical Weather API 的臺北單一參考點歷史再分析資料，以確保流程不依賴寫入原始碼的 API Key 且可重現。此資料不是每個 YouBike 站點的現地氣象站觀測；中央氣象署資料留待後續作實測驗證。雨天與需求差異目前僅為描述性關聯，不宣稱因果效果。
+
+### Stage 6 Deliverables
+
+- [x] 定義 top-100 station hourly transfer-demand 預測範圍
+- [x] 站點排名只使用 training period，避免 test leakage
+- [x] 建立站點活動期間內的完整 hourly grid 與零需求列
+- [x] 建立 1／24／168 小時 past-only lag 與 24 小時 rolling 特徵
+- [x] 建立 1–9 月 train、10–11 月 validation、12 月 test 時間切分
+- [x] 建立 previous-hour 與 previous-week naive baselines
+- [x] 建立有／無天氣 Ridge baselines
+- [x] 使用 validation 選擇 alpha，test 僅作一次最終評估
+- [x] 產出 MAE、RMSE、R² 與站點／小時誤差報告
+- [x] 建立並執行 `06_baseline_model.ipynb`
+- [x] 撰寫 Stage 6 中文說明文件
+
+### Baseline Result Scope
+
+含天氣 Ridge 的 2023 年 12 月 holdout 結果為 MAE 1.793、RMSE 2.889、R² 0.736；相較不含天氣 Ridge，MAE 改善約 0.9%。這些結果只適用於定義的 100 個站點與 hourly transfer-related demand，不代表所有 YouBike 旅次，也不是短期可用車預測成果。正式部署時必須以預測當下可取得的 weather forecast 取代事後實際天氣。
