@@ -1,0 +1,14 @@
+metric,value
+source_files,2
+raw_rows,3580
+processed_rows,3580
+unique_snapshots,2
+unique_stations,1790
+raw_missing_cells,0
+duplicate_station_snapshot_rows_removed,0
+inactive_records,58
+active_empty_records,47
+active_full_records,41
+records_with_unavailable_docks,959
+valid_change_intervals,1761
+nonzero_bike_change_intervals,859

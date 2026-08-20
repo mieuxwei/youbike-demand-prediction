@@ -501,7 +501,7 @@ README 最終至少需要包含：
 
 目前只處理：
 
-> Project Setup + Data Exploration
+> Historical Data Collection + Data Cleaning & Exploratory Data Analysis
 
 請不要提前：
 
@@ -542,7 +542,27 @@ README 最終至少需要包含：
 Completed Stage:
 
 > Milestone 1 — Project Setup, Data Collection & Initial Exploration
+>
+> Milestone 2 — Reproducible Data Collection & Cleaning Pipeline
 
 Current Stage:
 
-> Data Cleaning & Exploratory Data Analysis
+> Historical Snapshot Accumulation
+
+### Milestone 2 Deliverables
+
+- [x] 建立可重複執行的官方 API 快照蒐集器
+- [x] 驗證 JSON 結構與必要欄位
+- [x] 建立多快照載入與合併流程
+- [x] 統一欄位名稱、資料型別與臺北時區
+- [x] 檢查負數、經緯度、重複列與容量一致性
+- [x] 保留不可用車柱與站點資料延遲資訊
+- [x] 建立跨快照車輛淨變化特徵
+- [x] 產生資料品質與快照摘要報告
+- [x] 建立並執行 `02_data_cleaning.ipynb`
+- [x] 建立資料管線自動化測試
+- [x] 撰寫 Stage 2 中文說明文件
+
+Next Stage:
+
+> Accumulate multi-day history → Extended EDA → Feature Engineering

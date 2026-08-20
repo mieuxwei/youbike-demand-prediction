@@ -32,12 +32,13 @@ The initial sample comes from the official
 [Taipei City YouBike 2.0 real-time dataset](https://data.taipei/dataset/detail?id=c6bc8aed-557d-41d5-bfb1-8da24f78f2fb).
 The source is public, free to use, provided as JSON, and updated every minute.
 
-The sample currently contains one snapshot of station availability. Its fields
+The repository contains two reproducible snapshots of station availability. Their fields
 include station ID and name, district, capacity, available bikes, return spaces,
 location, operating status, and update times.
 
-> A single snapshot cannot measure demand. Multiple snapshots must be collected
-> over time before short-term demand can be calculated or predicted.
+> Bike-count changes between snapshots are not direct rental counts. They may
+> include rentals, returns, redistribution, and data corrections. More history
+> is required before short-term demand can be modeled reliably.
 
 ## Tech Stack
 
@@ -61,6 +62,8 @@ youbike-demand-prediction/
 │   └── processed/    # Cleaned and feature-ready data
 ├── notebooks/        # Exploration and experiment notebooks
 ├── src/              # Reusable data and modeling code
+├── tests/            # Automated pipeline tests
+├── docs/             # Stage explanations and project documentation
 ├── models/           # Saved model artifacts
 ├── results/          # Metrics, tables, and experiment outputs
 ├── images/           # Figures and images used in reports
@@ -83,11 +86,42 @@ python -m pip install -r requirements.txt
 jupyter notebook
 ```
 
+## Collecting Snapshots
+
+Run the collector once to save a timestamped snapshot from the official API:
+
+```bash
+python src/collect_youbike.py
+```
+
+Snapshots are saved under `data/raw/snapshots/`. The JSON files in that folder
+are intentionally ignored by Git because repeated collection will create a
+large local dataset.
+
+## Preparing Data
+
+Validate and combine every raw snapshot into a clean analysis table:
+
+```bash
+python src/prepare_data.py
+```
+
+The command generates `data/processed/youbike_snapshots.csv` plus compact
+quality reports under `results/`. Run the automated checks with:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+For cleaning decisions, current quality results, limitations, and presentation
+notes, read the [Stage 2 data pipeline guide](docs/STAGE_2_DATA_PIPELINE.md).
+
 ## Project Status
 
 🚧 **In development**
 
-Milestone 1 is complete. The repository includes an official real-time data
-sample and an executed initial exploration notebook. Historical collection,
-data cleaning, models, optimization, and evaluation results have not been
-completed yet.
+Milestones 1 and 2 are complete. The repository now includes reproducible API
+samples, a validated collection and cleaning pipeline, automated tests, quality
+reports, and executed exploration and cleaning notebooks. Historical coverage
+is still being accumulated; models, optimization, and evaluation results have
+not been completed yet.
