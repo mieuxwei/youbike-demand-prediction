@@ -468,22 +468,22 @@ README 最終至少需要包含：
 
 ### Milestone 1
 
-- [ ] 建立 Repository 基礎架構
-- [ ] 建立 README.md
-- [ ] 建立 PROJECT_PLAN.md
-- [ ] 建立 requirements.txt
-- [ ] 建立 .gitignore
-- [ ] 找到官方 YouBike Dataset
-- [ ] 確認 Dataset 欄位
-- [ ] 下載一小部分資料進行測試
-- [ ] 建立 `01_data_exploration.ipynb`
-- [ ] 使用 Pandas 載入資料
-- [ ] 顯示資料前 5 筆
-- [ ] 檢查資料 Shape
-- [ ] 檢查 Columns
-- [ ] 檢查 Missing Values
-- [ ] 基本 Descriptive Statistics
-- [ ] 建立第一張資料視覺化圖表
+- [x] 建立 Repository 基礎架構
+- [x] 建立 README.md
+- [x] 建立 PROJECT_PLAN.md
+- [x] 建立 requirements.txt
+- [x] 建立 .gitignore
+- [x] 找到官方 YouBike Dataset
+- [x] 確認 Dataset 欄位
+- [x] 下載一小部分資料進行測試
+- [x] 建立 `01_data_exploration.ipynb`
+- [x] 使用 Pandas 載入資料
+- [x] 顯示資料前 5 筆
+- [x] 檢查資料 Shape
+- [x] 檢查 Columns
+- [x] 檢查 Missing Values
+- [x] 基本 Descriptive Statistics
+- [x] 建立第一張資料視覺化圖表
 
 完成 Milestone 1 後才進入資料清理。
 
@@ -539,10 +539,10 @@ README 最終至少需要包含：
 
 🚧 **In Development**
 
+Completed Stage:
+
+> Milestone 1 — Project Setup, Data Collection & Initial Exploration
+
 Current Stage:
-
-> Project Setup → Data Collection → Initial Exploration
-
-Next Stage:
 
 > Data Cleaning & Exploratory Data Analysis

@@ -26,6 +26,19 @@ combine demand forecasting with a bike redistribution strategy.
 7. Evaluate errors by station and time period.
 8. Use validated forecasts to explore redistribution optimization.
 
+## Dataset
+
+The initial sample comes from the official
+[Taipei City YouBike 2.0 real-time dataset](https://data.taipei/dataset/detail?id=c6bc8aed-557d-41d5-bfb1-8da24f78f2fb).
+The source is public, free to use, provided as JSON, and updated every minute.
+
+The sample currently contains one snapshot of station availability. Its fields
+include station ID and name, district, capacity, available bikes, return spaces,
+location, operating status, and update times.
+
+> A single snapshot cannot measure demand. Multiple snapshots must be collected
+> over time before short-term demand can be calculated or predicted.
+
 ## Tech Stack
 
 - Python
@@ -53,6 +66,7 @@ youbike-demand-prediction/
 ├── images/           # Figures and images used in reports
 ├── .gitignore
 ├── LICENSE
+├── PROJECT_PLAN.md
 ├── README.md
 └── requirements.txt
 ```
@@ -73,6 +87,7 @@ jupyter notebook
 
 🚧 **In development**
 
-The repository currently contains the initial project structure only. Data
-collection, notebooks, models, optimization, and evaluation results have not
-been completed yet.
+Milestone 1 is complete. The repository includes an official real-time data
+sample and an executed initial exploration notebook. Historical collection,
+data cleaning, models, optimization, and evaluation results have not been
+completed yet.
