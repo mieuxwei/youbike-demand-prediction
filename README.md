@@ -98,6 +98,16 @@ Snapshots are saved under `data/raw/snapshots/`. The JSON files in that folder
 are intentionally ignored by Git because repeated collection will create a
 large local dataset.
 
+Collect multiple snapshots at a fixed interval (12 snapshots at five-minute
+intervals is approximately one hour):
+
+```bash
+python src/collect_history.py --count 12 --interval-minutes 5
+```
+
+The computer, network connection, and process must remain active while this
+command runs.
+
 ## Preparing Data
 
 Validate and combine every raw snapshot into a clean analysis table:
@@ -116,12 +126,28 @@ python -m unittest discover -s tests -v
 For cleaning decisions, current quality results, limitations, and presentation
 notes, read the [Stage 2 data pipeline guide](docs/STAGE_2_DATA_PIPELINE.md).
 
+## Building Time-Series Features
+
+Build calendar, 15/30/60-minute lag, past-only rolling, and separate 30/60-minute
+future target columns:
+
+```bash
+python src/build_features.py
+```
+
+The pipeline prevents predictor features from looking forward in time and
+writes a coverage audit to `results/feature_coverage.csv`. Current fixed samples
+do not yet contain 30/60-minute targets, so model training has intentionally not
+started. See the
+[Stage 3 history and feature guide](docs/STAGE_3_HISTORY_AND_FEATURES.md).
+
 ## Project Status
 
 🚧 **In development**
 
-Milestones 1 and 2 are complete. The repository now includes reproducible API
-samples, a validated collection and cleaning pipeline, automated tests, quality
-reports, and executed exploration and cleaning notebooks. Historical coverage
-is still being accumulated; models, optimization, and evaluation results have
-not been completed yet.
+Milestones 1 and 2 plus the Stage 3 tooling are complete. The repository now
+includes reproducible API samples, validated collection and cleaning pipelines,
+leakage-aware time-series feature engineering, automated tests, quality reports,
+and three executed notebooks. Multi-day historical coverage is still being
+accumulated; models, optimization, and evaluation results have not been
+completed yet.

@@ -501,7 +501,7 @@ README 最終至少需要包含：
 
 目前只處理：
 
-> Historical Data Collection + Data Cleaning & Exploratory Data Analysis
+> Historical Data Collection + Extended EDA + Feature Engineering
 
 請不要提前：
 
@@ -544,6 +544,8 @@ Completed Stage:
 > Milestone 1 — Project Setup, Data Collection & Initial Exploration
 >
 > Milestone 2 — Reproducible Data Collection & Cleaning Pipeline
+>
+> Stage 3 Tooling — Historical Collection & Feature Engineering Foundation
 
 Current Stage:
 
@@ -565,4 +567,22 @@ Current Stage:
 
 Next Stage:
 
-> Accumulate multi-day history → Extended EDA → Feature Engineering
+> Accumulate multi-day history → Extended EDA → Baseline Model
+
+### Stage 3 Deliverables
+
+- [x] 建立固定間隔與指定份數的歷史快照蒐集器
+- [ ] 累積至少 7 天且包含平日與週末的真實快照
+- [x] 建立 hour、weekday、month、weekend、rush hour 特徵
+- [x] 建立週期性 sine / cosine 時間特徵
+- [x] 建立 15／30／60 分鐘 backward-only lag 特徵
+- [x] 建立排除當前列的 30／60 分鐘 rolling 特徵
+- [x] 建立獨立的 30／60 分鐘 future target 欄位
+- [x] 建立 feature coverage 報告
+- [x] 建立並執行 `03_feature_engineering.ipynb`
+- [x] 建立 future leakage 防護測試
+- [x] 撰寫 Stage 3 中文說明文件
+
+### Model Readiness
+
+目前 30／60 分鐘 future target coverage 仍為 0%，因此尚未進入模型訓練。待多日歷史資料累積且完成擴充 EDA 後，才建立 Baseline Model。

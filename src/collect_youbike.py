@@ -60,7 +60,7 @@ def save_snapshot(
     """Save records as UTF-8 JSON using a timestamped filename."""
     output_directory.mkdir(parents=True, exist_ok=True)
     collected_at = datetime.now().astimezone()
-    filename = f"youbike_{collected_at:%Y%m%d_%H%M%S}.json"
+    filename = f"youbike_{collected_at:%Y%m%d_%H%M%S_%f}.json"
     output_path = output_directory / filename
 
     temporary_path = output_path.with_suffix(".json.tmp")
