@@ -214,14 +214,35 @@ demand are the strongest signals; weather provides a smaller incremental gain.
 See the executed [tree comparison notebook](notebooks/07_tree_model_comparison.ipynb)
 and [Stage 7 guide](docs/STAGE_7_TREE_MODEL_COMPARISON.md).
 
+## Prediction Interface
+
+Generate a ranked prediction for one target hour:
+
+```bash
+python src/predict_hourly.py \
+  --target-time 2023-12-31T18:00:00+08:00 \
+  --include-actual \
+  --output results/example_hourly_predictions.csv
+```
+
+The command verifies the model SHA-256, feature schema, 168-hour demand-history
+coverage, station scope, and target-hour weather before predicting. Remove
+`--include-actual` for a non-backtest prediction. Future use requires updated
+transfer-demand history and weather forecasts with the same schemas; the bundled
+2023 files alone cannot produce a current prediction. See the
+[Model Card](docs/MODEL_CARD.md),
+[Stage 8 guide](docs/STAGE_8_PREDICTION_INTERFACE.md), and executed
+[prediction demo notebook](notebooks/08_prediction_demo.ipynb).
+
 ## Project Status
 
 🚧 **In development**
 
-Milestones 1 and 2 plus Stage 3 through 7 are complete. The repository now
+Milestones 1 and 2 plus Stage 3 through 8 are complete. The repository now
 includes reproducible API samples, validated collection and cleaning pipelines,
 leakage-aware time-series feature engineering, automated tests, quality reports,
 official full-year 2023 transfer-demand and weather analysis, a chronological
 hourly Ridge baseline, a rolling-origin validated gradient-boosting model, and
-seven executed notebooks. Multi-day live snapshot coverage, a production-style
-prediction interface, deep learning, and optimization are still in development.
+an integrity-checked prediction interface with eight executed notebooks.
+Multi-day live snapshot coverage, visualization, deep learning, and optimization
+are still in development.

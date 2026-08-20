@@ -3,12 +3,15 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
+import json
 from pathlib import Path
 from typing import Any
 
 import joblib
 import numpy as np
 import pandas as pd
+import sklearn
 from sklearn.inspection import permutation_importance
 
 try:
@@ -88,6 +91,15 @@ def metric_row(
         "rows": len(actual),
         **evaluate_predictions(actual, prediction),
     }
+
+
+def file_sha256(source_path: Path) -> str:
+    """Calculate a model artifact checksum without loading the pickle."""
+    digest = hashlib.sha256()
+    with source_path.open("rb") as source:
+        for chunk in iter(lambda: source.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def tune_tree(
@@ -302,7 +314,41 @@ def main() -> None:
     )
     comparison.to_csv(args.results_dir / "model_comparison_metrics.csv", index=False)
     for name, pipeline in final_models.items():
-        joblib.dump(pipeline, args.models_dir / f"{name}.joblib")
+        artifact_path = args.models_dir / f"{name}.joblib"
+        joblib.dump(pipeline, artifact_path)
+        include_weather = name.endswith("_weather")
+        model_test = tree_metrics.loc[
+            tree_metrics["model"].eq(name) & tree_metrics["split"].eq("test")
+        ].iloc[0]
+        metadata = {
+            "format_version": 1,
+            "model_name": name,
+            "artifact_filename": artifact_path.name,
+            "artifact_sha256": file_sha256(artifact_path),
+            "target": target,
+            "target_scope": "hourly transfer-related borrowing demand",
+            "selected_station_count": len(stations),
+            "selected_stations": stations,
+            "feature_columns": tree_feature_columns(include_weather),
+            "includes_weather": include_weather,
+            "trained_through": validation_end.isoformat(),
+            "test_period_start": splits["test"]["event_time"].min().isoformat(),
+            "test_period_end": splits["test"]["event_time"].max().isoformat(),
+            "test_metrics": {
+                "mae": float(model_test["mae"]),
+                "rmse": float(model_test["rmse"]),
+                "r2": float(model_test["r2"]),
+            },
+            "candidate": best_candidates[name],
+            "library_versions": {
+                "scikit_learn": sklearn.__version__,
+                "pandas": pd.__version__,
+                "numpy": np.__version__,
+            },
+        }
+        artifact_path.with_suffix(".metadata.json").write_text(
+            json.dumps(metadata, ensure_ascii=False, indent=2), encoding="utf-8"
+        )
 
     best_test = tree_metrics.loc[
         tree_metrics["model"].eq(best_name) & tree_metrics["split"].eq("test")

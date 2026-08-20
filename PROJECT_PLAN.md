@@ -501,7 +501,7 @@ README 最終至少需要包含：
 
 目前只處理：
 
-> Model Evaluation + Prediction Interface
+> Prediction Interface + Model Documentation
 
 請不要提前：
 
@@ -554,10 +554,12 @@ Completed Stage:
 > Stage 6 — Time-aware Hourly Baseline Model
 >
 > Stage 7 — Tree Model Comparison + Rolling-origin Evaluation
+>
+> Stage 8 — Reproducible Prediction Interface + Model Card
 
 Current Stage:
 
-> Prediction Interface + Historical Snapshot Accumulation
+> Visualization Demo + Historical Snapshot Accumulation
 
 ### Milestone 2 Deliverables
 
@@ -575,7 +577,7 @@ Current Stage:
 
 Next Stage:
 
-> Reproducible Prediction Interface + Model Card
+> Historical Prediction Demo / Dashboard Foundation
 
 ### Stage 3 Deliverables
 
@@ -665,3 +667,20 @@ Next Stage:
 ### Tree Model Result Scope
 
 含天氣 HGB 的 2023 年 12 月 holdout 結果為 MAE 1.575、RMSE 2.549、R² 0.794；相較含天氣 Ridge，MAE 改善約 12.2%。三段 rolling-origin MAE 介於 1.592–1.636。天氣相較無天氣 HGB 再改善約 1.7%，主要預測力仍來自小時週期、前一小時需求、站點與前一週需求。結果仍只適用於 100 個站點的 hourly transfer-related demand。
+
+### Stage 8 Deliverables
+
+- [x] 建立單一目標小時的 top-100 station prediction CLI
+- [x] 建立只讀取 target 前 168 小時歷史的推論特徵管線
+- [x] 驗證需求時間覆蓋、站點、重複列與 target-hour weather
+- [x] 建立 model metadata：feature schema、站點清單、版本與評估
+- [x] 推論前驗證 model artifact SHA-256
+- [x] 建立歷史 actual 僅在預測後附加的 backtest 模式
+- [x] 產生 2023-12-31 18:00 的 100 站預測範例
+- [x] 撰寫完整 Model Card
+- [x] 建立並執行 `08_prediction_demo.ipynb`
+- [x] 撰寫 Stage 8 中文說明文件
+
+### Prediction Interface Scope
+
+目前介面可重現 2023 歷史 holdout prediction。真正未來預測必須提供更新至 target 前一小時、相同定義的 transfer-demand history，以及 target 時點可取得的 weather forecast。介面輸出是 hourly transfer-related borrowing demand ranking，不能直接當成補車數量、缺車風險或 30／60 分鐘可用車數。
