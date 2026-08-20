@@ -1,0 +1,42 @@
+{
+  "model_name": "hist_gradient_boosting",
+  "loss": "poisson",
+  "random_state": 42,
+  "candidates": [
+    {
+      "candidate": "compact",
+      "learning_rate": 0.08,
+      "max_iter": 150,
+      "max_leaf_nodes": 31,
+      "min_samples_leaf": 50,
+      "l2_regularization": 1.0
+    },
+    {
+      "candidate": "deeper",
+      "learning_rate": 0.05,
+      "max_iter": 200,
+      "max_leaf_nodes": 63,
+      "min_samples_leaf": 40,
+      "l2_regularization": 1.0
+    }
+  ],
+  "rolling_origin_folds": [
+    {
+      "fold": "fold_1",
+      "train_end": "2023-09-30T23:00:00+08:00",
+      "validation_end": "2023-10-20T23:00:00+08:00"
+    },
+    {
+      "fold": "fold_2",
+      "train_end": "2023-10-20T23:00:00+08:00",
+      "validation_end": "2023-11-10T23:00:00+08:00"
+    },
+    {
+      "fold": "fold_3",
+      "train_end": "2023-11-10T23:00:00+08:00",
+      "validation_end": "2023-11-30T23:00:00+08:00"
+    }
+  ],
+  "permutation_sample_rows": 10000,
+  "permutation_repeats": 3
+}

@@ -501,7 +501,7 @@ README 最終至少需要包含：
 
 目前只處理：
 
-> Time-aware Baseline Modeling + Model Evaluation
+> Model Evaluation + Prediction Interface
 
 請不要提前：
 
@@ -552,10 +552,12 @@ Completed Stage:
 > Stage 5 — Full-year Historical Demand + Weather Integration
 >
 > Stage 6 — Time-aware Hourly Baseline Model
+>
+> Stage 7 — Tree Model Comparison + Rolling-origin Evaluation
 
 Current Stage:
 
-> Traditional Machine Learning Comparison + Historical Snapshot Accumulation
+> Prediction Interface + Historical Snapshot Accumulation
 
 ### Milestone 2 Deliverables
 
@@ -573,7 +575,7 @@ Current Stage:
 
 Next Stage:
 
-> Tree-based Model Comparison + Rolling-origin Evaluation
+> Reproducible Prediction Interface + Model Card
 
 ### Stage 3 Deliverables
 
@@ -646,3 +648,20 @@ Next Stage:
 ### Baseline Result Scope
 
 含天氣 Ridge 的 2023 年 12 月 holdout 結果為 MAE 1.793、RMSE 2.889、R² 0.736；相較不含天氣 Ridge，MAE 改善約 0.9%。這些結果只適用於定義的 100 個站點與 hourly transfer-related demand，不代表所有 YouBike 旅次，也不是短期可用車預測成果。正式部署時必須以預測當下可取得的 weather forecast 取代事後實際天氣。
+
+### Stage 7 Deliverables
+
+- [x] 建立 Histogram Gradient Boosting 非線性樹模型
+- [x] 在相同 top-100、特徵與時間切分下公平比較 Ridge
+- [x] 分別訓練有／無天氣 HGB，量化天氣增量
+- [x] 使用 validation MAE 選擇樹模型參數
+- [x] 使用 12 月 holdout 產出 MAE、RMSE、R²
+- [x] 建立三段 expanding-window rolling-origin evaluation
+- [x] 建立 permutation importance 報告
+- [x] 更新 station／hour error analysis
+- [x] 建立並執行 `07_tree_model_comparison.ipynb`
+- [x] 撰寫 Stage 7 中文說明文件
+
+### Tree Model Result Scope
+
+含天氣 HGB 的 2023 年 12 月 holdout 結果為 MAE 1.575、RMSE 2.549、R² 0.794；相較含天氣 Ridge，MAE 改善約 12.2%。三段 rolling-origin MAE 介於 1.592–1.636。天氣相較無天氣 HGB 再改善約 1.7%，主要預測力仍來自小時週期、前一小時需求、站點與前一週需求。結果仍只適用於 100 個站點的 hourly transfer-related demand。

@@ -198,14 +198,30 @@ defined 100-station experiment. See the executed
 [Stage 6 baseline guide](docs/STAGE_6_BASELINE_MODEL.md) for leakage controls,
 limitations, and error analysis.
 
+## Tree Model Comparison
+
+Train and evaluate the histogram gradient-boosting models:
+
+```bash
+python src/train_tree_models.py
+```
+
+The weather-enabled HGB model improves the December holdout MAE from 1.793 for
+weather Ridge to 1.575, with RMSE 2.549 and R² 0.794. Three expanding-window
+validation folds produce MAE values from 1.592 to 1.636. Permutation analysis
+shows that time-of-day, previous-hour demand, station identity, and previous-week
+demand are the strongest signals; weather provides a smaller incremental gain.
+See the executed [tree comparison notebook](notebooks/07_tree_model_comparison.ipynb)
+and [Stage 7 guide](docs/STAGE_7_TREE_MODEL_COMPARISON.md).
+
 ## Project Status
 
 🚧 **In development**
 
-Milestones 1 and 2 plus Stage 3 through 6 are complete. The repository now
+Milestones 1 and 2 plus Stage 3 through 7 are complete. The repository now
 includes reproducible API samples, validated collection and cleaning pipelines,
 leakage-aware time-series feature engineering, automated tests, quality reports,
 official full-year 2023 transfer-demand and weather analysis, a chronological
-hourly Ridge baseline, and six executed notebooks. Multi-day live snapshot
-coverage, broader machine-learning comparisons, deep learning, and optimization
-are still in development.
+hourly Ridge baseline, a rolling-origin validated gradient-boosting model, and
+seven executed notebooks. Multi-day live snapshot coverage, a production-style
+prediction interface, deep learning, and optimization are still in development.
