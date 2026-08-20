@@ -1,0 +1,548 @@
+# YouBike Demand Prediction & Optimization
+
+## 1. Project Overview
+
+本專題目標為建立一套 **YouBike 站點需求預測與智慧調度系統**。
+
+系統將使用臺北市 YouBike 開放資料、時間特徵與天氣資料，分析不同站點的使用情況，並建立 Machine Learning / Deep Learning 模型預測未來短時間內的租借需求與可用車輛變化。
+
+在需求預測完成後，再加入最佳化模型，計算不同站點之間較合理的車輛調度方式。
+
+本專題同時作為 AI / Data Science 研究所申請與實習作品集使用，因此重點不只是完成預測系統，也必須完整呈現：
+
+- Data Collection
+- Data Cleaning
+- Exploratory Data Analysis
+- Feature Engineering
+- Machine Learning
+- Deep Learning
+- Model Evaluation
+- Optimization
+- Visualization
+- Git / GitHub 專案管理
+
+---
+
+## 2. Research Question
+
+主要研究問題：
+
+> 是否能透過歷史 YouBike 使用資料、時間資訊與天氣資訊，預測特定站點未來的短期使用需求，並進一步利用最佳化方法改善站點間的車輛調度？
+
+延伸問題：
+
+1. 哪些因素最影響 YouBike 使用需求？
+2. 不同 Machine Learning 模型的預測效果有何差異？
+3. Deep Learning 是否能比傳統 Machine Learning 提供更好的時間序列預測？
+4. 天氣資料加入後是否能改善模型表現？
+5. 如何將預測結果轉換為實際的車輛調度建議？
+
+---
+
+## 3. Project Objectives
+
+### Phase 1 — Data Analysis
+
+- 收集 YouBike 官方 Open Data
+- 整理與清理資料
+- 分析不同站點的租借模式
+- 分析尖峰與離峰時段
+- 分析平日與假日差異
+- 分析天氣與使用需求的關係
+
+### Phase 2 — Machine Learning
+
+建立基礎預測模型，例如：
+
+- Linear Regression
+- Random Forest
+- XGBoost
+
+預測目標可能包含：
+
+- 未來 30 分鐘需求量
+- 未來 60 分鐘需求量
+- 未來可用車輛數量
+- 是否即將發生缺車 / 滿站
+
+### Phase 3 — Deep Learning
+
+嘗試時間序列模型：
+
+- LSTM
+- GRU（選做）
+
+並與傳統 Machine Learning 模型比較。
+
+### Phase 4 — Optimization
+
+將模型預測的各站需求轉換為最佳化問題。
+
+例如：
+
+- 哪些站需要補車？
+- 哪些站有多餘車輛？
+- 每個站應調入 / 調出幾輛？
+- 如何降低調度距離與缺車成本？
+
+可考慮：
+
+- Linear Programming
+- Mixed Integer Programming
+- OR-Tools
+- PuLP
+
+### Phase 5 — Visualization / Demo
+
+建立簡單 Dashboard 或視覺化成果，例如：
+
+```text
+捷運公館站
+
+目前可借：12 輛
+
+AI Prediction
+30 分鐘後：7 輛
+60 分鐘後：2 輛
+
+⚠ High risk of bike shortage
+
+Suggested Redistribution:
++6 bikes
+```
+
+---
+
+## 4. Planned Data Sources
+
+優先使用官方或公開資料來源。
+
+### YouBike Data
+
+可能使用：
+
+- YouBike 2.0 即時站點資料
+- YouBike 歷史借還紀錄
+- 站點基本資訊
+- 起訖站交易量
+
+需要確認：
+
+- Dataset 欄位
+- 更新頻率
+- 資料期間
+- License
+- 是否適合 Machine Learning
+
+### Weather Data
+
+可能使用中央氣象署 Open Data。
+
+特徵可能包含：
+
+- Temperature
+- Rainfall
+- Weather condition
+- Humidity
+
+---
+
+## 5. Possible Features
+
+模型輸入特徵可能包含：
+
+### Time Features
+
+- Hour
+- Day of week
+- Month
+- Weekend
+- Holiday
+- Rush hour
+
+### Station Features
+
+- Station ID
+- Location
+- Capacity
+- Previous available bikes
+
+### Historical Features
+
+- Previous 15-minute demand
+- Previous 30-minute demand
+- Previous 60-minute demand
+- Moving average
+
+### Weather Features
+
+- Temperature
+- Rainfall
+- Humidity
+- Weather condition
+
+---
+
+## 6. Machine Learning Workflow
+
+完整流程：
+
+```text
+Raw Data
+    ↓
+Data Cleaning
+    ↓
+Exploratory Data Analysis
+    ↓
+Feature Engineering
+    ↓
+Train / Validation / Test Split
+    ↓
+Baseline Model
+    ↓
+Machine Learning Models
+    ↓
+Deep Learning Model
+    ↓
+Model Evaluation
+    ↓
+Error Analysis
+    ↓
+Demand Prediction
+    ↓
+Optimization
+    ↓
+Dashboard / Visualization
+```
+
+---
+
+## 7. Model Evaluation
+
+Regression 問題預計使用：
+
+- MAE
+- RMSE
+- R²
+
+如果建立缺車 / 滿站分類模型：
+
+- Accuracy
+- Precision
+- Recall
+- F1-score
+- Confusion Matrix
+
+避免只報告單一 Accuracy。
+
+---
+
+## 8. Planned Tech Stack
+
+### Programming
+
+- Python
+
+### Data Processing
+
+- Pandas
+- NumPy
+
+### Visualization
+
+- Matplotlib
+
+### Machine Learning
+
+- scikit-learn
+- XGBoost
+
+### Deep Learning
+
+後期加入：
+
+- PyTorch
+
+### Optimization
+
+後期評估：
+
+- OR-Tools
+- PuLP
+
+### Development
+
+- Git
+- GitHub
+- Jupyter Notebook
+- Codex
+
+---
+
+## 9. Repository Structure
+
+```text
+youbike-demand-prediction/
+│
+├── README.md
+├── PROJECT_PLAN.md
+├── requirements.txt
+├── .gitignore
+│
+├── data/
+│   ├── raw/
+│   └── processed/
+│
+├── notebooks/
+│   ├── 01_data_exploration.ipynb
+│   ├── 02_data_cleaning.ipynb
+│   ├── 03_feature_engineering.ipynb
+│   ├── 04_machine_learning.ipynb
+│   └── 05_model_evaluation.ipynb
+│
+├── src/
+│
+├── models/
+│
+├── results/
+│
+└── images/
+```
+
+資料夾用途：
+
+### data/raw
+
+保存原始資料。
+
+原則：
+
+> 不直接修改原始資料。
+
+### data/processed
+
+保存經過清理與轉換後的資料。
+
+### notebooks
+
+保存資料分析與模型實驗 Notebook。
+
+### src
+
+正式 Python 程式碼。
+
+未來可以包含：
+
+```text
+data_loader.py
+preprocessing.py
+features.py
+train.py
+predict.py
+optimization.py
+```
+
+### models
+
+保存訓練完成的模型。
+
+### results
+
+保存：
+
+- evaluation results
+- CSV
+- experiment results
+
+### images
+
+保存：
+
+- EDA charts
+- model evaluation charts
+- architecture diagrams
+- README images
+
+---
+
+## 10. GitHub Rules
+
+### Commit 原則
+
+每完成一個有意義的小階段就 Commit。
+
+例如：
+
+```text
+Initialize project structure
+
+Add YouBike data loader
+
+Add exploratory data analysis
+
+Add weather data integration
+
+Train baseline model
+
+Add XGBoost model
+
+Add model evaluation
+
+Add optimization model
+```
+
+避免使用：
+
+```text
+update
+fix
+test
+123
+final
+```
+
+作為主要 Commit message。
+
+---
+
+## 11. Security Rules
+
+禁止將以下內容 Push 到 GitHub：
+
+- API Key
+- Access Token
+- Password
+- Secret
+- Private credential
+- .env
+
+`.gitignore` 至少加入：
+
+```text
+.env
+.venv/
+__pycache__/
+.DS_Store
+.ipynb_checkpoints/
+```
+
+---
+
+## 12. README Requirements
+
+README 最終至少需要包含：
+
+1. Project Overview
+2. Problem
+3. Research Question
+4. Dataset
+5. System Architecture
+6. Data Analysis
+7. Models
+8. Evaluation
+9. Results
+10. Optimization
+11. Demo
+12. Tech Stack
+13. Project Structure
+14. Future Work
+
+禁止在模型尚未完成之前填寫假的：
+
+- Accuracy
+- RMSE
+- F1-score
+- Prediction Result
+
+尚未完成的部分標示：
+
+> 🚧 In Development
+
+---
+
+## 13. First Development Milestone
+
+目前先不要開始 Deep Learning 或 Optimization。
+
+第一階段只完成以下內容：
+
+### Milestone 1
+
+- [ ] 建立 Repository 基礎架構
+- [ ] 建立 README.md
+- [ ] 建立 PROJECT_PLAN.md
+- [ ] 建立 requirements.txt
+- [ ] 建立 .gitignore
+- [ ] 找到官方 YouBike Dataset
+- [ ] 確認 Dataset 欄位
+- [ ] 下載一小部分資料進行測試
+- [ ] 建立 `01_data_exploration.ipynb`
+- [ ] 使用 Pandas 載入資料
+- [ ] 顯示資料前 5 筆
+- [ ] 檢查資料 Shape
+- [ ] 檢查 Columns
+- [ ] 檢查 Missing Values
+- [ ] 基本 Descriptive Statistics
+- [ ] 建立第一張資料視覺化圖表
+
+完成 Milestone 1 後才進入資料清理。
+
+---
+
+## 14. Instructions for Codex
+
+在修改此 Repository 前，請先閱讀：
+
+`PROJECT_PLAN.md`
+
+所有程式與檔案修改應遵循此文件。
+
+### Current Priority
+
+目前只處理：
+
+> Project Setup + Data Exploration
+
+請不要提前：
+
+- 建立 LSTM
+- 建立 PyTorch Model
+- 建立 Optimization
+- 宣稱模型已有成果
+- 填寫假的 Evaluation Metrics
+
+### When Writing Code
+
+請：
+
+1. 保持程式易讀。
+2. 避免過度複雜設計。
+3. 為重要程式加入簡短註解。
+4. 不要硬編 Dataset 欄位。
+5. 若 Dataset 格式尚未確認，先檢查資料。
+6. 不要把 API Key 寫入原始碼。
+7. 優先建立容易理解的版本，再逐步改善。
+
+### After Every Task
+
+完成任務後請說明：
+
+1. 新增哪些檔案
+2. 修改哪些檔案
+3. 每個修改的用途
+4. 下一步建議
+5. 是否有任何需要使用者決定的事項
+
+---
+
+## 15. Project Status
+
+🚧 **In Development**
+
+Current Stage:
+
+> Project Setup → Data Collection → Initial Exploration
+
+Next Stage:
+
+> Data Cleaning & Exploratory Data Analysis
