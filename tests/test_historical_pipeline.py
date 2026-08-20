@@ -67,6 +67,16 @@ class HistoricalPipelineTest(unittest.TestCase):
         self.assertEqual(taipei_at_eight["return_count"], 0)
         self.assertEqual(taipei_at_eight["net_flow"], -2)
 
+    def test_missing_station_keeps_the_usable_side_of_trip(self) -> None:
+        raw = example_raw_data().iloc[[0]].copy()
+        raw.loc[raw.index[0], "借車站"] = pd.NA
+        clean = clean_historical_trips(raw, {"科技大樓"})
+        demand = build_station_hour_demand(clean)
+
+        self.assertTrue(clean.loc[0, "borrow_station"] is pd.NA or pd.isna(clean.loc[0, "borrow_station"]))
+        self.assertEqual(demand["borrow_count"].sum(), 0)
+        self.assertEqual(demand["return_count"].sum(), 1)
+
     def test_hourly_profile_includes_zero_activity_hours(self) -> None:
         clean = clean_historical_trips(
             example_raw_data(), {"臺北車站", "科技大樓"}

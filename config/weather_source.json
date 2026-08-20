@@ -1,0 +1,19 @@
+{
+  "source_name": "Open-Meteo Historical Weather API",
+  "documentation_url": "https://open-meteo.com/en/docs/historical-weather-api",
+  "endpoint": "https://archive-api.open-meteo.com/v1/archive",
+  "location_name": "Taipei City Hall reference point",
+  "latitude": 25.0375,
+  "longitude": 121.5637,
+  "timezone": "Asia/Taipei",
+  "start_date": "2023-01-01",
+  "end_date": "2023-12-31",
+  "hourly_variables": [
+    "temperature_2m",
+    "relative_humidity_2m",
+    "precipitation",
+    "wind_speed_10m",
+    "weather_code"
+  ],
+  "scope_note": "City-level historical reanalysis at one Taipei reference point; not an observed value at every YouBike station."
+}

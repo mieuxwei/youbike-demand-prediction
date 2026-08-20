@@ -548,10 +548,12 @@ Completed Stage:
 > Stage 3 Tooling — Historical Collection & Feature Engineering Foundation
 >
 > Stage 4 — Official Historical Transfer-Demand Integration
+>
+> Stage 5 — Full-year Historical Demand + Weather Integration
 
 Current Stage:
 
-> Historical Snapshot Accumulation
+> Baseline Model Readiness + Historical Snapshot Accumulation
 
 ### Milestone 2 Deliverables
 
@@ -569,7 +571,7 @@ Current Stage:
 
 Next Stage:
 
-> Expand historical months + Weather Integration → Baseline Model
+> Time-aware Hourly Baseline Model
 
 ### Stage 3 Deliverables
 
@@ -606,3 +608,21 @@ Next Stage:
 ### Historical Dataset Scope
 
 2023 歷史資料僅涵蓋公車／捷運轉乘 YouBike 的租借紀錄，不代表所有 YouBike 使用者。此資料用於 hourly historical demand；自行蒐集的即時快照持續用於 30／60 分鐘 station availability 預測，兩者不可混為同一 target。
+
+### Stage 5 Deliverables
+
+- [x] 註冊並下載 2023 全年 12 個官方歷史月份
+- [x] 建立逐月處理、全年合併的記憶體友善管線
+- [x] 稽核全年 7,388,479 筆轉乘相關旅次
+- [x] 揭露 7 個缺漏站名並保留每筆仍可使用的借／還事件
+- [x] 建立 4,670,320 筆 station-hour demand 資料
+- [x] 建立全年 monthly、daily、hourly、station 與 quality reports
+- [x] 下載並清理 2023 全年 8,760 小時歷史天氣
+- [x] 建立需求與天氣 many-to-one 同小時合併，匹配率 100%
+- [x] 建立雨天／非雨天分層比較，避免直接混合平假日與小時
+- [x] 建立並執行 `05_weather_integration.ipynb`
+- [x] 撰寫 Stage 5 中文說明文件
+
+### Weather Dataset Scope
+
+目前天氣使用 Open-Meteo Historical Weather API 的臺北單一參考點歷史再分析資料，以確保流程不依賴寫入原始碼的 API Key 且可重現。此資料不是每個 YouBike 站點的現地氣象站觀測；中央氣象署資料留待後續作實測驗證。雨天與需求差異目前僅為描述性關聯，不宣稱因果效果。

@@ -9,10 +9,27 @@ from unittest.mock import Mock, patch
 
 import requests
 
-from src.download_historical import download_resource
+from src.download_historical import download_resource, select_resources
 
 
 class HistoricalDownloadTest(unittest.TestCase):
+    def test_select_resources_supports_all_and_specific_months(self) -> None:
+        config = {
+            "resources": {
+                "2023-02": {"url": "two", "filename": "two.csv"},
+                "2023-01": {"url": "one", "filename": "one.csv"},
+            }
+        }
+
+        self.assertEqual(
+            [month for month, _ in select_resources(config, ["all"])],
+            ["2023-01", "2023-02"],
+        )
+        self.assertEqual(
+            [month for month, _ in select_resources(config, ["2023-02"])],
+            ["2023-02"],
+        )
+
     @patch("src.download_historical.requests.get")
     def test_download_streams_to_final_path(self, mock_get: Mock) -> None:
         response = Mock()

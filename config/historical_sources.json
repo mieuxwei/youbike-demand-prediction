@@ -9,6 +9,50 @@
     "2023-01": {
       "url": "https://data.taipei/api/dataset/d51e8336-fceb-4275-a81a-2a246f4fca1b/resource/d49d31c6-f53c-448d-a782-f5d82d18669f/download",
       "filename": "transfers_2023_01.csv"
+    },
+    "2023-02": {
+      "url": "https://data.taipei/api/dataset/d51e8336-fceb-4275-a81a-2a246f4fca1b/resource/abe3381b-88c5-4601-b6da-bf466e655ffc/download",
+      "filename": "transfers_2023_02.csv"
+    },
+    "2023-03": {
+      "url": "https://data.taipei/api/dataset/d51e8336-fceb-4275-a81a-2a246f4fca1b/resource/65ee5383-cf71-4dc3-aeff-655b6f9c8356/download",
+      "filename": "transfers_2023_03.csv"
+    },
+    "2023-04": {
+      "url": "https://data.taipei/api/dataset/d51e8336-fceb-4275-a81a-2a246f4fca1b/resource/acf1e719-d5e0-471e-a261-5989d34c8ddb/download",
+      "filename": "transfers_2023_04.csv"
+    },
+    "2023-05": {
+      "url": "https://data.taipei/api/dataset/d51e8336-fceb-4275-a81a-2a246f4fca1b/resource/7deecfb2-28b2-4647-9002-42227314e17c/download",
+      "filename": "transfers_2023_05.csv"
+    },
+    "2023-06": {
+      "url": "https://data.taipei/api/dataset/d51e8336-fceb-4275-a81a-2a246f4fca1b/resource/fbc4205e-1aa3-4674-8e3a-4ff62960bf30/download",
+      "filename": "transfers_2023_06.csv"
+    },
+    "2023-07": {
+      "url": "https://data.taipei/api/dataset/d51e8336-fceb-4275-a81a-2a246f4fca1b/resource/ac971551-d594-4e84-895f-41a624ed7679/download",
+      "filename": "transfers_2023_07.csv"
+    },
+    "2023-08": {
+      "url": "https://data.taipei/api/dataset/d51e8336-fceb-4275-a81a-2a246f4fca1b/resource/58defa98-c041-4988-97ee-fe3798177e67/download",
+      "filename": "transfers_2023_08.csv"
+    },
+    "2023-09": {
+      "url": "https://data.taipei/api/dataset/d51e8336-fceb-4275-a81a-2a246f4fca1b/resource/f678018a-339f-40d0-a0f8-c544a8911b55/download",
+      "filename": "transfers_2023_09.csv"
+    },
+    "2023-10": {
+      "url": "https://data.taipei/api/dataset/d51e8336-fceb-4275-a81a-2a246f4fca1b/resource/c0d56ec4-d176-47c1-897f-b747be1db0c3/download",
+      "filename": "transfers_2023_10.csv"
+    },
+    "2023-11": {
+      "url": "https://data.taipei/api/dataset/d51e8336-fceb-4275-a81a-2a246f4fca1b/resource/be19e3ae-6c6e-480a-ace7-529bd84c1c3e/download",
+      "filename": "transfers_2023_11.csv"
+    },
+    "2023-12": {
+      "url": "https://data.taipei/api/dataset/d51e8336-fceb-4275-a81a-2a246f4fca1b/resource/8ddb45ba-a0f5-41d6-85a0-1691096fdcf8/download",
+      "filename": "transfers_2023_12.csv"
     }
   }
 }

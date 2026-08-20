@@ -40,11 +40,17 @@ location, operating status, and update times.
 > include rentals, returns, redistribution, and data corrections. More history
 > is required before short-term demand can be modeled reliably.
 
-The project also uses the official
+The project also uses all 12 monthly files from the official
 [2023 transfer-related YouBike trip dataset](https://data.gov.tw/dataset/169174)
 for historical hourly demand analysis. This source covers trips associated with
 bus or MRT transfers, not all YouBike trips, and its timestamps are aggregated
 to the hour. It complements rather than replaces the real-time snapshots.
+
+Hourly weather comes from the
+[Open-Meteo Historical Weather API](https://open-meteo.com/en/docs/historical-weather-api).
+The current integration uses one Taipei reference point and historical
+reanalysis values, not a separate observed weather station at every YouBike
+location.
 
 ## Tech Stack
 
@@ -148,28 +154,31 @@ do not yet contain 30/60-minute targets, so model training has intentionally not
 started. See the
 [Stage 3 history and feature guide](docs/STAGE_3_HISTORY_AND_FEATURES.md).
 
-## Historical Transfer-Demand Analysis
+## Full-year Historical Demand and Weather
 
-Download and prepare the registered January 2023 official file:
+Download and prepare every registered 2023 official month, then join hourly
+weather:
 
 ```bash
-python src/download_historical.py --month 2023-01
-python src/prepare_historical.py
+python src/download_historical.py --month all
+python src/prepare_historical_collection.py
+python src/download_weather.py
+python src/prepare_weather.py
 ```
 
-The raw file is approximately 71 MB and is intentionally ignored by Git. The
-pipeline builds hourly station demand plus compact daily, hourly, station, and
-quality reports. See the executed
-[historical demand notebook](notebooks/04_historical_demand_analysis.ipynb) and
-the [Stage 4 historical demand guide](docs/STAGE_4_HISTORICAL_DEMAND.md).
+The large raw and processed files are intentionally ignored by Git. The pipeline
+processes one month at a time, builds full-year hourly station demand, joins
+8,760 weather hours, and saves compact reproducible reports. See the executed
+[weather integration notebook](notebooks/05_weather_integration.ipynb) and the
+[Stage 5 full-year weather guide](docs/STAGE_5_FULL_YEAR_WEATHER.md).
 
 ## Project Status
 
 🚧 **In development**
 
-Milestones 1 and 2 plus the Stage 3 and 4 tooling are complete. The repository now
+Milestones 1 and 2 plus Stage 3 through 5 tooling are complete. The repository now
 includes reproducible API samples, validated collection and cleaning pipelines,
 leakage-aware time-series feature engineering, automated tests, quality reports,
-official January 2023 transfer-demand analysis, and four executed notebooks.
-Multi-day live coverage and additional historical months are still being
-accumulated; models, optimization, and evaluation results have not been completed.
+official full-year 2023 transfer-demand and weather analysis, and five executed
+notebooks. Multi-day live snapshot coverage is still being accumulated; models,
+optimization, and evaluation results have not been completed.

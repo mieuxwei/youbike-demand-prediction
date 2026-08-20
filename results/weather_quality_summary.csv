@@ -1,0 +1,10 @@
+metric,value
+weather_source,Open-Meteo historical weather API
+weather_scope,single_city_reference_point_reanalysis
+weather_rows,8760
+weather_date_start,2023-01-01T00:00:00+08:00
+weather_date_end,2023-12-31T23:00:00+08:00
+weather_missing_cells,0
+weather_latitude,25.06151
+weather_longitude,121.5194
+demand_rows_weather_matched_percent,100.0

@@ -51,12 +51,30 @@ def download_resource(
     return output_path
 
 
+def select_resources(config: dict[str, Any], months: list[str]) -> list[tuple[str, dict[str, str]]]:
+    """Resolve requested months, supporting the special value ``all``."""
+    resources = config["resources"]
+    selected_months = sorted(resources) if months == ["all"] else months
+    missing = [month for month in selected_months if month not in resources]
+    if missing:
+        available = ", ".join(sorted(resources))
+        raise ValueError(
+            f"Months not registered: {', '.join(missing)}. Available: {available}"
+        )
+    return [(month, resources[month]) for month in selected_months]
+
+
 def parse_args() -> argparse.Namespace:
     """Read command-line options."""
     parser = argparse.ArgumentParser(
         description="Download an official transfer-related YouBike trip file."
     )
-    parser.add_argument("--month", required=True, help="Resource month, e.g. 2023-01")
+    parser.add_argument(
+        "--month",
+        nargs="+",
+        required=True,
+        help="One or more resource months, or 'all', e.g. 2023-01 2023-02",
+    )
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIRECTORY)
     parser.add_argument("--force", action="store_true", help="Replace an existing file")
@@ -67,17 +85,14 @@ def main() -> None:
     """Download the selected registered resource."""
     args = parse_args()
     config = load_config(args.config)
-    resource = config["resources"].get(args.month)
-    if resource is None:
-        available = ", ".join(sorted(config["resources"]))
-        raise SystemExit(f"Month {args.month} is not registered. Available: {available}")
-
-    output_path = args.output_dir / resource["filename"]
     try:
-        download_resource(resource["url"], output_path, force=args.force)
+        resources = select_resources(config, args.month)
+        for month, resource in resources:
+            output_path = args.output_dir / resource["filename"]
+            download_resource(resource["url"], output_path, force=args.force)
+            print(f"Historical file ready ({month}): {output_path}")
     except (OSError, requests.RequestException, ValueError) as error:
         raise SystemExit(f"Historical download failed: {error}") from error
-    print(f"Historical file ready: {output_path}")
 
 
 if __name__ == "__main__":

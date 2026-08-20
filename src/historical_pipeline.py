@@ -77,8 +77,6 @@ def clean_historical_trips(
             "borrow_time",
             "return_time",
             "borrow_date",
-            "borrow_station",
-            "return_station",
             "duration_minutes",
         ]
     ].isna().sum()
@@ -93,8 +91,14 @@ def clean_historical_trips(
         count = int(clean["duration_minutes"].le(0).sum())
         raise ValueError(f"Historical data contains {count} non-positive durations.")
 
-    clean["borrow_station"] = clean["borrow_station"].map(normalize_station_name)
-    clean["return_station"] = clean["return_station"].map(normalize_station_name)
+    # A missing station name prevents only that side of the trip from being
+    # aggregated. Preserve the row so the opposite borrow/return event remains usable.
+    clean["borrow_station"] = clean["borrow_station"].map(
+        lambda value: normalize_station_name(value) if pd.notna(value) else pd.NA
+    )
+    clean["return_station"] = clean["return_station"].map(
+        lambda value: normalize_station_name(value) if pd.notna(value) else pd.NA
+    )
     clean["borrow_station_current_match"] = clean["borrow_station"].isin(
         current_station_names
     )
@@ -224,8 +228,8 @@ def build_historical_quality_summary(
     clean_data: pd.DataFrame,
 ) -> pd.DataFrame:
     """Report scope, time resolution, matching, and retained duplicates."""
-    historical_names = set(clean_data["borrow_station"]) | set(
-        clean_data["return_station"]
+    historical_names = set(clean_data["borrow_station"].dropna()) | set(
+        clean_data["return_station"].dropna()
     )
     matched_names = set(
         clean_data.loc[
@@ -243,6 +247,8 @@ def build_historical_quality_summary(
         ("date_end", clean_data["borrow_date"].max().date().isoformat()),
         ("timestamp_granularity", "hour"),
         ("raw_missing_cells", int(raw_data.isna().sum().sum())),
+        ("borrow_station_missing_rows", int(clean_data["borrow_station"].isna().sum())),
+        ("return_station_missing_rows", int(clean_data["return_station"].isna().sum())),
         ("exact_duplicate_extra_rows_retained", int(raw_data.duplicated().sum())),
         ("unique_historical_station_names", len(historical_names)),
         ("unique_names_matching_current", len(matched_names)),
