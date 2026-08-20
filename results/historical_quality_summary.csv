@@ -1,0 +1,14 @@
+metric,value
+dataset_scope,transfer_related_trips_only
+rows,593616
+date_start,2023-01-01
+date_end,2023-01-31
+timestamp_granularity,hour
+raw_missing_cells,0
+exact_duplicate_extra_rows_retained,1611
+unique_historical_station_names,1784
+unique_names_matching_current,1208
+borrow_rows_matching_current_percent,99.08
+return_rows_matching_current_percent,95.99
+borrow_date_mismatch_rows,0
+duration_over_2h_rows,6088

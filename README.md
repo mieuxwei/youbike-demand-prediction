@@ -28,7 +28,7 @@ combine demand forecasting with a bike redistribution strategy.
 
 ## Dataset
 
-The initial sample comes from the official
+The real-time samples come from the official
 [Taipei City YouBike 2.0 real-time dataset](https://data.taipei/dataset/detail?id=c6bc8aed-557d-41d5-bfb1-8da24f78f2fb).
 The source is public, free to use, provided as JSON, and updated every minute.
 
@@ -39,6 +39,12 @@ location, operating status, and update times.
 > Bike-count changes between snapshots are not direct rental counts. They may
 > include rentals, returns, redistribution, and data corrections. More history
 > is required before short-term demand can be modeled reliably.
+
+The project also uses the official
+[2023 transfer-related YouBike trip dataset](https://data.gov.tw/dataset/169174)
+for historical hourly demand analysis. This source covers trips associated with
+bus or MRT transfers, not all YouBike trips, and its timestamps are aggregated
+to the hour. It complements rather than replaces the real-time snapshots.
 
 ## Tech Stack
 
@@ -64,6 +70,7 @@ youbike-demand-prediction/
 ├── src/              # Reusable data and modeling code
 ├── tests/            # Automated pipeline tests
 ├── docs/             # Stage explanations and project documentation
+├── config/           # Reproducible official data-source registry
 ├── models/           # Saved model artifacts
 ├── results/          # Metrics, tables, and experiment outputs
 ├── images/           # Figures and images used in reports
@@ -141,13 +148,28 @@ do not yet contain 30/60-minute targets, so model training has intentionally not
 started. See the
 [Stage 3 history and feature guide](docs/STAGE_3_HISTORY_AND_FEATURES.md).
 
+## Historical Transfer-Demand Analysis
+
+Download and prepare the registered January 2023 official file:
+
+```bash
+python src/download_historical.py --month 2023-01
+python src/prepare_historical.py
+```
+
+The raw file is approximately 71 MB and is intentionally ignored by Git. The
+pipeline builds hourly station demand plus compact daily, hourly, station, and
+quality reports. See the executed
+[historical demand notebook](notebooks/04_historical_demand_analysis.ipynb) and
+the [Stage 4 historical demand guide](docs/STAGE_4_HISTORICAL_DEMAND.md).
+
 ## Project Status
 
 🚧 **In development**
 
-Milestones 1 and 2 plus the Stage 3 tooling are complete. The repository now
+Milestones 1 and 2 plus the Stage 3 and 4 tooling are complete. The repository now
 includes reproducible API samples, validated collection and cleaning pipelines,
 leakage-aware time-series feature engineering, automated tests, quality reports,
-and three executed notebooks. Multi-day historical coverage is still being
-accumulated; models, optimization, and evaluation results have not been
-completed yet.
+official January 2023 transfer-demand analysis, and four executed notebooks.
+Multi-day live coverage and additional historical months are still being
+accumulated; models, optimization, and evaluation results have not been completed.

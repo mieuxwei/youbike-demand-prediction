@@ -1,0 +1,14 @@
+{
+  "dataset_name": "臺北市轉乘YouBike租借資料",
+  "dataset_url": "https://data.gov.tw/dataset/169174",
+  "provider": "臺北市政府交通局",
+  "license": "政府資料開放授權條款-第1版",
+  "scope_note": "Only trips associated with bus or MRT transfers are included; this is not the complete YouBike trip population.",
+  "time_granularity": "Hourly timestamps; minute and second values are suppressed to zero.",
+  "resources": {
+    "2023-01": {
+      "url": "https://data.taipei/api/dataset/d51e8336-fceb-4275-a81a-2a246f4fca1b/resource/d49d31c6-f53c-448d-a782-f5d82d18669f/download",
+      "filename": "transfers_2023_01.csv"
+    }
+  }
+}

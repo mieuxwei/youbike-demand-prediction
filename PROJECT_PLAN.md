@@ -501,7 +501,7 @@ README 最終至少需要包含：
 
 目前只處理：
 
-> Historical Data Collection + Extended EDA + Feature Engineering
+> Historical Data Integration + Extended EDA + Feature Engineering
 
 請不要提前：
 
@@ -546,6 +546,8 @@ Completed Stage:
 > Milestone 2 — Reproducible Data Collection & Cleaning Pipeline
 >
 > Stage 3 Tooling — Historical Collection & Feature Engineering Foundation
+>
+> Stage 4 — Official Historical Transfer-Demand Integration
 
 Current Stage:
 
@@ -567,7 +569,7 @@ Current Stage:
 
 Next Stage:
 
-> Accumulate multi-day history → Extended EDA → Baseline Model
+> Expand historical months + Weather Integration → Baseline Model
 
 ### Stage 3 Deliverables
 
@@ -585,4 +587,22 @@ Next Stage:
 
 ### Model Readiness
 
-目前 30／60 分鐘 future target coverage 仍為 0%，因此尚未進入模型訓練。待多日歷史資料累積且完成擴充 EDA 後，才建立 Baseline Model。
+兩份公開固定樣本的 30／60 分鐘 future target coverage 為 0%；本機一小時蒐集測試已使 30 分鐘 coverage 達 42.16%，但 60 分鐘仍為 0%。目前資料期間仍不足，因此尚未進入模型訓練。待多日歷史資料累積且完成擴充 EDA 後，才建立 Baseline Model。
+
+### Stage 4 Deliverables
+
+- [x] 確認官方 2023 轉乘 YouBike 歷史資料來源與授權
+- [x] 下載並稽核 2023 年 1 月 593,616 筆資料
+- [x] 確認借還時間為 hourly granularity
+- [x] 建立大型歷史 CSV 串流下載器與來源 registry
+- [x] 建立歷史交易欄位驗證與清理管線
+- [x] 保留並揭露無法安全刪除的相同交易列
+- [x] 建立歷史站名正規化與現行站點對應檢查
+- [x] 建立 station-hour 借還需求聚合
+- [x] 建立 daily、hourly、top-station 與 quality reports
+- [x] 建立並執行 `04_historical_demand_analysis.ipynb`
+- [x] 撰寫 Stage 4 中文說明文件
+
+### Historical Dataset Scope
+
+2023 歷史資料僅涵蓋公車／捷運轉乘 YouBike 的租借紀錄，不代表所有 YouBike 使用者。此資料用於 hourly historical demand；自行蒐集的即時快照持續用於 30／60 分鐘 station availability 預測，兩者不可混為同一 target。
