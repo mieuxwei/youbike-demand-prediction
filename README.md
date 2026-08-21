@@ -6,6 +6,24 @@ This project studies short-term YouBike station demand using historical usage
 data, weather information, and time-based features. The long-term goal is to
 combine demand forecasting with a bike redistribution strategy.
 
+## Track A vs Track B
+
+The repository contains two separate research tracks with different data and
+targets:
+
+- **Track A — historical transfer-demand forecasting:** predicts hourly
+  transfer-related borrowing demand for 100 high-demand stations from the 2023
+  official trip dataset. HGB remains the best evaluated model. The React/Vinext
+  dashboard is a historical holdout demonstration of this track.
+- **Track B — live bike-availability forecasting:** will predict available
+  bikes 30 or 60 minutes ahead and later study shortage/full-station risk. Its
+  cloud data-collection infrastructure is implemented, but production deployment
+  and multi-day data accumulation are still in progress. No Track B prediction
+  model or optimization result is claimed yet.
+
+Track A hourly demand is not interchangeable with Track B future station
+inventory and must not be used directly as a shortage or redistribution label.
+
 ## Objectives
 
 - Explore spatial and temporal YouBike usage patterns.
@@ -62,6 +80,7 @@ location.
 - scikit-learn
 - XGBoost
 - Requests
+- Cloudflare Workers, Cron Triggers, and D1
 
 Additional libraries will be added only when the project reaches the stage that
 requires them.
@@ -81,6 +100,7 @@ youbike-demand-prediction/
 ├── models/           # Saved model artifacts
 ├── results/          # Metrics, tables, and experiment outputs
 ├── images/           # Figures and images used in reports
+├── cloudflare/        # Track B cloud collector, D1 migration, and tests
 ├── .gitignore
 ├── LICENSE
 ├── PROJECT_PLAN.md
@@ -102,6 +122,35 @@ jupyter notebook
 
 ## Collecting Snapshots
 
+### Cloud collection for Track B
+
+The production design uses a standalone Cloudflare Worker, a five-minute Cron
+Trigger, and D1. It validates the confirmed official API schema, stores UTC
+station-time rows with database-level duplicate prevention, retries bounded API
+failures, logs every run, and exposes a protected paginated CSV export.
+
+The cloud source is under `cloudflare/track-b-collector/`. It is ready for owner
+deployment but is **not running yet** because a real Cloudflare login, D1 database
+ID, and export secret must be created by the repository owner. Follow the exact
+[Stage 11 deployment checklist](docs/STAGE_11_TRACK_B_CLOUD_COLLECTION.md).
+
+After deployment, export a date range for Python with:
+
+```bash
+export TRACK_B_EXPORT_URL="https://<worker>.workers.dev/export.csv"
+export TRACK_B_EXPORT_TOKEN="<secret>"
+python src/export_track_b.py \
+  --start 2026-08-21 \
+  --end 2026-08-27 \
+  --output data/processed/track_b_week_1.csv
+```
+
+Add `--station-id <station_id>` for a single station. Exported timestamps are
+UTC ISO-8601 and must be converted explicitly to `Asia/Taipei` before creating
+calendar features.
+
+### Local fallback collector
+
 Run the collector once to save a timestamped snapshot from the official API:
 
 ```bash
@@ -120,7 +169,8 @@ python src/collect_history.py --count 12 --interval-minutes 5
 ```
 
 The computer, network connection, and process must remain active while this
-command runs.
+command runs. These local scripts remain useful for testing and debugging, but
+they are not the formal long-running Track B collection solution.
 
 ## Preparing Data
 
@@ -272,11 +322,13 @@ redistribution recommendation. See the
 
 🚧 **In development**
 
-Milestones 1 and 2 plus Stage 3 through 10 are complete. The repository now
+Milestones 1 and 2 plus Stage 3 through 11 source implementation are complete. The repository now
 includes reproducible API samples, validated collection and cleaning pipelines,
 leakage-aware time-series feature engineering, automated tests, quality reports,
 official full-year 2023 transfer-demand and weather analysis, a chronological
 hourly Ridge baseline, rolling-origin validated HGB and XGBoost comparisons, and
 an integrity-checked prediction interface with nine executed notebooks and an
-interactive historical dashboard. Multi-day live snapshot coverage, deep learning,
-and optimization are still in development.
+interactive historical dashboard, and a tested Cloudflare Worker + Cron + D1
+collector design with protected CSV export. The cloud collector still requires
+owner deployment, and multi-day live snapshot coverage, Track B modeling, deep
+learning, and optimization remain incomplete.

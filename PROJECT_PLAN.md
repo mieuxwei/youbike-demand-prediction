@@ -1,11 +1,11 @@
-# YouBike Demand Prediction & Optimization — Current-State v2
+# YouBike Demand Prediction & Optimization — Current-State v3
 
 ## 1. 文件目的
 
 本文件以目前 repository 的實際成果為基準，取代把專案描述成「準備建立 Baseline」的舊計畫。專案分為兩條目標、資料與評估方式不同的研究線；兩者不可共用 target，也不可把其中一條的輸出直接解讀成另一條的成果。
 
 - **Track A：歷史轉乘需求預測** — 已完成可重現的主要研究與展示鏈。
-- **Track B：即時可用車／缺車風險** — 已完成蒐集與特徵管線基礎，目前仍需累積足夠的連續即時資料。
+- **Track B：Cloud Live Data Collection／即時可用車研究** — Cloudflare Worker + Cron + D1 程式、schema、測試與匯出工具已完成；正式部署仍待使用者 Cloudflare 授權，之後需持續累積足夠的連續即時資料。
 
 ## 2. 核心研究定義
 
@@ -26,7 +26,7 @@
 
 - Target：`target_available_bikes_30m`、`target_available_bikes_60m`，或後續明確定義的缺車／滿站標籤。
 - 可能輸入：目前可借車數、可還車位、站點容量、時間特徵、只向過去對齊的 lag／rolling 特徵，以及經驗證可取得的外部資訊。
-- 現況：蒐集器、清理流程、15／30／60 分鐘 lag／rolling 與 future target 建立流程已完成；可供訓練的多日連續快照仍不足。
+- 現況：本機蒐集器、清理流程、15／30／60 分鐘 lag／rolling、future target、雲端 Worker／Cron／D1 與 CSV export source 已完成；雲端尚未部署，可供訓練的多日連續快照仍不足。
 - 注意：快照間的車輛數變化可能同時包含租借、還車、調度與資料修正，不能直接當作租借需求。
 
 ## 3. 已驗證資料狀態
@@ -45,6 +45,7 @@
 - Repository 內固定樣本為 2 個快照、3,580 rows，主要用於重現清理與特徵流程。
 - 固定樣本的 30／60 分鐘 future target coverage 均為 0%。
 - 曾完成 12 份、約一小時的本機蒐集測試；這仍不足以涵蓋平日、週末與多種需求情境，也不是可用於正式建模的多日資料集。
+- 雲端正式資料目前仍為 0；Stage 11 source 已就緒但等待 owner 建立 D1、授權 Wrangler、設定 export secret 並部署 Cron Worker。
 - 正式建模前至少要有連續 7 天且包含平日與週末的資料；14–28 天會更有利於涵蓋週間差異。這是資料規劃門檻，不是模型有效性的保證。
 
 ## 4. Track A 目前成果
@@ -105,12 +106,19 @@
 | Error Analysis | 部分完成 | 已有 station／hour errors 與尖峰觀察；極端天氣、假日、worst cases 等完整情境分析尚未完成 |
 | Deep Learning | 未開始 | 須待 Track A 傳統模型研究鏈完整後再評估必要性 |
 | Track B availability model | 未開始訓練 | 等待多日連續快照與 target coverage |
+| Track B Cloud Live Collector | 程式完成／待部署 | Worker + `*/5` Cron + D1 + validation／retry／logging／CSV export；等待 owner Cloudflare 操作 |
 | Optimization | 未開始 | 必須建立在 Track B 的有效狀態／風險預測與明確營運限制上 |
 | Interactive Web Demo | 已完成 | React 19 + Vinext + Cloudflare／Sites；歷史回測展示 |
 
 ## 6. 下一步優先順序
 
-### Priority 1 — 完成 Track A 的 Ablation 與 Error Analysis
+### Priority 1 — 啟用 Track B Cloud Live Data Collection
+
+1. 由 owner 登入 Cloudflare，建立 D1、填入真實 database ID、套用 migration、部署 Worker 並設定 `EXPORT_TOKEN`。
+2. 確認 `*/5 * * * *` Cron、Worker logs、`collection_runs` 與 `/health` 都有真實成功紀錄。
+3. 30／60 分鐘 target coverage 足夠以前，不開始 availability／risk model，也不宣稱 live prediction 完成。
+
+### Priority 2 — 完成 Track A 的 Ablation 與 Error Analysis
 
 1. XGBoost 已使用相同 top-100 scope、feature definition、time split、validation、holdout test 與 rolling-origin 完成比較；HGB 仍保留為主模型。
 2. 完成尚缺的 ablation；新增 holiday feature 前必須先確認可靠資料來源與定義。
@@ -118,14 +126,14 @@
 4. Random Forest 只在比較價值明確且資源允許時補做，不是完成 Track A 的必要條件。
 5. 完成 Track A 研究摘要，忠實記錄 HGB 略優於 XGBoost。
 
-### Priority 2 — 平行累積 Track B 資料
+### Priority 3 — 平行累積 Track B 資料
 
 1. 穩定蒐集至少 7 天、同時包含平日與週末的 5 分鐘左右快照；若可行，以 14–28 天為較佳範圍。
 2. 記錄資料缺口、時間間隔、站點 coverage 與 API／設備中斷。
 3. 重建 feature coverage，確認 30／60 分鐘 target 有足夠非空資料後，才設計時間切分與 baseline。
 4. 明確定義 shortage／full-station label、預測 horizon 與評估指標後，才開始 Track B 模型。
 
-### Priority 3 — 延後研究
+### Priority 4 — 延後研究
 
 - Deep Learning：Track A 的 ablation 與 error analysis 完成後，再判斷是否值得加入 LSTM／GRU。
 - Optimization：Track B 建立有效的 availability／risk prediction、站點容量與營運限制後才開始。
@@ -159,21 +167,24 @@ Track A 可以作為長期需求背景訊號或候選特徵，但必須先經驗
 - Naive、Ridge、HGB 與 XGBoost 統一比較。
 - Ablation、error analysis、rolling-origin validation 與 model documentation。
 - React 19 + Vinext + Cloudflare／Sites Interactive Web Demo。
+- Track B Cloudflare Worker、Cron Trigger、D1 schema、collection logs、CSV export 與部署文件。
 - `README.md`、`PROJECT_PLAN.md`、`HANDOFF.md` 與各 Stage 文件。
 - Deep Learning、Track B 模型及 Optimization 僅在其前置條件滿足後加入。
 
 ## 10. Current Priority
 
 ```text
-Track A: Complete Ablation + Error Analysis
+Track B: Owner Deploys Cloud Worker + D1 + Cron
         ↓
-Track A Research Summary
-
-Track B: Continue Multi-day Snapshot Collection
+Continue Multi-day Snapshot Collection
         ↓
 Coverage / Gap Audit
         ↓
 Availability Baseline Only When Data Is Ready
+
+Track A: Preserve Existing Models and Dashboard
+        ↓
+Complete Ablation + Error Analysis When Resumed
 ```
 
 目前不要優先進行：Deep Learning、Optimization、重做 Streamlit，或把歷史 Dashboard 改稱 Live prediction。

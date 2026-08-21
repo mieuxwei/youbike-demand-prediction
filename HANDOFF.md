@@ -1,11 +1,17 @@
 # HANDOFF — YouBike Demand Prediction & Optimization
 
+**Date:** 2026-08-21
+
+**Current Stage:** Stage 11 — Track B Cloud Live Data Collection Infrastructure
+
+**Deployment status:** Source complete and locally verified; Cloudflare D1／Worker／Cron production deployment pending repository-owner authentication.
+
 ## 1. 交接摘要
 
 目前專案已有一條成熟的歷史需求研究線與一條仍在累積資料的即時 availability 研究線。接手者必須保持兩者的 target、資料、評估與對外說法分離。
 
 - **Track A：歷史轉乘需求預測** — 已完成 2023 全年資料、天氣、Naive／Ridge／HGB／XGBoost、rolling-origin validation、預測介面與 Interactive Web Demo；下一步是完整 ablation 與完整 error analysis。
-- **Track B：即時可用車／缺車風險** — 已完成蒐集、清理與特徵工程基礎，但連續快照不足，尚未開始正式建模。
+- **Track B：即時可用車／缺車風險** — 已完成本機 pipeline 與 Cloudflare Worker + Cron + D1 source；正式雲端部署與多日資料累積尚未完成，也尚未開始正式建模。
 - **Deep Learning 與 Optimization** — 尚未開始；Optimization 不能使用 Track A demand 直接當 shortage。
 
 ## 2. 已完成成果
@@ -15,6 +21,7 @@
 - 官方 YouBike 即時 API 單次與固定間隔蒐集器。
 - 多快照清理、欄位驗證、品質摘要與自動化測試。
 - 15／30／60 分鐘 backward-only lag、past-only rolling 與獨立 future target 管線。
+- 獨立 Cloudflare Worker、`*/5 * * * *` Cron、D1 schema、validation、retry、structured logging 與 protected CSV export。
 - 2023 全年 12 個月份官方轉乘旅次下載、逐月處理與稽核。
 - Station-hour 借還需求聚合。
 - 2023 全年小時天氣下載、清理與需求合併。
@@ -67,6 +74,8 @@
 | 固定樣本 30 分鐘 future target | 0% coverage |
 | 固定樣本 60 分鐘 future target | 0% coverage |
 | 本機蒐集測試 | 12 份、約一小時；不足以作為正式訓練資料 |
+| Cloud live dataset | 0 rows；尚未部署 |
+| Cloud collector source | 已完成並通過本機測試；待 owner Cloudflare 操作 |
 | 多日 coverage | 尚未完成 |
 
 快照間車輛數變化混合租借、還車、調度與資料修正，不能直接視為實際租借量。
@@ -125,20 +134,19 @@ Rolling-origin HGB folds 的 MAE 為 1.636、1.592、1.606；XGBoost folds 為 1
 | Track | 狀態 | 下一個有效成果 |
 |---|---|---|
 | Track A：歷史轉乘需求 | Naive／Ridge／HGB／XGBoost 與展示已完成 | 完整 ablation／error analysis + research summary |
-| Track B：即時 availability／risk | 資料與 feature pipeline 已完成；資料不足 | 多日 snapshot dataset + coverage／gap audit |
+| Track B：即時 availability／risk | 本機與雲端 collector source 已完成；部署待授權、資料不足 | 部署 Worker + D1 + Cron，持續累積後做 coverage／gap audit |
 | Deep Learning | 未開始 | Track A 研究鏈完成後再決定是否執行 |
 | Optimization | 未開始 | Track B 有效預測與營運限制定義完成後才設計 |
 
 ## 8. 下一步優先順序
 
-1. **Track A：完成 ablation。** 先補 holiday 定義，再做 feature-group 比較；現有 weather on／off 結果保留。
-2. **Track A：完成 error analysis。** 沿用 XGBoost worst cases，建立可重現的情境化結果，不加入無資料支持的原因解釋。
-3. **Track A：完成 research summary。** 統整 Naive、Ridge、HGB、XGBoost 與 rolling-origin，忠實保留 HGB 為主模型。
-4. **Track B：持續蒐集 snapshots。** 至少 7 天且包含平日／週末，較佳為 14–28 天；記錄中斷與資料缺口。
-5. **Track B：重新做 coverage audit。** 只有 30／60 分鐘 targets 足夠後，才定義 baseline 與 time split。
-6. **延後 Deep Learning。** 等 ablation、error analysis 完成後再決定是否有比較價值。
-7. **延後 Optimization。** 不得以 Track A hourly demand 直接推導缺車或調度。
-8. **沿用現有 Web Demo。** Streamlit 不是必要工作；不要為符合舊計畫重做前端。
+1. **Track B：完成 owner deployment。** 建立 D1、填入真實 ID、套 migration、部署 Worker、設定 export secret 並確認 Cron／logs／health。
+2. **Track B：持續蒐集 snapshots。** 7 天做初步可行性、14 天比較平假日、28 天作為第一版正式模型建議最低目標；記錄中斷與資料缺口。
+3. **Track B：重新做 coverage audit。** 只有 30／60 分鐘 targets 足夠後，才定義 baseline 與 time split。
+4. **Track A：完成 ablation／error analysis／research summary。** 恢復 Track A 時沿用現有 HGB／XGBoost 結果，不重做已完成模型。
+5. **延後 Deep Learning。** 等 ablation、error analysis 完成後再決定是否有比較價值。
+6. **延後 Optimization。** 不得以 Track A hourly demand 直接推導缺車或調度。
+7. **沿用現有 Web Demo。** Streamlit 不是必要工作；不要為符合舊計畫重做前端。
 
 ## 9. Codex 交接規則
 
@@ -159,7 +167,78 @@ Rolling-origin HGB folds 的 MAE 為 1.636、1.592、1.606；XGBoost folds 為 1
 13. 不要因舊計畫指定 Random Forest、Streamlit、LSTM 或 Optimization 就跳過目前優先順序。
 14. Optimization 必須等待 Track B 有效預測與營運限制；Track A 只能作為經驗證的背景訊號，不能直接當即時庫存缺口。
 
-## 10. 交接時應更新的欄位
+## 10. Stage 11 最新交接紀錄
+
+### Track A Status
+
+Track A 未重訓、未修改模型 target、artifact 或 metrics。HGB holdout MAE 1.575、RMSE 2.549、R² 0.794，歷史 React/Vinext Dashboard 維持原部署與歷史回測定位。
+
+### Track B Status
+
+- 本機真實資料：12 snapshots、2026-08-20 20:20:14～21:15:23（Asia/Taipei）、約 55 分鐘、每份約 1,790 站。
+- 2026-08-21 單次 schema check：官方 API 回傳 1,794 站，必要欄位全數存在；這只是 schema 驗證，不是正式雲端資料集。
+- 雲端資料：0 rows；production collector 尚未部署。
+- 30／60 分鐘 future target coverage 仍不足，沒有 Track B 模型 metrics。
+
+### Cloud architecture
+
+- Primary：standalone Cloudflare Worker + Cron Trigger + D1。
+- Cron：`*/5 * * * *`，Cloudflare 以 UTC 執行。
+- D1：`station_snapshots` + `collection_runs`。
+- R2：本階段不使用；若未來有 raw payload 稽核／冷儲存需求才另行評估。
+- Export：Bearer token 保護、cursor pagination 的 `/export.csv`，由 `src/export_track_b.py` 合併成單一 CSV。
+
+### Database schema
+
+`station_snapshots` 保存 UTC snapshot/source/station update times、station ID/name、available bikes、available return bikes、capacity、latitude、longitude、active flag；`PRIMARY KEY (station_id, snapshot_time)` 強制去重，另有 time index。`collection_runs` 保存每次排程成功／失敗、attempts、station count、inserted count 與錯誤資訊。
+
+### New files
+
+- `cloudflare/track-b-collector/package.json`
+- `cloudflare/track-b-collector/pnpm-lock.yaml`
+- `cloudflare/track-b-collector/wrangler.jsonc`
+- `cloudflare/track-b-collector/src/index.mjs`
+- `cloudflare/track-b-collector/migrations/0001_track_b_live.sql`
+- `cloudflare/track-b-collector/test/collector.test.mjs`
+- `cloudflare/track-b-collector/README.md`
+- `src/export_track_b.py`
+- `tests/test_export_track_b.py`
+- `docs/STAGE_11_TRACK_B_CLOUD_COLLECTION.md`
+
+### Modified files
+
+- `PROJECT_PLAN.md`
+- `README.md`
+- `HANDOFF.md`
+
+### Test results
+
+- 完整 Python repository tests：43 passed；包含 Track B export／D1 的 2 項新測試。
+- Node collector tests：9 passed；包含成功／失敗 collection run logging。
+- Wrangler dry-run：成功，Worker bundle 約 18.4 KiB，D1／vars bindings 可解析。
+- Wrangler local D1 migration：6 個 schema commands 全數成功。
+- 目前官方 API 1,794 rows 全數通過實際 transform validation。
+- Dashboard lint、Vinext production build 與 server-rendered HTML test 均通過；Track A 展示未受影響。
+
+### Deployment status and user actions required
+
+目前停在 Cloudflare credential boundary。Owner 必須登入 Cloudflare Dashboard 建立 `youbike-track-b-live` D1，將真實 Database ID 填入 `wrangler.jsonc`，授權 Wrangler、套用 migration、部署 Worker、設定 `EXPORT_TOKEN`，並在 Triggers／Logs／D1 Console 驗證。逐步操作見 `docs/STAGE_11_TRACK_B_CLOUD_COLLECTION.md` 第 11 節。
+
+### Known limitations
+
+1. Production Worker、D1、Cron 尚未建立，雲端蒐集尚未開始。
+2. 5 分鐘 Cron 不能保證無抖動；必須以實際 gap audit 判斷 target coverage。
+3. API station count 會變動，不可固定為 1,790。
+4. 28 天估計約 14.43M rows、約 2.36 GiB SQLite planning size；Cloudflare 實際用量與帳號方案需由 Console 確認。
+5. D1 是結構化主資料；本階段沒有 raw JSON R2 備份。
+6. 快照差值仍混合租借、還車、調度與資料修正。
+7. Live prediction、shortage／full risk、optimization 均未完成。
+
+### Next recommended step
+
+只完成 owner Cloudflare deployment 與 production smoke check；之後讓 collector 持續執行。7 天後做第一輪 coverage／gap audit，但 collector 不停止；14／28 天再逐步進入 Track B 資料研究。不要自動開始新模型 Stage。
+
+## 11. 交接時應更新的欄位
 
 每次階段性交接至少記錄：
 
