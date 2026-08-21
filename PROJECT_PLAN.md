@@ -106,7 +106,8 @@
 | Random Forest | 選配 | 不是進入下一階段的必要條件 |
 | Ablation Study | 已完成 | 固定 HGB 參數移除 6 個 feature groups；calendar 移除造成最大 MAE 退化 10.44%，holiday 增量方向不一致 |
 | Error Analysis | 已完成 | 已涵蓋 worst cases、hour／weekday、尖離峰、站點需求層級、天氣、政府機關放假類型與 daily errors |
-| Deep Learning | 未開始 | 須待 Track A 傳統模型研究鏈完整後再評估必要性 |
+| Consolidated Research Summary | 已完成 | 已整合資料範圍、模型比較、rolling-origin、ablation、error analysis、限制與決策 |
+| Deep Learning | 未開始／非優先 | Track A 傳統模型研究鏈已完整；只有在新增研究價值明確時才評估 |
 | Track B availability model | 未開始訓練 | 等待多日連續快照與 target coverage |
 | Track B Cloud Live Collector | 已部署／資料累積中 | Worker + `*/5` Cron + D1 + validation／retry／logging；連續三輪成功、5,382 rows，CSV export secret 已生效 |
 | Optimization | 未開始 | 必須建立在 Track B 的有效狀態／風險預測與明確營運限制上 |
@@ -120,11 +121,11 @@
 2. `EXPORT_TOKEN` 與未授權拒絕已驗證；未來匯出時由 owner 在本機安全輸入 token，完成授權下載 smoke test。
 3. 30／60 分鐘 target coverage 足夠以前，不開始 availability／risk model，也不宣稱 live prediction 完成。
 
-### Priority 2 — 完成 Track A Research Summary
+### Priority 2 — Track A Research Summary 已完成
 
-1. Feature-group ablation 與完整 error analysis 已完成；維持 HGB 主模型與既有 feature schema。
-2. 撰寫 Track A 研究摘要，整合 Naive／Ridge／HGB／XGBoost、rolling-origin、ablation 與限制。
-3. 忠實記錄 holiday flag 沒有一致改善，且不得用 worst cases 猜測事件原因。
+1. 已完成 consolidated research summary，整合 Naive／Ridge／HGB／XGBoost、rolling-origin、ablation、error analysis 與限制。
+2. 維持 HGB with weather 為主模型與既有 feature schema；holiday flag 因證據方向不一致而不加入。
+3. Track A 在目前計畫內進入維護狀態；未來有新年度資料時優先做跨年度驗證，而不是增加相近模型。
 4. Random Forest 不再是必要項；Deep Learning 只在研究問題與資源價值明確時重新評估。
 
 ### Priority 3 — 平行累積 Track B 資料
@@ -167,6 +168,7 @@ Track A 可以作為長期需求背景訊號或候選特徵，但必須先經驗
 - 可重現的資料與模型 pipeline。
 - Naive、Ridge、HGB 與 XGBoost 統一比較。
 - Ablation、error analysis、rolling-origin validation 與 model documentation。
+- Track A consolidated research summary 與明確的成果邊界、研究結論及後續決策。
 - React 19 + Vinext + Cloudflare／Sites Interactive Web Demo。
 - Track B Cloudflare Worker、Cron Trigger、D1 schema、collection logs、CSV export 與部署文件。
 - `README.md`、`PROJECT_PLAN.md`、`HANDOFF.md` 與各 Stage 文件。
@@ -187,7 +189,9 @@ Track A: Preserve Existing Models and Dashboard
         ↓
 Feature Ablation + Error Analysis Complete
         ↓
-Write Consolidated Research Summary
+Consolidated Research Summary Complete
+        ↓
+Maintenance / Future Cross-year Validation
 ```
 
 目前不要優先進行：Deep Learning、Optimization、重做 Streamlit，或把歷史 Dashboard 改稱 Live prediction。

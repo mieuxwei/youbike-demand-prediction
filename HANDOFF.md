@@ -2,7 +2,7 @@
 
 **Date:** 2026-08-21
 
-**Current Stage:** Stage 12 — Track A Feature-group Ablation + Complete Error Analysis
+**Current Stage:** Stage 13 — Track A Consolidated Research Summary Complete
 
 **Deployment status:** Cloudflare D1／Worker／Cron production deployment active; consecutive scheduled snapshots succeeded. `EXPORT_TOKEN` is configured and unauthorized export protection is verified.
 
@@ -10,7 +10,7 @@
 
 目前專案已有一條成熟的歷史需求研究線與一條仍在累積資料的即時 availability 研究線。接手者必須保持兩者的 target、資料、評估與對外說法分離。
 
-- **Track A：歷史轉乘需求預測** — 已完成 2023 全年資料、天氣、Naive／Ridge／HGB／XGBoost、rolling-origin validation、feature-group ablation、完整 error analysis、預測介面與 Interactive Web Demo；下一步是整合 research summary。
+- **Track A：歷史轉乘需求預測** — 已完成 2023 全年資料、天氣、Naive／Ridge／HGB／XGBoost、rolling-origin validation、feature-group ablation、完整 error analysis、consolidated research summary、預測介面與 Interactive Web Demo；目前進入維護狀態。
 - **Track B：即時可用車／缺車風險** — 已完成本機 pipeline 並正式部署 Cloudflare Worker + Cron + D1；正在累積多日資料，尚未開始正式建模。
 - **Deep Learning 與 Optimization** — 尚未開始；Optimization 不能使用 Track A demand 直接當 shortage。
 
@@ -131,9 +131,9 @@ Rolling-origin HGB folds 的 MAE 為 1.636、1.592、1.606；XGBoost folds 為 1
 
 | Track | 狀態 | 下一個有效成果 |
 |---|---|---|
-| Track A：歷史轉乘需求 | Naive／Ridge／HGB／XGBoost、ablation、完整 error analysis 與展示已完成 | Consolidated research summary |
+| Track A：歷史轉乘需求 | Naive／Ridge／HGB／XGBoost、ablation、完整 error analysis、research summary 與展示已完成 | 維護；有新年度資料時做跨年度驗證 |
 | Track B：即時 availability／risk | 雲端 collector 已部署；資料累積中、仍不足以建模 | 持續累積並做 coverage／gap audit；需要時做授權 export smoke test |
-| Deep Learning | 未開始 | Track A 研究鏈完成後再決定是否執行 |
+| Deep Learning | 未開始／非優先 | 只有新增研究價值明確時才重新評估 |
 | Optimization | 未開始 | Track B 有效預測與營運限制定義完成後才設計 |
 
 ## 8. 下一步優先順序
@@ -141,8 +141,8 @@ Rolling-origin HGB folds 的 MAE 為 1.636、1.592、1.606；XGBoost folds 為 1
 1. **Track B：持續監控。** `EXPORT_TOKEN` 已生效；需要匯出時由 owner 在本機安全輸入 token，完成授權 CSV export smoke test。
 2. **Track B：持續蒐集 snapshots。** 7 天做初步可行性、14 天比較平假日、28 天作為第一版正式模型建議最低目標；記錄中斷與資料缺口。
 3. **Track B：重新做 coverage audit。** 只有 30／60 分鐘 targets 足夠後，才定義 baseline 與 time split。
-4. **Track A：完成 research summary。** 沿用現有 HGB／XGBoost／ablation／error results，不重做已完成模型。
-5. **延後 Deep Learning。** 等 ablation、error analysis 完成後再決定是否有比較價值。
+4. **Track A：維護既有成果。** Research summary 已完成；沿用現有 HGB／XGBoost／ablation／error results，不重做已完成模型。
+5. **Deep Learning 非優先。** Track A 研究鏈已完整；只有新增研究價值明確時才重新評估。
 6. **延後 Optimization。** 不得以 Track A hourly demand 直接推導缺車或調度。
 7. **沿用現有 Web Demo。** Streamlit 不是必要工作；不要為符合舊計畫重做前端。
 
@@ -293,7 +293,52 @@ Cloudflare Worker + D1 + `*/5 * * * *` Cron 持續獨立運作；本階段沒有
 
 整理 Track A consolidated research summary，不新增 Random Forest、LSTM 或 Optimization。Track B collector 繼續累積，滿 7 天後另做 coverage／gap audit。
 
-## 12. 交接時應更新的欄位
+## 12. Stage 13 最新交接紀錄
+
+### Track A Status
+
+- 已完成 `docs/STAGE_13_TRACK_A_RESEARCH_SUMMARY.md`，整合研究問題、資料範圍、時序切分、防洩漏規則、模型比較、rolling-origin、feature evidence、完整 error analysis、限制與決策。
+- HGB with weather 維持主模型：2023 年 12 月 holdout MAE 1.575、RMSE 2.549、R² 0.794。
+- 相較 previous hour、previous week same hour 與 Ridge with weather，HGB MAE 分別降低約 35.5%、27.6% 與 12.2%。
+- HGB 三段 rolling-origin MAE 1.592–1.636、平均 1.611；每一段均優於 XGBoost。
+- Track A 在目前計畫內進入 maintenance 狀態。Random Forest／LSTM 不列為必要下一步；有新年度資料時優先做跨年度驗證。
+
+### Track B Status
+
+Cloudflare Worker + D1 + `*/5 * * * *` Cron 維持獨立蒐集。本階段沒有重新啟動 collector、修改 schema、訓練 availability model 或執行 Optimization。
+
+### New files
+
+- `docs/STAGE_13_TRACK_A_RESEARCH_SUMMARY.md`
+
+### Modified files
+
+- `PROJECT_PLAN.md`
+- `README.md`
+- `HANDOFF.md`
+- `docs/MODEL_CARD.md`
+
+### Validation
+
+- 研究摘要中的模型 metrics、rolling-origin folds、ablation 數值與 context errors 均由既有 committed CSV／JSON 重新核對。
+- 完整 Python repository tests：48 passed。
+- Track B collector Node tests：9 passed；本階段未修改 collector source。
+- Stage 13 metrics assertions 與 Markdown link checks：passed。
+- Dashboard source 未修改，因此依 Sites 規範不需要重新 build 或 deploy。
+
+### Known limitations
+
+1. 本階段是既有實驗證據的整合，不是新模型實驗。
+2. 結論只適用 2023 年轉乘相關旅次、training-defined top-100 站點與既有切分。
+3. 跨年度、全站點、完整 YouBike 旅次及線上 weather forecast 尚未驗證。
+4. Peak／station／weather 情境差異不是因果效果。
+5. Track A demand 不能當作 Track B availability、shortage 或調度 target。
+
+### Next recommended step
+
+Track B collector 繼續累積；滿 7 天時執行第一輪 coverage／gap audit，但不要停止蒐集。30／60 分鐘 targets 通過資料完整性檢查以前，不開始 Track B 模型。
+
+## 13. 交接時應更新的欄位
 
 每次階段性交接至少記錄：
 

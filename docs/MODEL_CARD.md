@@ -107,3 +107,6 @@ Metadata 保存：
 - 站點大規模新增／更名時重新訓練並更新 scope。
 - 新年度資料可用後重新做跨年 holdout。
 - 若 rolling MAE 明顯高於目前 1.592–1.636 範圍，應檢查資料漂移與模型失效。
+
+Track A 的完整實驗脈絡、模型比較、ablation、情境誤差與研究決策見
+[`STAGE_13_TRACK_A_RESEARCH_SUMMARY.md`](STAGE_13_TRACK_A_RESEARCH_SUMMARY.md)。

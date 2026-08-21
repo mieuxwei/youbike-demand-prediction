@@ -302,6 +302,22 @@ model. The error report confirms that evening peak, morning peak, high-demand
 stations, and actual demand of 10 or more remain the hardest segments. See the
 [Stage 12 analysis](docs/STAGE_12_FEATURE_ABLATION_ERROR_ANALYSIS.md).
 
+## Consolidated Track A Research Summary
+
+Track A's planned traditional-model research chain is complete. The consolidated
+summary brings the data scope, chronological evaluation design, Naive／Ridge／HGB／
+XGBoost comparison, rolling-origin evidence, feature ablation, context errors,
+research conclusions, and validity limits into one reviewable document.
+
+HGB with weather remains the primary model: December holdout MAE 1.575, RMSE
+2.549, and R² 0.794. Its three rolling-origin MAEs are 1.636, 1.592, and 1.606.
+The main unresolved errors occur during commuting peaks, at high-demand stations,
+and when actual hourly demand reaches 10 or more. These findings support historical
+demand research and backtesting only; they are not live bike-availability or
+redistribution results.
+
+Read the [Stage 13 consolidated Track A research summary](docs/STAGE_13_TRACK_A_RESEARCH_SUMMARY.md).
+
 ## Prediction Interface
 
 Generate a ranked prediction for one target hour:
