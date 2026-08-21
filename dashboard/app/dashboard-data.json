@@ -1,0 +1,7357 @@
+{
+  "meta": {
+    "title": "YouBike 歷史需求觀測站",
+    "model": "Histogram Gradient Boosting + 天氣",
+    "scope": "hourly transfer-related borrowing demand",
+    "stationCount": 100,
+    "testPeriod": "2023-12-01 至 2023-12-31",
+    "trainedThrough": "2023-11-30T23:00:00+08:00",
+    "targetCount": 10,
+    "testMetrics": {
+      "mae": 1.575,
+      "rmse": 2.549,
+      "r2": 0.794
+    }
+  },
+  "targets": [
+    {
+      "id": "20231201-08",
+      "targetTime": "2023-12-01T08:00:00+08:00",
+      "dateLabel": "12 月 1 日",
+      "timeLabel": "08:00",
+      "weekdayLabel": "週五",
+      "periodLabel": "平日",
+      "weather": {
+        "temperatureC": 16.9,
+        "humidityPercent": 84,
+        "precipitationMm": 0.1,
+        "windSpeedKmh": 12.8,
+        "isRaining": true
+      },
+      "summary": {
+        "totalPredicted": 726,
+        "totalActual": 876,
+        "mae": 2.86,
+        "largestDemandStation": "捷運公館站(3號出口)"
+      },
+      "stations": [
+        {
+          "rank": 1,
+          "station": "捷運公館站(3號出口)",
+          "predicted": 25.2,
+          "actual": 31.0,
+          "absoluteError": 5.8
+        },
+        {
+          "rank": 2,
+          "station": "捷運公館站(2號出口)",
+          "predicted": 23.37,
+          "actual": 38.0,
+          "absoluteError": 14.63
+        },
+        {
+          "rank": 3,
+          "station": "捷運中山國中站",
+          "predicted": 21.28,
+          "actual": 38.0,
+          "absoluteError": 16.72
+        },
+        {
+          "rank": 4,
+          "station": "捷運科技大樓站",
+          "predicted": 20.14,
+          "actual": 27.0,
+          "absoluteError": 6.86
+        },
+        {
+          "rank": 5,
+          "station": "捷運六張犁站",
+          "predicted": 19.43,
+          "actual": 22.0,
+          "absoluteError": 2.57
+        },
+        {
+          "rank": 6,
+          "station": "捷運松江南京站(7號出口)",
+          "predicted": 17.55,
+          "actual": 22.0,
+          "absoluteError": 4.45
+        },
+        {
+          "rank": 7,
+          "station": "捷運行天宮站(3號出口)",
+          "predicted": 16.8,
+          "actual": 19.0,
+          "absoluteError": 2.2
+        },
+        {
+          "rank": 8,
+          "station": "捷運芝山站(2號出口)_1",
+          "predicted": 16.74,
+          "actual": 12.0,
+          "absoluteError": 4.74
+        },
+        {
+          "rank": 9,
+          "station": "捷運劍南路站(2號出口)",
+          "predicted": 14.12,
+          "actual": 16.0,
+          "absoluteError": 1.88
+        },
+        {
+          "rank": 10,
+          "station": "捷運大橋頭站(2號出口)",
+          "predicted": 13.52,
+          "actual": 17.0,
+          "absoluteError": 3.48
+        },
+        {
+          "rank": 11,
+          "station": "捷運龍山寺站(1號出口)",
+          "predicted": 13.18,
+          "actual": 25.0,
+          "absoluteError": 11.82
+        },
+        {
+          "rank": 12,
+          "station": "捷運芝山站(1號出口)",
+          "predicted": 12.59,
+          "actual": 10.0,
+          "absoluteError": 2.59
+        },
+        {
+          "rank": 13,
+          "station": "捷運北門站(3號出口)",
+          "predicted": 12.47,
+          "actual": 15.0,
+          "absoluteError": 2.53
+        },
+        {
+          "rank": 14,
+          "station": "捷運圓山站(2號出口)",
+          "predicted": 12.27,
+          "actual": 20.0,
+          "absoluteError": 7.73
+        },
+        {
+          "rank": 15,
+          "station": "捷運劍潭站(2號出口)",
+          "predicted": 12.27,
+          "actual": 24.0,
+          "absoluteError": 11.73
+        },
+        {
+          "rank": 16,
+          "station": "南京遼寧街口",
+          "predicted": 12.19,
+          "actual": 14.0,
+          "absoluteError": 1.81
+        },
+        {
+          "rank": 17,
+          "station": "信義廣場(臺北101)",
+          "predicted": 12.12,
+          "actual": 7.0,
+          "absoluteError": 5.12
+        },
+        {
+          "rank": 18,
+          "station": "捷運象山站(3號出口)",
+          "predicted": 11.99,
+          "actual": 13.0,
+          "absoluteError": 1.01
+        },
+        {
+          "rank": 19,
+          "station": "捷運象山站(2號出口)",
+          "predicted": 11.71,
+          "actual": 13.0,
+          "absoluteError": 1.29
+        },
+        {
+          "rank": 20,
+          "station": "捷運南京三民站(1號出口)",
+          "predicted": 11.22,
+          "actual": 10.0,
+          "absoluteError": 1.22
+        },
+        {
+          "rank": 21,
+          "station": "捷運圓山站(1號出口)",
+          "predicted": 10.65,
+          "actual": 13.0,
+          "absoluteError": 2.35
+        },
+        {
+          "rank": 22,
+          "station": "捷運中山國小站(4號出口)",
+          "predicted": 10.47,
+          "actual": 13.0,
+          "absoluteError": 2.53
+        },
+        {
+          "rank": 23,
+          "station": "捷運劍潭站(1號出口)",
+          "predicted": 10.23,
+          "actual": 19.0,
+          "absoluteError": 8.77
+        },
+        {
+          "rank": 24,
+          "station": "捷運石牌站(2號出口)",
+          "predicted": 10.07,
+          "actual": 11.0,
+          "absoluteError": 0.93
+        },
+        {
+          "rank": 25,
+          "station": "捷運永春站(2號出口)",
+          "predicted": 9.8,
+          "actual": 14.0,
+          "absoluteError": 4.2
+        },
+        {
+          "rank": 26,
+          "station": "捷運東門站(5號出口)",
+          "predicted": 9.72,
+          "actual": 7.0,
+          "absoluteError": 2.72
+        },
+        {
+          "rank": 27,
+          "station": "捷運大安森林公園站(5號出口)",
+          "predicted": 9.06,
+          "actual": 9.0,
+          "absoluteError": 0.06
+        },
+        {
+          "rank": 28,
+          "station": "興雅松仁路口",
+          "predicted": 8.99,
+          "actual": 8.0,
+          "absoluteError": 0.99
+        },
+        {
+          "rank": 29,
+          "station": "捷運士林站(2號出口)",
+          "predicted": 8.99,
+          "actual": 14.0,
+          "absoluteError": 5.01
+        },
+        {
+          "rank": 30,
+          "station": "捷運大安站(3號出口)",
+          "predicted": 8.72,
+          "actual": 10.0,
+          "absoluteError": 1.28
+        },
+        {
+          "rank": 31,
+          "station": "捷運國父紀念館站(2號出口)",
+          "predicted": 8.67,
+          "actual": 7.0,
+          "absoluteError": 1.67
+        },
+        {
+          "rank": 32,
+          "station": "捷運臺北101/世貿站(2號出口)",
+          "predicted": 8.67,
+          "actual": 13.0,
+          "absoluteError": 4.33
+        },
+        {
+          "rank": 33,
+          "station": "捷運南京復興站(5號出口)",
+          "predicted": 8.54,
+          "actual": 10.0,
+          "absoluteError": 1.46
+        },
+        {
+          "rank": 34,
+          "station": "捷運忠孝復興站(2號出口)",
+          "predicted": 8.47,
+          "actual": 6.0,
+          "absoluteError": 2.47
+        },
+        {
+          "rank": 35,
+          "station": "捷運西門站(3號出口)",
+          "predicted": 8.45,
+          "actual": 12.0,
+          "absoluteError": 3.55
+        },
+        {
+          "rank": 36,
+          "station": "捷運南京復興站(7號出口)",
+          "predicted": 8.25,
+          "actual": 13.0,
+          "absoluteError": 4.75
+        },
+        {
+          "rank": 37,
+          "station": "捷運大安站(4號出口)",
+          "predicted": 8.18,
+          "actual": 8.0,
+          "absoluteError": 0.18
+        },
+        {
+          "rank": 38,
+          "station": "捷運古亭站(8號出口)",
+          "predicted": 8.11,
+          "actual": 4.0,
+          "absoluteError": 4.11
+        },
+        {
+          "rank": 39,
+          "station": "捷運市政府站(3號出口)",
+          "predicted": 8.01,
+          "actual": 4.0,
+          "absoluteError": 4.01
+        },
+        {
+          "rank": 40,
+          "station": "捷運松江南京站(8號出口)",
+          "predicted": 7.85,
+          "actual": 8.0,
+          "absoluteError": 0.15
+        },
+        {
+          "rank": 41,
+          "station": "捷運文德站(2號出口)",
+          "predicted": 7.84,
+          "actual": 12.0,
+          "absoluteError": 4.16
+        },
+        {
+          "rank": 42,
+          "station": "捷運臺大醫院站(4號出口)",
+          "predicted": 7.8,
+          "actual": 4.0,
+          "absoluteError": 3.8
+        },
+        {
+          "rank": 43,
+          "station": "捷運後山埤站(2號出口)",
+          "predicted": 7.71,
+          "actual": 6.0,
+          "absoluteError": 1.71
+        },
+        {
+          "rank": 44,
+          "station": "捷運北投站(1號出口)",
+          "predicted": 7.39,
+          "actual": 5.0,
+          "absoluteError": 2.39
+        },
+        {
+          "rank": 45,
+          "station": "捷運忠孝新生站(4號出口)",
+          "predicted": 7.35,
+          "actual": 8.0,
+          "absoluteError": 0.65
+        },
+        {
+          "rank": 46,
+          "station": "捷運士林站(1號出口)",
+          "predicted": 7.18,
+          "actual": 8.0,
+          "absoluteError": 0.82
+        },
+        {
+          "rank": 47,
+          "station": "捷運善導寺站(3號出口)(忠孝東路側)",
+          "predicted": 6.35,
+          "actual": 10.0,
+          "absoluteError": 3.65
+        },
+        {
+          "rank": 48,
+          "station": "捷運中山站(2號出口)",
+          "predicted": 6.09,
+          "actual": 2.0,
+          "absoluteError": 4.09
+        },
+        {
+          "rank": 49,
+          "station": "臺大鹿鳴堂東側",
+          "predicted": 5.96,
+          "actual": 2.0,
+          "absoluteError": 3.96
+        },
+        {
+          "rank": 50,
+          "station": "捷運古亭站(6號出口)",
+          "predicted": 5.81,
+          "actual": 9.0,
+          "absoluteError": 3.19
+        },
+        {
+          "rank": 51,
+          "station": "捷運小巨蛋站(5號出口)_1",
+          "predicted": 5.65,
+          "actual": 7.0,
+          "absoluteError": 1.35
+        },
+        {
+          "rank": 52,
+          "station": "捷運大安森林公園站(2號出口)",
+          "predicted": 5.48,
+          "actual": 7.0,
+          "absoluteError": 1.52
+        },
+        {
+          "rank": 53,
+          "station": "捷運雙連站(2號出口)",
+          "predicted": 5.44,
+          "actual": 10.0,
+          "absoluteError": 4.56
+        },
+        {
+          "rank": 54,
+          "station": "捷運關渡站(1號出口)",
+          "predicted": 5.44,
+          "actual": 3.0,
+          "absoluteError": 2.44
+        },
+        {
+          "rank": 55,
+          "station": "捷運明德站(3號出口)",
+          "predicted": 5.33,
+          "actual": 6.0,
+          "absoluteError": 0.67
+        },
+        {
+          "rank": 56,
+          "station": "捷運古亭站(2號出口)",
+          "predicted": 5.18,
+          "actual": 5.0,
+          "absoluteError": 0.18
+        },
+        {
+          "rank": 57,
+          "station": "捷運忠孝新生站(2號出口)",
+          "predicted": 5.02,
+          "actual": 8.0,
+          "absoluteError": 2.98
+        },
+        {
+          "rank": 58,
+          "station": "捷運西門站(5號出口)",
+          "predicted": 4.97,
+          "actual": 7.0,
+          "absoluteError": 2.03
+        },
+        {
+          "rank": 59,
+          "station": "捷運信義安和站(4號出口)",
+          "predicted": 4.5,
+          "actual": 9.0,
+          "absoluteError": 4.5
+        },
+        {
+          "rank": 60,
+          "station": "捷運中山站(5號出口)",
+          "predicted": 4.47,
+          "actual": 9.0,
+          "absoluteError": 4.53
+        },
+        {
+          "rank": 61,
+          "station": "捷運松江南京站(4號出口)",
+          "predicted": 4.38,
+          "actual": 4.0,
+          "absoluteError": 0.38
+        },
+        {
+          "rank": 62,
+          "station": "捷運南京三民站(2號出口)",
+          "predicted": 4.34,
+          "actual": 7.0,
+          "absoluteError": 2.66
+        },
+        {
+          "rank": 63,
+          "station": "捷運信義安和站(2號出口)",
+          "predicted": 4.33,
+          "actual": 4.0,
+          "absoluteError": 0.33
+        },
+        {
+          "rank": 64,
+          "station": "捷運信義安和站(1號出口)",
+          "predicted": 4.29,
+          "actual": 6.0,
+          "absoluteError": 1.71
+        },
+        {
+          "rank": 65,
+          "station": "捷運古亭站(5號出口)",
+          "predicted": 4.28,
+          "actual": 2.0,
+          "absoluteError": 2.28
+        },
+        {
+          "rank": 66,
+          "station": "捷運小巨蛋站(3號出口)",
+          "predicted": 4.21,
+          "actual": 5.0,
+          "absoluteError": 0.79
+        },
+        {
+          "rank": 67,
+          "station": "捷運南港展覽館站(5號出口)",
+          "predicted": 4.17,
+          "actual": 8.0,
+          "absoluteError": 3.83
+        },
+        {
+          "rank": 68,
+          "station": "捷運港墘站(2號出口)",
+          "predicted": 4.07,
+          "actual": 2.0,
+          "absoluteError": 2.07
+        },
+        {
+          "rank": 69,
+          "station": "捷運臺北101/世貿站(3號出口)",
+          "predicted": 4.06,
+          "actual": 6.0,
+          "absoluteError": 1.94
+        },
+        {
+          "rank": 70,
+          "station": "捷運象山站(1號出口)",
+          "predicted": 4.0,
+          "actual": 2.0,
+          "absoluteError": 2.0
+        },
+        {
+          "rank": 71,
+          "station": "西本願寺廣場",
+          "predicted": 3.67,
+          "actual": 2.0,
+          "absoluteError": 1.67
+        },
+        {
+          "rank": 72,
+          "station": "捷運昆陽站(1號出口)",
+          "predicted": 3.65,
+          "actual": 3.0,
+          "absoluteError": 0.65
+        },
+        {
+          "rank": 73,
+          "station": "臺大大一女舍北側",
+          "predicted": 3.61,
+          "actual": 10.0,
+          "absoluteError": 6.39
+        },
+        {
+          "rank": 74,
+          "station": "捷運奇岩站(三合街)",
+          "predicted": 3.44,
+          "actual": 3.0,
+          "absoluteError": 0.44
+        },
+        {
+          "rank": 75,
+          "station": "捷運大安站(5號出口)",
+          "predicted": 3.33,
+          "actual": 2.0,
+          "absoluteError": 1.33
+        },
+        {
+          "rank": 76,
+          "station": "捷運唭哩岸站(2號出口)",
+          "predicted": 3.17,
+          "actual": 5.0,
+          "absoluteError": 1.83
+        },
+        {
+          "rank": 77,
+          "station": "捷運公館站(1號出口)",
+          "predicted": 3.13,
+          "actual": 3.0,
+          "absoluteError": 0.13
+        },
+        {
+          "rank": 78,
+          "station": "捷運萬隆站(2號出口)",
+          "predicted": 3.07,
+          "actual": 3.0,
+          "absoluteError": 0.07
+        },
+        {
+          "rank": 79,
+          "station": "捷運港墘站(1號出口)",
+          "predicted": 2.95,
+          "actual": 6.0,
+          "absoluteError": 3.05
+        },
+        {
+          "rank": 80,
+          "station": "捷運南京三民站(4號出口)",
+          "predicted": 2.94,
+          "actual": 1.0,
+          "absoluteError": 1.94
+        },
+        {
+          "rank": 81,
+          "station": "捷運臺電大樓站(2號出口)",
+          "predicted": 2.81,
+          "actual": 6.0,
+          "absoluteError": 3.19
+        },
+        {
+          "rank": 82,
+          "station": "捷運松山站(4號出口)",
+          "predicted": 2.78,
+          "actual": 1.0,
+          "absoluteError": 1.78
+        },
+        {
+          "rank": 83,
+          "station": "捷運萬隆站(4號出口)",
+          "predicted": 2.77,
+          "actual": 2.0,
+          "absoluteError": 0.77
+        },
+        {
+          "rank": 84,
+          "station": "捷運萬隆站(1號出口)",
+          "predicted": 2.76,
+          "actual": 6.0,
+          "absoluteError": 3.24
+        },
+        {
+          "rank": 85,
+          "station": "捷運臺電大樓站(2號出口)_1",
+          "predicted": 2.56,
+          "actual": 11.0,
+          "absoluteError": 8.44
+        },
+        {
+          "rank": 86,
+          "station": "捷運松山站(3號出口)",
+          "predicted": 2.5,
+          "actual": 5.0,
+          "absoluteError": 2.5
+        },
+        {
+          "rank": 87,
+          "station": "捷運忠孝敦化站(7號出口)",
+          "predicted": 2.46,
+          "actual": 4.0,
+          "absoluteError": 1.54
+        },
+        {
+          "rank": 88,
+          "station": "捷運內湖站(1號出口)",
+          "predicted": 2.44,
+          "actual": 3.0,
+          "absoluteError": 0.56
+        },
+        {
+          "rank": 89,
+          "station": "臺大椰林小舖",
+          "predicted": 2.28,
+          "actual": 1.0,
+          "absoluteError": 1.28
+        },
+        {
+          "rank": 90,
+          "station": "捷運後山埤站(3號出口)",
+          "predicted": 2.16,
+          "actual": 3.0,
+          "absoluteError": 0.84
+        },
+        {
+          "rank": 91,
+          "station": "南港車站(市民大道)",
+          "predicted": 2.11,
+          "actual": 2.0,
+          "absoluteError": 0.11
+        },
+        {
+          "rank": 92,
+          "station": "捷運小南門站(1號出口)",
+          "predicted": 2.05,
+          "actual": 3.0,
+          "absoluteError": 0.95
+        },
+        {
+          "rank": 93,
+          "station": "復興南路二段273號前",
+          "predicted": 1.95,
+          "actual": 4.0,
+          "absoluteError": 2.05
+        },
+        {
+          "rank": 94,
+          "station": "捷運龍山寺站(1號出口)_1",
+          "predicted": 1.71,
+          "actual": 1.0,
+          "absoluteError": 0.71
+        },
+        {
+          "rank": 95,
+          "station": "捷運後山埤站(1號出口)",
+          "predicted": 1.32,
+          "actual": 1.0,
+          "absoluteError": 0.32
+        },
+        {
+          "rank": 96,
+          "station": "捷運西湖站(1號出口)",
+          "predicted": 1.26,
+          "actual": 1.0,
+          "absoluteError": 0.26
+        },
+        {
+          "rank": 97,
+          "station": "捷運景美站(2號出口)",
+          "predicted": 1.23,
+          "actual": 2.0,
+          "absoluteError": 0.77
+        },
+        {
+          "rank": 98,
+          "station": "捷運芝山站(2號出口)",
+          "predicted": 1.22,
+          "actual": 1.0,
+          "absoluteError": 0.22
+        },
+        {
+          "rank": 99,
+          "station": "捷運北投站(1號出口)(北投路側)",
+          "predicted": 0.95,
+          "actual": 0.0,
+          "absoluteError": 0.95
+        },
+        {
+          "rank": 100,
+          "station": "松山車站",
+          "predicted": 0.86,
+          "actual": 2.0,
+          "absoluteError": 1.14
+        }
+      ]
+    },
+    {
+      "id": "20231201-18",
+      "targetTime": "2023-12-01T18:00:00+08:00",
+      "dateLabel": "12 月 1 日",
+      "timeLabel": "18:00",
+      "weekdayLabel": "週五",
+      "periodLabel": "平日",
+      "weather": {
+        "temperatureC": 15.7,
+        "humidityPercent": 82,
+        "precipitationMm": 0.0,
+        "windSpeedKmh": 16.6,
+        "isRaining": false
+      },
+      "summary": {
+        "totalPredicted": 928,
+        "totalActual": 1235,
+        "mae": 4.27,
+        "largestDemandStation": "捷運科技大樓站"
+      },
+      "stations": [
+        {
+          "rank": 1,
+          "station": "捷運科技大樓站",
+          "predicted": 31.8,
+          "actual": 49,
+          "absoluteError": 17.2
+        },
+        {
+          "rank": 2,
+          "station": "捷運芝山站(2號出口)_1",
+          "predicted": 30.76,
+          "actual": 56,
+          "absoluteError": 25.24
+        },
+        {
+          "rank": 3,
+          "station": "捷運公館站(2號出口)",
+          "predicted": 29.86,
+          "actual": 36,
+          "absoluteError": 6.14
+        },
+        {
+          "rank": 4,
+          "station": "捷運劍潭站(2號出口)",
+          "predicted": 29.81,
+          "actual": 55,
+          "absoluteError": 25.19
+        },
+        {
+          "rank": 5,
+          "station": "捷運圓山站(1號出口)",
+          "predicted": 24.12,
+          "actual": 31,
+          "absoluteError": 6.88
+        },
+        {
+          "rank": 6,
+          "station": "捷運行天宮站(3號出口)",
+          "predicted": 19.87,
+          "actual": 34,
+          "absoluteError": 14.13
+        },
+        {
+          "rank": 7,
+          "station": "捷運芝山站(1號出口)",
+          "predicted": 19.22,
+          "actual": 36,
+          "absoluteError": 16.78
+        },
+        {
+          "rank": 8,
+          "station": "捷運中山國中站",
+          "predicted": 18.28,
+          "actual": 26,
+          "absoluteError": 7.72
+        },
+        {
+          "rank": 9,
+          "station": "捷運龍山寺站(1號出口)",
+          "predicted": 18.17,
+          "actual": 23,
+          "absoluteError": 4.83
+        },
+        {
+          "rank": 10,
+          "station": "捷運公館站(3號出口)",
+          "predicted": 17.12,
+          "actual": 16,
+          "absoluteError": 1.12
+        },
+        {
+          "rank": 11,
+          "station": "捷運永春站(2號出口)",
+          "predicted": 16.95,
+          "actual": 23,
+          "absoluteError": 6.05
+        },
+        {
+          "rank": 12,
+          "station": "捷運東門站(5號出口)",
+          "predicted": 15.94,
+          "actual": 20,
+          "absoluteError": 4.06
+        },
+        {
+          "rank": 13,
+          "station": "捷運象山站(3號出口)",
+          "predicted": 15.91,
+          "actual": 21,
+          "absoluteError": 5.09
+        },
+        {
+          "rank": 14,
+          "station": "捷運北投站(1號出口)",
+          "predicted": 15.84,
+          "actual": 14,
+          "absoluteError": 1.84
+        },
+        {
+          "rank": 15,
+          "station": "捷運六張犁站",
+          "predicted": 15.83,
+          "actual": 21,
+          "absoluteError": 5.17
+        },
+        {
+          "rank": 16,
+          "station": "捷運劍南路站(2號出口)",
+          "predicted": 15.3,
+          "actual": 29,
+          "absoluteError": 13.7
+        },
+        {
+          "rank": 17,
+          "station": "捷運大安站(4號出口)",
+          "predicted": 14.86,
+          "actual": 19,
+          "absoluteError": 4.14
+        },
+        {
+          "rank": 18,
+          "station": "捷運圓山站(2號出口)",
+          "predicted": 14.53,
+          "actual": 19,
+          "absoluteError": 4.47
+        },
+        {
+          "rank": 19,
+          "station": "捷運大安森林公園站(5號出口)",
+          "predicted": 14.12,
+          "actual": 20,
+          "absoluteError": 5.88
+        },
+        {
+          "rank": 20,
+          "station": "捷運南京三民站(1號出口)",
+          "predicted": 13.91,
+          "actual": 25,
+          "absoluteError": 11.09
+        },
+        {
+          "rank": 21,
+          "station": "捷運象山站(2號出口)",
+          "predicted": 13.58,
+          "actual": 23,
+          "absoluteError": 9.42
+        },
+        {
+          "rank": 22,
+          "station": "捷運士林站(2號出口)",
+          "predicted": 13.42,
+          "actual": 16,
+          "absoluteError": 2.58
+        },
+        {
+          "rank": 23,
+          "station": "捷運古亭站(2號出口)",
+          "predicted": 13.22,
+          "actual": 11,
+          "absoluteError": 2.22
+        },
+        {
+          "rank": 24,
+          "station": "捷運龍山寺站(1號出口)_1",
+          "predicted": 12.91,
+          "actual": 12,
+          "absoluteError": 0.91
+        },
+        {
+          "rank": 25,
+          "station": "捷運士林站(1號出口)",
+          "predicted": 12.57,
+          "actual": 12,
+          "absoluteError": 0.57
+        },
+        {
+          "rank": 26,
+          "station": "捷運劍潭站(1號出口)",
+          "predicted": 12.14,
+          "actual": 13,
+          "absoluteError": 0.86
+        },
+        {
+          "rank": 27,
+          "station": "捷運石牌站(2號出口)",
+          "predicted": 11.8,
+          "actual": 22,
+          "absoluteError": 10.2
+        },
+        {
+          "rank": 28,
+          "station": "捷運臺北101/世貿站(2號出口)",
+          "predicted": 11.54,
+          "actual": 18,
+          "absoluteError": 6.46
+        },
+        {
+          "rank": 29,
+          "station": "捷運古亭站(5號出口)",
+          "predicted": 11.48,
+          "actual": 11,
+          "absoluteError": 0.48
+        },
+        {
+          "rank": 30,
+          "station": "捷運信義安和站(4號出口)",
+          "predicted": 10.51,
+          "actual": 8,
+          "absoluteError": 2.51
+        },
+        {
+          "rank": 31,
+          "station": "捷運後山埤站(2號出口)",
+          "predicted": 10.44,
+          "actual": 15,
+          "absoluteError": 4.56
+        },
+        {
+          "rank": 32,
+          "station": "捷運松山站(3號出口)",
+          "predicted": 10.19,
+          "actual": 13,
+          "absoluteError": 2.81
+        },
+        {
+          "rank": 33,
+          "station": "捷運奇岩站(三合街)",
+          "predicted": 10.19,
+          "actual": 12,
+          "absoluteError": 1.81
+        },
+        {
+          "rank": 34,
+          "station": "捷運北門站(3號出口)",
+          "predicted": 10.11,
+          "actual": 13,
+          "absoluteError": 2.89
+        },
+        {
+          "rank": 35,
+          "station": "捷運中山站(2號出口)",
+          "predicted": 9.66,
+          "actual": 7,
+          "absoluteError": 2.66
+        },
+        {
+          "rank": 36,
+          "station": "捷運忠孝復興站(2號出口)",
+          "predicted": 9.64,
+          "actual": 16,
+          "absoluteError": 6.36
+        },
+        {
+          "rank": 37,
+          "station": "捷運南港展覽館站(5號出口)",
+          "predicted": 9.58,
+          "actual": 10,
+          "absoluteError": 0.42
+        },
+        {
+          "rank": 38,
+          "station": "捷運松江南京站(7號出口)",
+          "predicted": 9.56,
+          "actual": 23,
+          "absoluteError": 13.44
+        },
+        {
+          "rank": 39,
+          "station": "捷運臺電大樓站(2號出口)",
+          "predicted": 9.31,
+          "actual": 10,
+          "absoluteError": 0.69
+        },
+        {
+          "rank": 40,
+          "station": "捷運國父紀念館站(2號出口)",
+          "predicted": 9.28,
+          "actual": 7,
+          "absoluteError": 2.28
+        },
+        {
+          "rank": 41,
+          "station": "捷運內湖站(1號出口)",
+          "predicted": 8.81,
+          "actual": 13,
+          "absoluteError": 4.19
+        },
+        {
+          "rank": 42,
+          "station": "捷運明德站(3號出口)",
+          "predicted": 8.78,
+          "actual": 4,
+          "absoluteError": 4.78
+        },
+        {
+          "rank": 43,
+          "station": "捷運中山站(5號出口)",
+          "predicted": 8.45,
+          "actual": 10,
+          "absoluteError": 1.55
+        },
+        {
+          "rank": 44,
+          "station": "捷運大橋頭站(2號出口)",
+          "predicted": 8.27,
+          "actual": 8,
+          "absoluteError": 0.27
+        },
+        {
+          "rank": 45,
+          "station": "西本願寺廣場",
+          "predicted": 8.01,
+          "actual": 14,
+          "absoluteError": 5.99
+        },
+        {
+          "rank": 46,
+          "station": "捷運大安森林公園站(2號出口)",
+          "predicted": 7.73,
+          "actual": 15,
+          "absoluteError": 7.27
+        },
+        {
+          "rank": 47,
+          "station": "捷運西門站(3號出口)",
+          "predicted": 7.31,
+          "actual": 6,
+          "absoluteError": 1.31
+        },
+        {
+          "rank": 48,
+          "station": "捷運唭哩岸站(2號出口)",
+          "predicted": 7.12,
+          "actual": 7,
+          "absoluteError": 0.12
+        },
+        {
+          "rank": 49,
+          "station": "捷運文德站(2號出口)",
+          "predicted": 6.92,
+          "actual": 10,
+          "absoluteError": 3.08
+        },
+        {
+          "rank": 50,
+          "station": "捷運萬隆站(2號出口)",
+          "predicted": 6.92,
+          "actual": 5,
+          "absoluteError": 1.92
+        },
+        {
+          "rank": 51,
+          "station": "捷運小巨蛋站(5號出口)_1",
+          "predicted": 6.87,
+          "actual": 14,
+          "absoluteError": 7.13
+        },
+        {
+          "rank": 52,
+          "station": "捷運南京復興站(7號出口)",
+          "predicted": 6.79,
+          "actual": 8,
+          "absoluteError": 1.21
+        },
+        {
+          "rank": 53,
+          "station": "捷運松山站(4號出口)",
+          "predicted": 6.75,
+          "actual": 9,
+          "absoluteError": 2.25
+        },
+        {
+          "rank": 54,
+          "station": "捷運大安站(3號出口)",
+          "predicted": 6.66,
+          "actual": 10,
+          "absoluteError": 3.34
+        },
+        {
+          "rank": 55,
+          "station": "捷運中山國小站(4號出口)",
+          "predicted": 6.65,
+          "actual": 12,
+          "absoluteError": 5.35
+        },
+        {
+          "rank": 56,
+          "station": "捷運雙連站(2號出口)",
+          "predicted": 6.62,
+          "actual": 6,
+          "absoluteError": 0.62
+        },
+        {
+          "rank": 57,
+          "station": "捷運景美站(2號出口)",
+          "predicted": 6.42,
+          "actual": 7,
+          "absoluteError": 0.58
+        },
+        {
+          "rank": 58,
+          "station": "松山車站",
+          "predicted": 6.4,
+          "actual": 6,
+          "absoluteError": 0.4
+        },
+        {
+          "rank": 59,
+          "station": "捷運南京復興站(5號出口)",
+          "predicted": 6.16,
+          "actual": 6,
+          "absoluteError": 0.16
+        },
+        {
+          "rank": 60,
+          "station": "捷運信義安和站(1號出口)",
+          "predicted": 5.95,
+          "actual": 10,
+          "absoluteError": 4.05
+        },
+        {
+          "rank": 61,
+          "station": "捷運關渡站(1號出口)",
+          "predicted": 5.94,
+          "actual": 2,
+          "absoluteError": 3.94
+        },
+        {
+          "rank": 62,
+          "station": "捷運善導寺站(3號出口)(忠孝東路側)",
+          "predicted": 5.92,
+          "actual": 3,
+          "absoluteError": 2.92
+        },
+        {
+          "rank": 63,
+          "station": "捷運北投站(1號出口)(北投路側)",
+          "predicted": 5.76,
+          "actual": 7,
+          "absoluteError": 1.24
+        },
+        {
+          "rank": 64,
+          "station": "捷運南京三民站(4號出口)",
+          "predicted": 5.68,
+          "actual": 11,
+          "absoluteError": 5.32
+        },
+        {
+          "rank": 65,
+          "station": "捷運大安站(5號出口)",
+          "predicted": 5.66,
+          "actual": 11,
+          "absoluteError": 5.34
+        },
+        {
+          "rank": 66,
+          "station": "捷運象山站(1號出口)",
+          "predicted": 5.36,
+          "actual": 3,
+          "absoluteError": 2.36
+        },
+        {
+          "rank": 67,
+          "station": "捷運昆陽站(1號出口)",
+          "predicted": 5.31,
+          "actual": 9,
+          "absoluteError": 3.69
+        },
+        {
+          "rank": 68,
+          "station": "捷運港墘站(2號出口)",
+          "predicted": 5.22,
+          "actual": 4,
+          "absoluteError": 1.22
+        },
+        {
+          "rank": 69,
+          "station": "臺大大一女舍北側",
+          "predicted": 5.21,
+          "actual": 1,
+          "absoluteError": 4.21
+        },
+        {
+          "rank": 70,
+          "station": "捷運後山埤站(1號出口)",
+          "predicted": 5.2,
+          "actual": 3,
+          "absoluteError": 2.2
+        },
+        {
+          "rank": 71,
+          "station": "捷運港墘站(1號出口)",
+          "predicted": 5.2,
+          "actual": 3,
+          "absoluteError": 2.2
+        },
+        {
+          "rank": 72,
+          "station": "捷運信義安和站(2號出口)",
+          "predicted": 5.14,
+          "actual": 7,
+          "absoluteError": 1.86
+        },
+        {
+          "rank": 73,
+          "station": "捷運市政府站(3號出口)",
+          "predicted": 5.12,
+          "actual": 8,
+          "absoluteError": 2.88
+        },
+        {
+          "rank": 74,
+          "station": "捷運古亭站(8號出口)",
+          "predicted": 5.08,
+          "actual": 5,
+          "absoluteError": 0.08
+        },
+        {
+          "rank": 75,
+          "station": "捷運萬隆站(4號出口)",
+          "predicted": 4.99,
+          "actual": 1,
+          "absoluteError": 3.99
+        },
+        {
+          "rank": 76,
+          "station": "捷運後山埤站(3號出口)",
+          "predicted": 4.91,
+          "actual": 6,
+          "absoluteError": 1.09
+        },
+        {
+          "rank": 77,
+          "station": "捷運臺電大樓站(2號出口)_1",
+          "predicted": 4.83,
+          "actual": 6,
+          "absoluteError": 1.17
+        },
+        {
+          "rank": 78,
+          "station": "捷運芝山站(2號出口)",
+          "predicted": 4.78,
+          "actual": 2,
+          "absoluteError": 2.78
+        },
+        {
+          "rank": 79,
+          "station": "南京遼寧街口",
+          "predicted": 4.54,
+          "actual": 6,
+          "absoluteError": 1.46
+        },
+        {
+          "rank": 80,
+          "station": "捷運小巨蛋站(3號出口)",
+          "predicted": 4.48,
+          "actual": 2,
+          "absoluteError": 2.48
+        },
+        {
+          "rank": 81,
+          "station": "復興南路二段273號前",
+          "predicted": 4.47,
+          "actual": 9,
+          "absoluteError": 4.53
+        },
+        {
+          "rank": 82,
+          "station": "捷運忠孝敦化站(7號出口)",
+          "predicted": 4.36,
+          "actual": 8,
+          "absoluteError": 3.64
+        },
+        {
+          "rank": 83,
+          "station": "捷運忠孝新生站(4號出口)",
+          "predicted": 4.26,
+          "actual": 12,
+          "absoluteError": 7.74
+        },
+        {
+          "rank": 84,
+          "station": "捷運小南門站(1號出口)",
+          "predicted": 4.26,
+          "actual": 3,
+          "absoluteError": 1.26
+        },
+        {
+          "rank": 85,
+          "station": "捷運古亭站(6號出口)",
+          "predicted": 4.26,
+          "actual": 7,
+          "absoluteError": 2.74
+        },
+        {
+          "rank": 86,
+          "station": "捷運臺北101/世貿站(3號出口)",
+          "predicted": 4.24,
+          "actual": 12,
+          "absoluteError": 7.76
+        },
+        {
+          "rank": 87,
+          "station": "捷運公館站(1號出口)",
+          "predicted": 4.12,
+          "actual": 8,
+          "absoluteError": 3.88
+        },
+        {
+          "rank": 88,
+          "station": "捷運西門站(5號出口)",
+          "predicted": 4.0,
+          "actual": 2,
+          "absoluteError": 2.0
+        },
+        {
+          "rank": 89,
+          "station": "捷運萬隆站(1號出口)",
+          "predicted": 3.87,
+          "actual": 12,
+          "absoluteError": 8.13
+        },
+        {
+          "rank": 90,
+          "station": "捷運松江南京站(8號出口)",
+          "predicted": 3.8,
+          "actual": 7,
+          "absoluteError": 3.2
+        },
+        {
+          "rank": 91,
+          "station": "捷運臺大醫院站(4號出口)",
+          "predicted": 3.69,
+          "actual": 2,
+          "absoluteError": 1.69
+        },
+        {
+          "rank": 92,
+          "station": "捷運南京三民站(2號出口)",
+          "predicted": 3.6,
+          "actual": 7,
+          "absoluteError": 3.4
+        },
+        {
+          "rank": 93,
+          "station": "信義廣場(臺北101)",
+          "predicted": 3.27,
+          "actual": 6,
+          "absoluteError": 2.73
+        },
+        {
+          "rank": 94,
+          "station": "捷運松江南京站(4號出口)",
+          "predicted": 3.01,
+          "actual": 3,
+          "absoluteError": 0.01
+        },
+        {
+          "rank": 95,
+          "station": "南港車站(市民大道)",
+          "predicted": 3.0,
+          "actual": 2,
+          "absoluteError": 1.0
+        },
+        {
+          "rank": 96,
+          "station": "捷運西湖站(1號出口)",
+          "predicted": 2.75,
+          "actual": 2,
+          "absoluteError": 0.75
+        },
+        {
+          "rank": 97,
+          "station": "興雅松仁路口",
+          "predicted": 2.15,
+          "actual": 3,
+          "absoluteError": 0.85
+        },
+        {
+          "rank": 98,
+          "station": "捷運忠孝新生站(2號出口)",
+          "predicted": 1.8,
+          "actual": 3,
+          "absoluteError": 1.2
+        },
+        {
+          "rank": 99,
+          "station": "臺大椰林小舖",
+          "predicted": 0.79,
+          "actual": 2,
+          "absoluteError": 1.21
+        },
+        {
+          "rank": 100,
+          "station": "臺大鹿鳴堂東側",
+          "predicted": 0.67,
+          "actual": 0,
+          "absoluteError": 0.67
+        }
+      ]
+    },
+    {
+      "id": "20231209-14",
+      "targetTime": "2023-12-09T14:00:00+08:00",
+      "dateLabel": "12 月 9 日",
+      "timeLabel": "14:00",
+      "weekdayLabel": "週六",
+      "periodLabel": "週末",
+      "weather": {
+        "temperatureC": 26.7,
+        "humidityPercent": 59,
+        "precipitationMm": 0.0,
+        "windSpeedKmh": 0.0,
+        "isRaining": false
+      },
+      "summary": {
+        "totalPredicted": 681,
+        "totalActual": 697,
+        "mae": 2.07,
+        "largestDemandStation": "捷運公館站(2號出口)"
+      },
+      "stations": [
+        {
+          "rank": 1,
+          "station": "捷運公館站(2號出口)",
+          "predicted": 37.46,
+          "actual": 23.0,
+          "absoluteError": 14.46
+        },
+        {
+          "rank": 2,
+          "station": "捷運公館站(3號出口)",
+          "predicted": 22.07,
+          "actual": 20.0,
+          "absoluteError": 2.07
+        },
+        {
+          "rank": 3,
+          "station": "捷運芝山站(2號出口)_1",
+          "predicted": 20.57,
+          "actual": 17.0,
+          "absoluteError": 3.57
+        },
+        {
+          "rank": 4,
+          "station": "捷運科技大樓站",
+          "predicted": 18.81,
+          "actual": 15.0,
+          "absoluteError": 3.81
+        },
+        {
+          "rank": 5,
+          "station": "捷運劍潭站(2號出口)",
+          "predicted": 17.14,
+          "actual": 25.0,
+          "absoluteError": 7.86
+        },
+        {
+          "rank": 6,
+          "station": "捷運龍山寺站(1號出口)",
+          "predicted": 16.18,
+          "actual": 29.0,
+          "absoluteError": 12.82
+        },
+        {
+          "rank": 7,
+          "station": "捷運中山國中站",
+          "predicted": 14.64,
+          "actual": 11.0,
+          "absoluteError": 3.64
+        },
+        {
+          "rank": 8,
+          "station": "捷運圓山站(1號出口)",
+          "predicted": 14.29,
+          "actual": 13.0,
+          "absoluteError": 1.29
+        },
+        {
+          "rank": 9,
+          "station": "捷運南京三民站(1號出口)",
+          "predicted": 12.01,
+          "actual": 11.0,
+          "absoluteError": 1.01
+        },
+        {
+          "rank": 10,
+          "station": "捷運北投站(1號出口)",
+          "predicted": 11.39,
+          "actual": 7.0,
+          "absoluteError": 4.39
+        },
+        {
+          "rank": 11,
+          "station": "捷運北門站(3號出口)",
+          "predicted": 11.27,
+          "actual": 8.0,
+          "absoluteError": 3.27
+        },
+        {
+          "rank": 12,
+          "station": "捷運芝山站(1號出口)",
+          "predicted": 11.0,
+          "actual": 16.0,
+          "absoluteError": 5.0
+        },
+        {
+          "rank": 13,
+          "station": "捷運東門站(5號出口)",
+          "predicted": 10.96,
+          "actual": 13.0,
+          "absoluteError": 2.04
+        },
+        {
+          "rank": 14,
+          "station": "捷運永春站(2號出口)",
+          "predicted": 10.8,
+          "actual": 15.0,
+          "absoluteError": 4.2
+        },
+        {
+          "rank": 15,
+          "station": "捷運臺北101/世貿站(2號出口)",
+          "predicted": 10.7,
+          "actual": 15.0,
+          "absoluteError": 4.3
+        },
+        {
+          "rank": 16,
+          "station": "捷運行天宮站(3號出口)",
+          "predicted": 10.68,
+          "actual": 11.0,
+          "absoluteError": 0.32
+        },
+        {
+          "rank": 17,
+          "station": "捷運古亭站(2號出口)",
+          "predicted": 10.66,
+          "actual": 9.0,
+          "absoluteError": 1.66
+        },
+        {
+          "rank": 18,
+          "station": "捷運圓山站(2號出口)",
+          "predicted": 10.43,
+          "actual": 6.0,
+          "absoluteError": 4.43
+        },
+        {
+          "rank": 19,
+          "station": "捷運劍南路站(2號出口)",
+          "predicted": 10.31,
+          "actual": 6.0,
+          "absoluteError": 4.31
+        },
+        {
+          "rank": 20,
+          "station": "捷運士林站(2號出口)",
+          "predicted": 10.3,
+          "actual": 12.0,
+          "absoluteError": 1.7
+        },
+        {
+          "rank": 21,
+          "station": "捷運象山站(2號出口)",
+          "predicted": 9.89,
+          "actual": 13.0,
+          "absoluteError": 3.11
+        },
+        {
+          "rank": 22,
+          "station": "捷運六張犁站",
+          "predicted": 9.69,
+          "actual": 10.0,
+          "absoluteError": 0.31
+        },
+        {
+          "rank": 23,
+          "station": "捷運松江南京站(7號出口)",
+          "predicted": 9.65,
+          "actual": 9.0,
+          "absoluteError": 0.65
+        },
+        {
+          "rank": 24,
+          "station": "捷運大橋頭站(2號出口)",
+          "predicted": 9.32,
+          "actual": 8.0,
+          "absoluteError": 1.32
+        },
+        {
+          "rank": 25,
+          "station": "捷運關渡站(1號出口)",
+          "predicted": 8.98,
+          "actual": 14.0,
+          "absoluteError": 5.02
+        },
+        {
+          "rank": 26,
+          "station": "捷運後山埤站(2號出口)",
+          "predicted": 8.98,
+          "actual": 5.0,
+          "absoluteError": 3.98
+        },
+        {
+          "rank": 27,
+          "station": "捷運象山站(3號出口)",
+          "predicted": 8.96,
+          "actual": 11.0,
+          "absoluteError": 2.04
+        },
+        {
+          "rank": 28,
+          "station": "捷運忠孝復興站(2號出口)",
+          "predicted": 8.92,
+          "actual": 7.0,
+          "absoluteError": 1.92
+        },
+        {
+          "rank": 29,
+          "station": "捷運大安森林公園站(5號出口)",
+          "predicted": 8.91,
+          "actual": 8.0,
+          "absoluteError": 0.91
+        },
+        {
+          "rank": 30,
+          "station": "捷運市政府站(3號出口)",
+          "predicted": 8.65,
+          "actual": 10.0,
+          "absoluteError": 1.35
+        },
+        {
+          "rank": 31,
+          "station": "捷運古亭站(5號出口)",
+          "predicted": 8.16,
+          "actual": 7.0,
+          "absoluteError": 1.16
+        },
+        {
+          "rank": 32,
+          "station": "捷運大安站(4號出口)",
+          "predicted": 7.89,
+          "actual": 10.0,
+          "absoluteError": 2.11
+        },
+        {
+          "rank": 33,
+          "station": "捷運石牌站(2號出口)",
+          "predicted": 7.43,
+          "actual": 6.0,
+          "absoluteError": 1.43
+        },
+        {
+          "rank": 34,
+          "station": "捷運中山站(2號出口)",
+          "predicted": 7.22,
+          "actual": 5.0,
+          "absoluteError": 2.22
+        },
+        {
+          "rank": 35,
+          "station": "捷運南港展覽館站(5號出口)",
+          "predicted": 7.0,
+          "actual": 10.0,
+          "absoluteError": 3.0
+        },
+        {
+          "rank": 36,
+          "station": "捷運大安森林公園站(2號出口)",
+          "predicted": 6.95,
+          "actual": 8.0,
+          "absoluteError": 1.05
+        },
+        {
+          "rank": 37,
+          "station": "捷運國父紀念館站(2號出口)",
+          "predicted": 6.93,
+          "actual": 7.0,
+          "absoluteError": 0.07
+        },
+        {
+          "rank": 38,
+          "station": "捷運劍潭站(1號出口)",
+          "predicted": 6.92,
+          "actual": 9.0,
+          "absoluteError": 2.08
+        },
+        {
+          "rank": 39,
+          "station": "捷運士林站(1號出口)",
+          "predicted": 6.78,
+          "actual": 6.0,
+          "absoluteError": 0.78
+        },
+        {
+          "rank": 40,
+          "station": "捷運雙連站(2號出口)",
+          "predicted": 6.44,
+          "actual": 7.0,
+          "absoluteError": 0.56
+        },
+        {
+          "rank": 41,
+          "station": "捷運信義安和站(4號出口)",
+          "predicted": 6.09,
+          "actual": 7.0,
+          "absoluteError": 0.91
+        },
+        {
+          "rank": 42,
+          "station": "捷運西門站(3號出口)",
+          "predicted": 5.8,
+          "actual": 5.0,
+          "absoluteError": 0.8
+        },
+        {
+          "rank": 43,
+          "station": "捷運昆陽站(1號出口)",
+          "predicted": 5.61,
+          "actual": 8.0,
+          "absoluteError": 2.39
+        },
+        {
+          "rank": 44,
+          "station": "捷運善導寺站(3號出口)(忠孝東路側)",
+          "predicted": 5.41,
+          "actual": 5.0,
+          "absoluteError": 0.41
+        },
+        {
+          "rank": 45,
+          "station": "西本願寺廣場",
+          "predicted": 5.29,
+          "actual": 7.0,
+          "absoluteError": 1.71
+        },
+        {
+          "rank": 46,
+          "station": "捷運南京復興站(5號出口)",
+          "predicted": 5.22,
+          "actual": 3.0,
+          "absoluteError": 2.22
+        },
+        {
+          "rank": 47,
+          "station": "捷運萬隆站(2號出口)",
+          "predicted": 5.11,
+          "actual": 6.0,
+          "absoluteError": 0.89
+        },
+        {
+          "rank": 48,
+          "station": "捷運奇岩站(三合街)",
+          "predicted": 5.1,
+          "actual": 7.0,
+          "absoluteError": 1.9
+        },
+        {
+          "rank": 49,
+          "station": "捷運松山站(3號出口)",
+          "predicted": 5.08,
+          "actual": 4.0,
+          "absoluteError": 1.08
+        },
+        {
+          "rank": 50,
+          "station": "臺大大一女舍北側",
+          "predicted": 5.07,
+          "actual": 3.0,
+          "absoluteError": 2.07
+        },
+        {
+          "rank": 51,
+          "station": "捷運中山國小站(4號出口)",
+          "predicted": 5.03,
+          "actual": 3.0,
+          "absoluteError": 2.03
+        },
+        {
+          "rank": 52,
+          "station": "捷運中山站(5號出口)",
+          "predicted": 5.03,
+          "actual": 5.0,
+          "absoluteError": 0.03
+        },
+        {
+          "rank": 53,
+          "station": "興雅松仁路口",
+          "predicted": 4.83,
+          "actual": 7.0,
+          "absoluteError": 2.17
+        },
+        {
+          "rank": 54,
+          "station": "捷運臺大醫院站(4號出口)",
+          "predicted": 4.71,
+          "actual": 1.0,
+          "absoluteError": 3.71
+        },
+        {
+          "rank": 55,
+          "station": "捷運大安站(3號出口)",
+          "predicted": 4.7,
+          "actual": 5.0,
+          "absoluteError": 0.3
+        },
+        {
+          "rank": 56,
+          "station": "捷運公館站(1號出口)",
+          "predicted": 4.62,
+          "actual": 8.0,
+          "absoluteError": 3.38
+        },
+        {
+          "rank": 57,
+          "station": "捷運南京三民站(2號出口)",
+          "predicted": 4.44,
+          "actual": 3.0,
+          "absoluteError": 1.44
+        },
+        {
+          "rank": 58,
+          "station": "捷運西門站(5號出口)",
+          "predicted": 4.41,
+          "actual": 2.0,
+          "absoluteError": 2.41
+        },
+        {
+          "rank": 59,
+          "station": "南京遼寧街口",
+          "predicted": 4.23,
+          "actual": 6.0,
+          "absoluteError": 1.77
+        },
+        {
+          "rank": 60,
+          "station": "捷運臺北101/世貿站(3號出口)",
+          "predicted": 4.2,
+          "actual": 4.0,
+          "absoluteError": 0.2
+        },
+        {
+          "rank": 61,
+          "station": "捷運大安站(5號出口)",
+          "predicted": 4.15,
+          "actual": 3.0,
+          "absoluteError": 1.15
+        },
+        {
+          "rank": 62,
+          "station": "捷運小巨蛋站(5號出口)_1",
+          "predicted": 4.13,
+          "actual": 3.0,
+          "absoluteError": 1.13
+        },
+        {
+          "rank": 63,
+          "station": "捷運唭哩岸站(2號出口)",
+          "predicted": 4.05,
+          "actual": 11.0,
+          "absoluteError": 6.95
+        },
+        {
+          "rank": 64,
+          "station": "捷運內湖站(1號出口)",
+          "predicted": 4.03,
+          "actual": 4.0,
+          "absoluteError": 0.03
+        },
+        {
+          "rank": 65,
+          "station": "捷運松山站(4號出口)",
+          "predicted": 4.03,
+          "actual": 4.0,
+          "absoluteError": 0.03
+        },
+        {
+          "rank": 66,
+          "station": "信義廣場(臺北101)",
+          "predicted": 3.99,
+          "actual": 3.0,
+          "absoluteError": 0.99
+        },
+        {
+          "rank": 67,
+          "station": "捷運忠孝敦化站(7號出口)",
+          "predicted": 3.92,
+          "actual": 6.0,
+          "absoluteError": 2.08
+        },
+        {
+          "rank": 68,
+          "station": "捷運文德站(2號出口)",
+          "predicted": 3.91,
+          "actual": 3.0,
+          "absoluteError": 0.91
+        },
+        {
+          "rank": 69,
+          "station": "捷運信義安和站(1號出口)",
+          "predicted": 3.91,
+          "actual": 4.0,
+          "absoluteError": 0.09
+        },
+        {
+          "rank": 70,
+          "station": "復興南路二段273號前",
+          "predicted": 3.79,
+          "actual": 3.0,
+          "absoluteError": 0.79
+        },
+        {
+          "rank": 71,
+          "station": "捷運忠孝新生站(4號出口)",
+          "predicted": 3.76,
+          "actual": 3.0,
+          "absoluteError": 0.76
+        },
+        {
+          "rank": 72,
+          "station": "捷運臺電大樓站(2號出口)",
+          "predicted": 3.72,
+          "actual": 4.0,
+          "absoluteError": 0.28
+        },
+        {
+          "rank": 73,
+          "station": "捷運後山埤站(3號出口)",
+          "predicted": 3.65,
+          "actual": 5.0,
+          "absoluteError": 1.35
+        },
+        {
+          "rank": 74,
+          "station": "捷運明德站(3號出口)",
+          "predicted": 3.6,
+          "actual": 4.0,
+          "absoluteError": 0.4
+        },
+        {
+          "rank": 75,
+          "station": "捷運港墘站(2號出口)",
+          "predicted": 3.55,
+          "actual": 3.0,
+          "absoluteError": 0.55
+        },
+        {
+          "rank": 76,
+          "station": "捷運龍山寺站(1號出口)_1",
+          "predicted": 3.55,
+          "actual": 6.0,
+          "absoluteError": 2.45
+        },
+        {
+          "rank": 77,
+          "station": "捷運南京復興站(7號出口)",
+          "predicted": 3.3,
+          "actual": 3.0,
+          "absoluteError": 0.3
+        },
+        {
+          "rank": 78,
+          "station": "捷運古亭站(6號出口)",
+          "predicted": 3.28,
+          "actual": 1.0,
+          "absoluteError": 2.28
+        },
+        {
+          "rank": 79,
+          "station": "捷運臺電大樓站(2號出口)_1",
+          "predicted": 3.28,
+          "actual": 4.0,
+          "absoluteError": 0.72
+        },
+        {
+          "rank": 80,
+          "station": "捷運古亭站(8號出口)",
+          "predicted": 3.25,
+          "actual": 4.0,
+          "absoluteError": 0.75
+        },
+        {
+          "rank": 81,
+          "station": "捷運景美站(2號出口)",
+          "predicted": 3.13,
+          "actual": 4.0,
+          "absoluteError": 0.87
+        },
+        {
+          "rank": 82,
+          "station": "捷運象山站(1號出口)",
+          "predicted": 3.09,
+          "actual": 5.0,
+          "absoluteError": 1.91
+        },
+        {
+          "rank": 83,
+          "station": "臺大椰林小舖",
+          "predicted": 3.07,
+          "actual": 2.0,
+          "absoluteError": 1.07
+        },
+        {
+          "rank": 84,
+          "station": "捷運忠孝新生站(2號出口)",
+          "predicted": 3.03,
+          "actual": 6.0,
+          "absoluteError": 2.97
+        },
+        {
+          "rank": 85,
+          "station": "捷運信義安和站(2號出口)",
+          "predicted": 2.95,
+          "actual": 4.0,
+          "absoluteError": 1.05
+        },
+        {
+          "rank": 86,
+          "station": "松山車站",
+          "predicted": 2.9,
+          "actual": 5.0,
+          "absoluteError": 2.1
+        },
+        {
+          "rank": 87,
+          "station": "捷運松江南京站(8號出口)",
+          "predicted": 2.9,
+          "actual": 3.0,
+          "absoluteError": 0.1
+        },
+        {
+          "rank": 88,
+          "station": "捷運小南門站(1號出口)",
+          "predicted": 2.87,
+          "actual": 3.0,
+          "absoluteError": 0.13
+        },
+        {
+          "rank": 89,
+          "station": "捷運小巨蛋站(3號出口)",
+          "predicted": 2.8,
+          "actual": 4.0,
+          "absoluteError": 1.2
+        },
+        {
+          "rank": 90,
+          "station": "捷運北投站(1號出口)(北投路側)",
+          "predicted": 2.68,
+          "actual": 6.0,
+          "absoluteError": 3.32
+        },
+        {
+          "rank": 91,
+          "station": "南港車站(市民大道)",
+          "predicted": 2.6,
+          "actual": 0.0,
+          "absoluteError": 2.6
+        },
+        {
+          "rank": 92,
+          "station": "捷運後山埤站(1號出口)",
+          "predicted": 2.57,
+          "actual": 2.0,
+          "absoluteError": 0.57
+        },
+        {
+          "rank": 93,
+          "station": "捷運萬隆站(4號出口)",
+          "predicted": 2.52,
+          "actual": 0.0,
+          "absoluteError": 2.52
+        },
+        {
+          "rank": 94,
+          "station": "捷運松江南京站(4號出口)",
+          "predicted": 2.35,
+          "actual": 4.0,
+          "absoluteError": 1.65
+        },
+        {
+          "rank": 95,
+          "station": "捷運南京三民站(4號出口)",
+          "predicted": 2.3,
+          "actual": 1.0,
+          "absoluteError": 1.3
+        },
+        {
+          "rank": 96,
+          "station": "捷運西湖站(1號出口)",
+          "predicted": 2.18,
+          "actual": 5.0,
+          "absoluteError": 2.82
+        },
+        {
+          "rank": 97,
+          "station": "捷運萬隆站(1號出口)",
+          "predicted": 2.0,
+          "actual": 4.0,
+          "absoluteError": 2.0
+        },
+        {
+          "rank": 98,
+          "station": "臺大鹿鳴堂東側",
+          "predicted": 1.93,
+          "actual": 2.0,
+          "absoluteError": 0.07
+        },
+        {
+          "rank": 99,
+          "station": "捷運港墘站(1號出口)",
+          "predicted": 1.76,
+          "actual": 3.0,
+          "absoluteError": 1.24
+        },
+        {
+          "rank": 100,
+          "station": "捷運芝山站(2號出口)",
+          "predicted": 1.45,
+          "actual": 2.0,
+          "absoluteError": 0.55
+        }
+      ]
+    },
+    {
+      "id": "20231209-18",
+      "targetTime": "2023-12-09T18:00:00+08:00",
+      "dateLabel": "12 月 9 日",
+      "timeLabel": "18:00",
+      "weekdayLabel": "週六",
+      "periodLabel": "週末",
+      "weather": {
+        "temperatureC": 21.8,
+        "humidityPercent": 86,
+        "precipitationMm": 0.0,
+        "windSpeedKmh": 5.4,
+        "isRaining": false
+      },
+      "summary": {
+        "totalPredicted": 873,
+        "totalActual": 771,
+        "mae": 2.71,
+        "largestDemandStation": "捷運公館站(2號出口)"
+      },
+      "stations": [
+        {
+          "rank": 1,
+          "station": "捷運公館站(2號出口)",
+          "predicted": 42.32,
+          "actual": 32,
+          "absoluteError": 10.32
+        },
+        {
+          "rank": 2,
+          "station": "捷運劍潭站(2號出口)",
+          "predicted": 34.44,
+          "actual": 25,
+          "absoluteError": 9.44
+        },
+        {
+          "rank": 3,
+          "station": "捷運芝山站(2號出口)_1",
+          "predicted": 27.52,
+          "actual": 19,
+          "absoluteError": 8.52
+        },
+        {
+          "rank": 4,
+          "station": "捷運龍山寺站(1號出口)",
+          "predicted": 25.97,
+          "actual": 27,
+          "absoluteError": 1.03
+        },
+        {
+          "rank": 5,
+          "station": "捷運科技大樓站",
+          "predicted": 25.12,
+          "actual": 20,
+          "absoluteError": 5.12
+        },
+        {
+          "rank": 6,
+          "station": "捷運公館站(3號出口)",
+          "predicted": 21.27,
+          "actual": 14,
+          "absoluteError": 7.27
+        },
+        {
+          "rank": 7,
+          "station": "捷運圓山站(1號出口)",
+          "predicted": 21.19,
+          "actual": 14,
+          "absoluteError": 7.19
+        },
+        {
+          "rank": 8,
+          "station": "捷運南京三民站(1號出口)",
+          "predicted": 19.71,
+          "actual": 12,
+          "absoluteError": 7.71
+        },
+        {
+          "rank": 9,
+          "station": "捷運東門站(5號出口)",
+          "predicted": 18.49,
+          "actual": 8,
+          "absoluteError": 10.49
+        },
+        {
+          "rank": 10,
+          "station": "捷運臺北101/世貿站(2號出口)",
+          "predicted": 18.31,
+          "actual": 16,
+          "absoluteError": 2.31
+        },
+        {
+          "rank": 11,
+          "station": "捷運中山國中站",
+          "predicted": 16.72,
+          "actual": 18,
+          "absoluteError": 1.28
+        },
+        {
+          "rank": 12,
+          "station": "捷運象山站(2號出口)",
+          "predicted": 15.97,
+          "actual": 14,
+          "absoluteError": 1.97
+        },
+        {
+          "rank": 13,
+          "station": "捷運芝山站(1號出口)",
+          "predicted": 15.77,
+          "actual": 7,
+          "absoluteError": 8.77
+        },
+        {
+          "rank": 14,
+          "station": "捷運象山站(3號出口)",
+          "predicted": 14.43,
+          "actual": 5,
+          "absoluteError": 9.43
+        },
+        {
+          "rank": 15,
+          "station": "捷運永春站(2號出口)",
+          "predicted": 13.98,
+          "actual": 15,
+          "absoluteError": 1.02
+        },
+        {
+          "rank": 16,
+          "station": "捷運行天宮站(3號出口)",
+          "predicted": 13.66,
+          "actual": 10,
+          "absoluteError": 3.66
+        },
+        {
+          "rank": 17,
+          "station": "捷運後山埤站(2號出口)",
+          "predicted": 13.17,
+          "actual": 10,
+          "absoluteError": 3.17
+        },
+        {
+          "rank": 18,
+          "station": "捷運北門站(3號出口)",
+          "predicted": 12.86,
+          "actual": 11,
+          "absoluteError": 1.86
+        },
+        {
+          "rank": 19,
+          "station": "捷運南港展覽館站(5號出口)",
+          "predicted": 12.51,
+          "actual": 12,
+          "absoluteError": 0.51
+        },
+        {
+          "rank": 20,
+          "station": "捷運信義安和站(4號出口)",
+          "predicted": 12.19,
+          "actual": 15,
+          "absoluteError": 2.81
+        },
+        {
+          "rank": 21,
+          "station": "捷運劍南路站(2號出口)",
+          "predicted": 12.02,
+          "actual": 11,
+          "absoluteError": 1.02
+        },
+        {
+          "rank": 22,
+          "station": "捷運市政府站(3號出口)",
+          "predicted": 11.85,
+          "actual": 14,
+          "absoluteError": 2.15
+        },
+        {
+          "rank": 23,
+          "station": "捷運六張犁站",
+          "predicted": 11.61,
+          "actual": 16,
+          "absoluteError": 4.39
+        },
+        {
+          "rank": 24,
+          "station": "捷運古亭站(2號出口)",
+          "predicted": 11.11,
+          "actual": 8,
+          "absoluteError": 3.11
+        },
+        {
+          "rank": 25,
+          "station": "捷運古亭站(5號出口)",
+          "predicted": 10.78,
+          "actual": 7,
+          "absoluteError": 3.78
+        },
+        {
+          "rank": 26,
+          "station": "捷運北投站(1號出口)",
+          "predicted": 10.67,
+          "actual": 9,
+          "absoluteError": 1.67
+        },
+        {
+          "rank": 27,
+          "station": "捷運忠孝復興站(2號出口)",
+          "predicted": 10.63,
+          "actual": 6,
+          "absoluteError": 4.63
+        },
+        {
+          "rank": 28,
+          "station": "捷運大安森林公園站(5號出口)",
+          "predicted": 10.36,
+          "actual": 8,
+          "absoluteError": 2.36
+        },
+        {
+          "rank": 29,
+          "station": "捷運中山站(2號出口)",
+          "predicted": 10.09,
+          "actual": 11,
+          "absoluteError": 0.91
+        },
+        {
+          "rank": 30,
+          "station": "捷運石牌站(2號出口)",
+          "predicted": 10.04,
+          "actual": 15,
+          "absoluteError": 4.96
+        },
+        {
+          "rank": 31,
+          "station": "捷運龍山寺站(1號出口)_1",
+          "predicted": 9.75,
+          "actual": 1,
+          "absoluteError": 8.75
+        },
+        {
+          "rank": 32,
+          "station": "捷運中山站(5號出口)",
+          "predicted": 9.62,
+          "actual": 14,
+          "absoluteError": 4.38
+        },
+        {
+          "rank": 33,
+          "station": "捷運大安站(4號出口)",
+          "predicted": 9.51,
+          "actual": 3,
+          "absoluteError": 6.51
+        },
+        {
+          "rank": 34,
+          "station": "捷運大安森林公園站(2號出口)",
+          "predicted": 9.33,
+          "actual": 8,
+          "absoluteError": 1.33
+        },
+        {
+          "rank": 35,
+          "station": "捷運圓山站(2號出口)",
+          "predicted": 9.33,
+          "actual": 18,
+          "absoluteError": 8.67
+        },
+        {
+          "rank": 36,
+          "station": "捷運國父紀念館站(2號出口)",
+          "predicted": 9.22,
+          "actual": 9,
+          "absoluteError": 0.22
+        },
+        {
+          "rank": 37,
+          "station": "捷運昆陽站(1號出口)",
+          "predicted": 9.04,
+          "actual": 12,
+          "absoluteError": 2.96
+        },
+        {
+          "rank": 38,
+          "station": "西本願寺廣場",
+          "predicted": 8.97,
+          "actual": 7,
+          "absoluteError": 1.97
+        },
+        {
+          "rank": 39,
+          "station": "捷運內湖站(1號出口)",
+          "predicted": 8.54,
+          "actual": 9,
+          "absoluteError": 0.46
+        },
+        {
+          "rank": 40,
+          "station": "捷運士林站(1號出口)",
+          "predicted": 8.32,
+          "actual": 6,
+          "absoluteError": 2.32
+        },
+        {
+          "rank": 41,
+          "station": "捷運中山國小站(4號出口)",
+          "predicted": 8.29,
+          "actual": 8,
+          "absoluteError": 0.29
+        },
+        {
+          "rank": 42,
+          "station": "捷運士林站(2號出口)",
+          "predicted": 7.95,
+          "actual": 6,
+          "absoluteError": 1.95
+        },
+        {
+          "rank": 43,
+          "station": "捷運劍潭站(1號出口)",
+          "predicted": 7.65,
+          "actual": 4,
+          "absoluteError": 3.65
+        },
+        {
+          "rank": 44,
+          "station": "捷運大橋頭站(2號出口)",
+          "predicted": 7.2,
+          "actual": 10,
+          "absoluteError": 2.8
+        },
+        {
+          "rank": 45,
+          "station": "捷運松江南京站(7號出口)",
+          "predicted": 6.99,
+          "actual": 14,
+          "absoluteError": 7.01
+        },
+        {
+          "rank": 46,
+          "station": "捷運松山站(3號出口)",
+          "predicted": 6.98,
+          "actual": 7,
+          "absoluteError": 0.02
+        },
+        {
+          "rank": 47,
+          "station": "捷運雙連站(2號出口)",
+          "predicted": 6.95,
+          "actual": 10,
+          "absoluteError": 3.05
+        },
+        {
+          "rank": 48,
+          "station": "捷運西門站(3號出口)",
+          "predicted": 6.68,
+          "actual": 7,
+          "absoluteError": 0.32
+        },
+        {
+          "rank": 49,
+          "station": "捷運臺電大樓站(2號出口)",
+          "predicted": 6.4,
+          "actual": 3,
+          "absoluteError": 3.4
+        },
+        {
+          "rank": 50,
+          "station": "捷運善導寺站(3號出口)(忠孝東路側)",
+          "predicted": 6.23,
+          "actual": 2,
+          "absoluteError": 4.23
+        },
+        {
+          "rank": 51,
+          "station": "捷運關渡站(1號出口)",
+          "predicted": 6.08,
+          "actual": 5,
+          "absoluteError": 1.08
+        },
+        {
+          "rank": 52,
+          "station": "捷運松山站(4號出口)",
+          "predicted": 6.07,
+          "actual": 9,
+          "absoluteError": 2.93
+        },
+        {
+          "rank": 53,
+          "station": "捷運萬隆站(2號出口)",
+          "predicted": 5.97,
+          "actual": 5,
+          "absoluteError": 0.97
+        },
+        {
+          "rank": 54,
+          "station": "捷運臺北101/世貿站(3號出口)",
+          "predicted": 5.89,
+          "actual": 5,
+          "absoluteError": 0.89
+        },
+        {
+          "rank": 55,
+          "station": "捷運信義安和站(1號出口)",
+          "predicted": 5.8,
+          "actual": 4,
+          "absoluteError": 1.8
+        },
+        {
+          "rank": 56,
+          "station": "捷運奇岩站(三合街)",
+          "predicted": 5.65,
+          "actual": 9,
+          "absoluteError": 3.35
+        },
+        {
+          "rank": 57,
+          "station": "捷運文德站(2號出口)",
+          "predicted": 5.63,
+          "actual": 4,
+          "absoluteError": 1.63
+        },
+        {
+          "rank": 58,
+          "station": "捷運後山埤站(3號出口)",
+          "predicted": 5.6,
+          "actual": 4,
+          "absoluteError": 1.6
+        },
+        {
+          "rank": 59,
+          "station": "信義廣場(臺北101)",
+          "predicted": 5.46,
+          "actual": 6,
+          "absoluteError": 0.54
+        },
+        {
+          "rank": 60,
+          "station": "捷運公館站(1號出口)",
+          "predicted": 5.46,
+          "actual": 5,
+          "absoluteError": 0.46
+        },
+        {
+          "rank": 61,
+          "station": "捷運南京復興站(5號出口)",
+          "predicted": 5.39,
+          "actual": 7,
+          "absoluteError": 1.61
+        },
+        {
+          "rank": 62,
+          "station": "捷運唭哩岸站(2號出口)",
+          "predicted": 5.33,
+          "actual": 6,
+          "absoluteError": 0.67
+        },
+        {
+          "rank": 63,
+          "station": "捷運景美站(2號出口)",
+          "predicted": 5.32,
+          "actual": 3,
+          "absoluteError": 2.32
+        },
+        {
+          "rank": 64,
+          "station": "松山車站",
+          "predicted": 5.14,
+          "actual": 4,
+          "absoluteError": 1.14
+        },
+        {
+          "rank": 65,
+          "station": "捷運大安站(5號出口)",
+          "predicted": 5.14,
+          "actual": 4,
+          "absoluteError": 1.14
+        },
+        {
+          "rank": 66,
+          "station": "臺大大一女舍北側",
+          "predicted": 5.1,
+          "actual": 3,
+          "absoluteError": 2.1
+        },
+        {
+          "rank": 67,
+          "station": "捷運北投站(1號出口)(北投路側)",
+          "predicted": 4.85,
+          "actual": 6,
+          "absoluteError": 1.15
+        },
+        {
+          "rank": 68,
+          "station": "捷運南京復興站(7號出口)",
+          "predicted": 4.85,
+          "actual": 3,
+          "absoluteError": 1.85
+        },
+        {
+          "rank": 69,
+          "station": "興雅松仁路口",
+          "predicted": 4.36,
+          "actual": 6,
+          "absoluteError": 1.64
+        },
+        {
+          "rank": 70,
+          "station": "捷運象山站(1號出口)",
+          "predicted": 4.34,
+          "actual": 2,
+          "absoluteError": 2.34
+        },
+        {
+          "rank": 71,
+          "station": "捷運大安站(3號出口)",
+          "predicted": 4.31,
+          "actual": 1,
+          "absoluteError": 3.31
+        },
+        {
+          "rank": 72,
+          "station": "捷運忠孝敦化站(7號出口)",
+          "predicted": 4.2,
+          "actual": 6,
+          "absoluteError": 1.8
+        },
+        {
+          "rank": 73,
+          "station": "捷運小南門站(1號出口)",
+          "predicted": 4.19,
+          "actual": 2,
+          "absoluteError": 2.19
+        },
+        {
+          "rank": 74,
+          "station": "南京遼寧街口",
+          "predicted": 4.18,
+          "actual": 3,
+          "absoluteError": 1.18
+        },
+        {
+          "rank": 75,
+          "station": "捷運港墘站(2號出口)",
+          "predicted": 4.14,
+          "actual": 3,
+          "absoluteError": 1.14
+        },
+        {
+          "rank": 76,
+          "station": "捷運明德站(3號出口)",
+          "predicted": 4.13,
+          "actual": 3,
+          "absoluteError": 1.13
+        },
+        {
+          "rank": 77,
+          "station": "捷運萬隆站(1號出口)",
+          "predicted": 4.11,
+          "actual": 4,
+          "absoluteError": 0.11
+        },
+        {
+          "rank": 78,
+          "station": "捷運臺電大樓站(2號出口)_1",
+          "predicted": 4.1,
+          "actual": 5,
+          "absoluteError": 0.9
+        },
+        {
+          "rank": 79,
+          "station": "捷運忠孝新生站(4號出口)",
+          "predicted": 3.7,
+          "actual": 4,
+          "absoluteError": 0.3
+        },
+        {
+          "rank": 80,
+          "station": "捷運芝山站(2號出口)",
+          "predicted": 3.57,
+          "actual": 1,
+          "absoluteError": 2.57
+        },
+        {
+          "rank": 81,
+          "station": "捷運後山埤站(1號出口)",
+          "predicted": 3.56,
+          "actual": 7,
+          "absoluteError": 3.44
+        },
+        {
+          "rank": 82,
+          "station": "復興南路二段273號前",
+          "predicted": 3.46,
+          "actual": 2,
+          "absoluteError": 1.46
+        },
+        {
+          "rank": 83,
+          "station": "捷運南京三民站(2號出口)",
+          "predicted": 3.44,
+          "actual": 6,
+          "absoluteError": 2.56
+        },
+        {
+          "rank": 84,
+          "station": "捷運港墘站(1號出口)",
+          "predicted": 3.43,
+          "actual": 5,
+          "absoluteError": 1.57
+        },
+        {
+          "rank": 85,
+          "station": "捷運松江南京站(8號出口)",
+          "predicted": 3.42,
+          "actual": 8,
+          "absoluteError": 4.58
+        },
+        {
+          "rank": 86,
+          "station": "捷運臺大醫院站(4號出口)",
+          "predicted": 3.39,
+          "actual": 2,
+          "absoluteError": 1.39
+        },
+        {
+          "rank": 87,
+          "station": "捷運信義安和站(2號出口)",
+          "predicted": 3.29,
+          "actual": 3,
+          "absoluteError": 0.29
+        },
+        {
+          "rank": 88,
+          "station": "南港車站(市民大道)",
+          "predicted": 3.25,
+          "actual": 6,
+          "absoluteError": 2.75
+        },
+        {
+          "rank": 89,
+          "station": "捷運古亭站(6號出口)",
+          "predicted": 3.23,
+          "actual": 4,
+          "absoluteError": 0.77
+        },
+        {
+          "rank": 90,
+          "station": "捷運古亭站(8號出口)",
+          "predicted": 3.0,
+          "actual": 1,
+          "absoluteError": 2.0
+        },
+        {
+          "rank": 91,
+          "station": "捷運西門站(5號出口)",
+          "predicted": 2.97,
+          "actual": 4,
+          "absoluteError": 1.03
+        },
+        {
+          "rank": 92,
+          "station": "捷運小巨蛋站(5號出口)_1",
+          "predicted": 2.91,
+          "actual": 2,
+          "absoluteError": 0.91
+        },
+        {
+          "rank": 93,
+          "station": "捷運忠孝新生站(2號出口)",
+          "predicted": 2.84,
+          "actual": 2,
+          "absoluteError": 0.84
+        },
+        {
+          "rank": 94,
+          "station": "捷運小巨蛋站(3號出口)",
+          "predicted": 2.83,
+          "actual": 3,
+          "absoluteError": 0.17
+        },
+        {
+          "rank": 95,
+          "station": "捷運南京三民站(4號出口)",
+          "predicted": 2.79,
+          "actual": 5,
+          "absoluteError": 2.21
+        },
+        {
+          "rank": 96,
+          "station": "捷運西湖站(1號出口)",
+          "predicted": 2.77,
+          "actual": 3,
+          "absoluteError": 0.23
+        },
+        {
+          "rank": 97,
+          "station": "捷運萬隆站(4號出口)",
+          "predicted": 2.58,
+          "actual": 3,
+          "absoluteError": 0.42
+        },
+        {
+          "rank": 98,
+          "station": "捷運松江南京站(4號出口)",
+          "predicted": 2.34,
+          "actual": 3,
+          "absoluteError": 0.66
+        },
+        {
+          "rank": 99,
+          "station": "臺大椰林小舖",
+          "predicted": 1.35,
+          "actual": 2,
+          "absoluteError": 0.65
+        },
+        {
+          "rank": 100,
+          "station": "臺大鹿鳴堂東側",
+          "predicted": 0.62,
+          "actual": 1,
+          "absoluteError": 0.38
+        }
+      ]
+    },
+    {
+      "id": "20231215-08",
+      "targetTime": "2023-12-15T08:00:00+08:00",
+      "dateLabel": "12 月 15 日",
+      "timeLabel": "08:00",
+      "weekdayLabel": "週五",
+      "periodLabel": "平日",
+      "weather": {
+        "temperatureC": 19.7,
+        "humidityPercent": 98,
+        "precipitationMm": 0.0,
+        "windSpeedKmh": 2.2,
+        "isRaining": false
+      },
+      "summary": {
+        "totalPredicted": 1143,
+        "totalActual": 1051,
+        "mae": 3.0,
+        "largestDemandStation": "捷運中山國中站"
+      },
+      "stations": [
+        {
+          "rank": 1,
+          "station": "捷運中山國中站",
+          "predicted": 43.7,
+          "actual": 44.0,
+          "absoluteError": 0.3
+        },
+        {
+          "rank": 2,
+          "station": "捷運六張犁站",
+          "predicted": 34.82,
+          "actual": 33.0,
+          "absoluteError": 1.82
+        },
+        {
+          "rank": 3,
+          "station": "捷運公館站(2號出口)",
+          "predicted": 29.43,
+          "actual": 33.0,
+          "absoluteError": 3.57
+        },
+        {
+          "rank": 4,
+          "station": "捷運公館站(3號出口)",
+          "predicted": 27.12,
+          "actual": 5.0,
+          "absoluteError": 22.12
+        },
+        {
+          "rank": 5,
+          "station": "捷運科技大樓站",
+          "predicted": 26.72,
+          "actual": 27.0,
+          "absoluteError": 0.28
+        },
+        {
+          "rank": 6,
+          "station": "捷運松江南京站(7號出口)",
+          "predicted": 26.25,
+          "actual": 38.0,
+          "absoluteError": 11.75
+        },
+        {
+          "rank": 7,
+          "station": "捷運芝山站(2號出口)_1",
+          "predicted": 24.18,
+          "actual": 14.0,
+          "absoluteError": 10.18
+        },
+        {
+          "rank": 8,
+          "station": "捷運象山站(2號出口)",
+          "predicted": 23.82,
+          "actual": 23.0,
+          "absoluteError": 0.82
+        },
+        {
+          "rank": 9,
+          "station": "捷運行天宮站(3號出口)",
+          "predicted": 23.6,
+          "actual": 23.0,
+          "absoluteError": 0.6
+        },
+        {
+          "rank": 10,
+          "station": "信義廣場(臺北101)",
+          "predicted": 23.02,
+          "actual": 17.0,
+          "absoluteError": 6.02
+        },
+        {
+          "rank": 11,
+          "station": "捷運象山站(3號出口)",
+          "predicted": 22.67,
+          "actual": 21.0,
+          "absoluteError": 1.67
+        },
+        {
+          "rank": 12,
+          "station": "捷運臺北101/世貿站(2號出口)",
+          "predicted": 22.27,
+          "actual": 29.0,
+          "absoluteError": 6.73
+        },
+        {
+          "rank": 13,
+          "station": "捷運北門站(3號出口)",
+          "predicted": 20.53,
+          "actual": 19.0,
+          "absoluteError": 1.53
+        },
+        {
+          "rank": 14,
+          "station": "捷運劍南路站(2號出口)",
+          "predicted": 19.98,
+          "actual": 23.0,
+          "absoluteError": 3.02
+        },
+        {
+          "rank": 15,
+          "station": "捷運芝山站(1號出口)",
+          "predicted": 19.27,
+          "actual": 22.0,
+          "absoluteError": 2.73
+        },
+        {
+          "rank": 16,
+          "station": "捷運劍潭站(2號出口)",
+          "predicted": 19.09,
+          "actual": 18.0,
+          "absoluteError": 1.09
+        },
+        {
+          "rank": 17,
+          "station": "捷運永春站(2號出口)",
+          "predicted": 18.81,
+          "actual": 18.0,
+          "absoluteError": 0.81
+        },
+        {
+          "rank": 18,
+          "station": "捷運龍山寺站(1號出口)",
+          "predicted": 18.55,
+          "actual": 13.0,
+          "absoluteError": 5.55
+        },
+        {
+          "rank": 19,
+          "station": "捷運圓山站(1號出口)",
+          "predicted": 17.89,
+          "actual": 14.0,
+          "absoluteError": 3.89
+        },
+        {
+          "rank": 20,
+          "station": "南京遼寧街口",
+          "predicted": 17.68,
+          "actual": 21.0,
+          "absoluteError": 3.32
+        },
+        {
+          "rank": 21,
+          "station": "興雅松仁路口",
+          "predicted": 17.37,
+          "actual": 13.0,
+          "absoluteError": 4.37
+        },
+        {
+          "rank": 22,
+          "station": "捷運大橋頭站(2號出口)",
+          "predicted": 17.17,
+          "actual": 19.0,
+          "absoluteError": 1.83
+        },
+        {
+          "rank": 23,
+          "station": "捷運圓山站(2號出口)",
+          "predicted": 17.09,
+          "actual": 17.0,
+          "absoluteError": 0.09
+        },
+        {
+          "rank": 24,
+          "station": "捷運劍潭站(1號出口)",
+          "predicted": 16.06,
+          "actual": 11.0,
+          "absoluteError": 5.06
+        },
+        {
+          "rank": 25,
+          "station": "捷運中山國小站(4號出口)",
+          "predicted": 15.48,
+          "actual": 5.0,
+          "absoluteError": 10.48
+        },
+        {
+          "rank": 26,
+          "station": "捷運市政府站(3號出口)",
+          "predicted": 15.39,
+          "actual": 11.0,
+          "absoluteError": 4.39
+        },
+        {
+          "rank": 27,
+          "station": "捷運大安站(4號出口)",
+          "predicted": 15.21,
+          "actual": 16.0,
+          "absoluteError": 0.79
+        },
+        {
+          "rank": 28,
+          "station": "捷運東門站(5號出口)",
+          "predicted": 15.13,
+          "actual": 11.0,
+          "absoluteError": 4.13
+        },
+        {
+          "rank": 29,
+          "station": "捷運大安站(3號出口)",
+          "predicted": 14.85,
+          "actual": 12.0,
+          "absoluteError": 2.85
+        },
+        {
+          "rank": 30,
+          "station": "捷運國父紀念館站(2號出口)",
+          "predicted": 14.54,
+          "actual": 10.0,
+          "absoluteError": 4.54
+        },
+        {
+          "rank": 31,
+          "station": "捷運南京三民站(1號出口)",
+          "predicted": 14.52,
+          "actual": 16.0,
+          "absoluteError": 1.48
+        },
+        {
+          "rank": 32,
+          "station": "捷運西門站(3號出口)",
+          "predicted": 13.52,
+          "actual": 11.0,
+          "absoluteError": 2.52
+        },
+        {
+          "rank": 33,
+          "station": "臺大鹿鳴堂東側",
+          "predicted": 13.15,
+          "actual": 8.0,
+          "absoluteError": 5.15
+        },
+        {
+          "rank": 34,
+          "station": "捷運南京復興站(7號出口)",
+          "predicted": 12.9,
+          "actual": 14.0,
+          "absoluteError": 1.1
+        },
+        {
+          "rank": 35,
+          "station": "捷運南京復興站(5號出口)",
+          "predicted": 12.76,
+          "actual": 11.0,
+          "absoluteError": 1.76
+        },
+        {
+          "rank": 36,
+          "station": "捷運善導寺站(3號出口)(忠孝東路側)",
+          "predicted": 12.49,
+          "actual": 14.0,
+          "absoluteError": 1.51
+        },
+        {
+          "rank": 37,
+          "station": "捷運臺大醫院站(4號出口)",
+          "predicted": 12.18,
+          "actual": 10.0,
+          "absoluteError": 2.18
+        },
+        {
+          "rank": 38,
+          "station": "捷運後山埤站(2號出口)",
+          "predicted": 12.11,
+          "actual": 9.0,
+          "absoluteError": 3.11
+        },
+        {
+          "rank": 39,
+          "station": "捷運古亭站(6號出口)",
+          "predicted": 11.8,
+          "actual": 8.0,
+          "absoluteError": 3.8
+        },
+        {
+          "rank": 40,
+          "station": "捷運士林站(2號出口)",
+          "predicted": 11.51,
+          "actual": 17.0,
+          "absoluteError": 5.49
+        },
+        {
+          "rank": 41,
+          "station": "捷運石牌站(2號出口)",
+          "predicted": 11.01,
+          "actual": 6.0,
+          "absoluteError": 5.01
+        },
+        {
+          "rank": 42,
+          "station": "捷運古亭站(8號出口)",
+          "predicted": 10.97,
+          "actual": 20.0,
+          "absoluteError": 9.03
+        },
+        {
+          "rank": 43,
+          "station": "捷運忠孝復興站(2號出口)",
+          "predicted": 10.89,
+          "actual": 11.0,
+          "absoluteError": 0.11
+        },
+        {
+          "rank": 44,
+          "station": "捷運松江南京站(8號出口)",
+          "predicted": 10.83,
+          "actual": 6.0,
+          "absoluteError": 4.83
+        },
+        {
+          "rank": 45,
+          "station": "捷運文德站(2號出口)",
+          "predicted": 10.7,
+          "actual": 18.0,
+          "absoluteError": 7.3
+        },
+        {
+          "rank": 46,
+          "station": "捷運南港展覽館站(5號出口)",
+          "predicted": 10.69,
+          "actual": 10.0,
+          "absoluteError": 0.69
+        },
+        {
+          "rank": 47,
+          "station": "捷運臺北101/世貿站(3號出口)",
+          "predicted": 10.02,
+          "actual": 16.0,
+          "absoluteError": 5.98
+        },
+        {
+          "rank": 48,
+          "station": "捷運忠孝新生站(2號出口)",
+          "predicted": 9.85,
+          "actual": 15.0,
+          "absoluteError": 5.15
+        },
+        {
+          "rank": 49,
+          "station": "捷運忠孝新生站(4號出口)",
+          "predicted": 9.8,
+          "actual": 6.0,
+          "absoluteError": 3.8
+        },
+        {
+          "rank": 50,
+          "station": "捷運大安森林公園站(5號出口)",
+          "predicted": 9.34,
+          "actual": 7.0,
+          "absoluteError": 2.34
+        },
+        {
+          "rank": 51,
+          "station": "捷運小巨蛋站(5號出口)_1",
+          "predicted": 9.18,
+          "actual": 6.0,
+          "absoluteError": 3.18
+        },
+        {
+          "rank": 52,
+          "station": "捷運北投站(1號出口)",
+          "predicted": 9.1,
+          "actual": 4.0,
+          "absoluteError": 5.1
+        },
+        {
+          "rank": 53,
+          "station": "捷運大安森林公園站(2號出口)",
+          "predicted": 9.05,
+          "actual": 12.0,
+          "absoluteError": 2.95
+        },
+        {
+          "rank": 54,
+          "station": "捷運古亭站(2號出口)",
+          "predicted": 8.88,
+          "actual": 7.0,
+          "absoluteError": 1.88
+        },
+        {
+          "rank": 55,
+          "station": "捷運雙連站(2號出口)",
+          "predicted": 8.49,
+          "actual": 9.0,
+          "absoluteError": 0.51
+        },
+        {
+          "rank": 56,
+          "station": "捷運古亭站(5號出口)",
+          "predicted": 8.45,
+          "actual": 7.0,
+          "absoluteError": 1.45
+        },
+        {
+          "rank": 57,
+          "station": "捷運信義安和站(4號出口)",
+          "predicted": 8.41,
+          "actual": 13.0,
+          "absoluteError": 4.59
+        },
+        {
+          "rank": 58,
+          "station": "捷運象山站(1號出口)",
+          "predicted": 8.31,
+          "actual": 4.0,
+          "absoluteError": 4.31
+        },
+        {
+          "rank": 59,
+          "station": "捷運西門站(5號出口)",
+          "predicted": 7.95,
+          "actual": 9.0,
+          "absoluteError": 1.05
+        },
+        {
+          "rank": 60,
+          "station": "臺大椰林小舖",
+          "predicted": 7.93,
+          "actual": 4.0,
+          "absoluteError": 3.93
+        },
+        {
+          "rank": 61,
+          "station": "捷運忠孝敦化站(7號出口)",
+          "predicted": 7.6,
+          "actual": 5.0,
+          "absoluteError": 2.6
+        },
+        {
+          "rank": 62,
+          "station": "捷運中山站(2號出口)",
+          "predicted": 7.59,
+          "actual": 8.0,
+          "absoluteError": 0.41
+        },
+        {
+          "rank": 63,
+          "station": "捷運南京三民站(2號出口)",
+          "predicted": 7.41,
+          "actual": 10.0,
+          "absoluteError": 2.59
+        },
+        {
+          "rank": 64,
+          "station": "捷運小巨蛋站(3號出口)",
+          "predicted": 7.36,
+          "actual": 5.0,
+          "absoluteError": 2.36
+        },
+        {
+          "rank": 65,
+          "station": "捷運關渡站(1號出口)",
+          "predicted": 7.21,
+          "actual": 5.0,
+          "absoluteError": 2.21
+        },
+        {
+          "rank": 66,
+          "station": "捷運中山站(5號出口)",
+          "predicted": 7.08,
+          "actual": 5.0,
+          "absoluteError": 2.08
+        },
+        {
+          "rank": 67,
+          "station": "捷運松山站(3號出口)",
+          "predicted": 7.03,
+          "actual": 6.0,
+          "absoluteError": 1.03
+        },
+        {
+          "rank": 68,
+          "station": "捷運昆陽站(1號出口)",
+          "predicted": 6.94,
+          "actual": 9.0,
+          "absoluteError": 2.06
+        },
+        {
+          "rank": 69,
+          "station": "捷運松山站(4號出口)",
+          "predicted": 6.52,
+          "actual": 8.0,
+          "absoluteError": 1.48
+        },
+        {
+          "rank": 70,
+          "station": "捷運信義安和站(2號出口)",
+          "predicted": 6.47,
+          "actual": 3.0,
+          "absoluteError": 3.47
+        },
+        {
+          "rank": 71,
+          "station": "捷運萬隆站(1號出口)",
+          "predicted": 6.43,
+          "actual": 8.0,
+          "absoluteError": 1.57
+        },
+        {
+          "rank": 72,
+          "station": "捷運明德站(3號出口)",
+          "predicted": 6.15,
+          "actual": 6.0,
+          "absoluteError": 0.15
+        },
+        {
+          "rank": 73,
+          "station": "捷運信義安和站(1號出口)",
+          "predicted": 6.12,
+          "actual": 4.0,
+          "absoluteError": 2.12
+        },
+        {
+          "rank": 74,
+          "station": "捷運士林站(1號出口)",
+          "predicted": 6.06,
+          "actual": 7.0,
+          "absoluteError": 0.94
+        },
+        {
+          "rank": 75,
+          "station": "捷運港墘站(1號出口)",
+          "predicted": 5.55,
+          "actual": 6.0,
+          "absoluteError": 0.45
+        },
+        {
+          "rank": 76,
+          "station": "捷運港墘站(2號出口)",
+          "predicted": 5.21,
+          "actual": 2.0,
+          "absoluteError": 3.21
+        },
+        {
+          "rank": 77,
+          "station": "捷運松江南京站(4號出口)",
+          "predicted": 5.13,
+          "actual": 2.0,
+          "absoluteError": 3.13
+        },
+        {
+          "rank": 78,
+          "station": "捷運大安站(5號出口)",
+          "predicted": 5.11,
+          "actual": 4.0,
+          "absoluteError": 1.11
+        },
+        {
+          "rank": 79,
+          "station": "臺大大一女舍北側",
+          "predicted": 5.0,
+          "actual": 6.0,
+          "absoluteError": 1.0
+        },
+        {
+          "rank": 80,
+          "station": "捷運萬隆站(2號出口)",
+          "predicted": 4.76,
+          "actual": 4.0,
+          "absoluteError": 0.76
+        },
+        {
+          "rank": 81,
+          "station": "捷運奇岩站(三合街)",
+          "predicted": 4.51,
+          "actual": 3.0,
+          "absoluteError": 1.51
+        },
+        {
+          "rank": 82,
+          "station": "捷運南京三民站(4號出口)",
+          "predicted": 4.43,
+          "actual": 3.0,
+          "absoluteError": 1.43
+        },
+        {
+          "rank": 83,
+          "station": "捷運臺電大樓站(2號出口)",
+          "predicted": 4.24,
+          "actual": 0.0,
+          "absoluteError": 4.24
+        },
+        {
+          "rank": 84,
+          "station": "捷運萬隆站(4號出口)",
+          "predicted": 3.91,
+          "actual": 1.0,
+          "absoluteError": 2.91
+        },
+        {
+          "rank": 85,
+          "station": "捷運內湖站(1號出口)",
+          "predicted": 3.83,
+          "actual": 3.0,
+          "absoluteError": 0.83
+        },
+        {
+          "rank": 86,
+          "station": "捷運唭哩岸站(2號出口)",
+          "predicted": 3.82,
+          "actual": 1.0,
+          "absoluteError": 2.82
+        },
+        {
+          "rank": 87,
+          "station": "西本願寺廣場",
+          "predicted": 3.57,
+          "actual": 3.0,
+          "absoluteError": 0.57
+        },
+        {
+          "rank": 88,
+          "station": "南港車站(市民大道)",
+          "predicted": 3.25,
+          "actual": 1.0,
+          "absoluteError": 2.25
+        },
+        {
+          "rank": 89,
+          "station": "捷運公館站(1號出口)",
+          "predicted": 3.23,
+          "actual": 3.0,
+          "absoluteError": 0.23
+        },
+        {
+          "rank": 90,
+          "station": "捷運臺電大樓站(2號出口)_1",
+          "predicted": 3.04,
+          "actual": 3.0,
+          "absoluteError": 0.04
+        },
+        {
+          "rank": 91,
+          "station": "復興南路二段273號前",
+          "predicted": 3.03,
+          "actual": 8.0,
+          "absoluteError": 4.97
+        },
+        {
+          "rank": 92,
+          "station": "捷運後山埤站(3號出口)",
+          "predicted": 2.95,
+          "actual": 0.0,
+          "absoluteError": 2.95
+        },
+        {
+          "rank": 93,
+          "station": "捷運西湖站(1號出口)",
+          "predicted": 2.92,
+          "actual": 6.0,
+          "absoluteError": 3.08
+        },
+        {
+          "rank": 94,
+          "station": "捷運小南門站(1號出口)",
+          "predicted": 2.87,
+          "actual": 2.0,
+          "absoluteError": 0.87
+        },
+        {
+          "rank": 95,
+          "station": "捷運龍山寺站(1號出口)_1",
+          "predicted": 2.55,
+          "actual": 6.0,
+          "absoluteError": 3.45
+        },
+        {
+          "rank": 96,
+          "station": "捷運景美站(2號出口)",
+          "predicted": 2.51,
+          "actual": 3.0,
+          "absoluteError": 0.49
+        },
+        {
+          "rank": 97,
+          "station": "捷運芝山站(2號出口)",
+          "predicted": 1.98,
+          "actual": 3.0,
+          "absoluteError": 1.02
+        },
+        {
+          "rank": 98,
+          "station": "捷運後山埤站(1號出口)",
+          "predicted": 1.73,
+          "actual": 0.0,
+          "absoluteError": 1.73
+        },
+        {
+          "rank": 99,
+          "station": "捷運北投站(1號出口)(北投路側)",
+          "predicted": 1.59,
+          "actual": 1.0,
+          "absoluteError": 0.59
+        },
+        {
+          "rank": 100,
+          "station": "松山車站",
+          "predicted": 1.35,
+          "actual": 0.0,
+          "absoluteError": 1.35
+        }
+      ]
+    },
+    {
+      "id": "20231215-18",
+      "targetTime": "2023-12-15T18:00:00+08:00",
+      "dateLabel": "12 月 15 日",
+      "timeLabel": "18:00",
+      "weekdayLabel": "週五",
+      "periodLabel": "平日",
+      "weather": {
+        "temperatureC": 25.3,
+        "humidityPercent": 65,
+        "precipitationMm": 0.0,
+        "windSpeedKmh": 0.4,
+        "isRaining": false
+      },
+      "summary": {
+        "totalPredicted": 1511,
+        "totalActual": 1312,
+        "mae": 3.34,
+        "largestDemandStation": "捷運劍潭站(2號出口)"
+      },
+      "stations": [
+        {
+          "rank": 1,
+          "station": "捷運劍潭站(2號出口)",
+          "predicted": 65.04,
+          "actual": 50,
+          "absoluteError": 15.04
+        },
+        {
+          "rank": 2,
+          "station": "捷運公館站(2號出口)",
+          "predicted": 50.07,
+          "actual": 37,
+          "absoluteError": 13.07
+        },
+        {
+          "rank": 3,
+          "station": "捷運科技大樓站",
+          "predicted": 45.53,
+          "actual": 45,
+          "absoluteError": 0.53
+        },
+        {
+          "rank": 4,
+          "station": "捷運芝山站(2號出口)_1",
+          "predicted": 41.71,
+          "actual": 39,
+          "absoluteError": 2.71
+        },
+        {
+          "rank": 5,
+          "station": "捷運圓山站(1號出口)",
+          "predicted": 34.53,
+          "actual": 25,
+          "absoluteError": 9.53
+        },
+        {
+          "rank": 6,
+          "station": "捷運芝山站(1號出口)",
+          "predicted": 33.48,
+          "actual": 30,
+          "absoluteError": 3.48
+        },
+        {
+          "rank": 7,
+          "station": "捷運龍山寺站(1號出口)",
+          "predicted": 32.67,
+          "actual": 27,
+          "absoluteError": 5.67
+        },
+        {
+          "rank": 8,
+          "station": "捷運六張犁站",
+          "predicted": 32.51,
+          "actual": 30,
+          "absoluteError": 2.51
+        },
+        {
+          "rank": 9,
+          "station": "捷運東門站(5號出口)",
+          "predicted": 31.89,
+          "actual": 27,
+          "absoluteError": 4.89
+        },
+        {
+          "rank": 10,
+          "station": "捷運象山站(3號出口)",
+          "predicted": 29.86,
+          "actual": 31,
+          "absoluteError": 1.14
+        },
+        {
+          "rank": 11,
+          "station": "捷運南京三民站(1號出口)",
+          "predicted": 28.33,
+          "actual": 29,
+          "absoluteError": 0.67
+        },
+        {
+          "rank": 12,
+          "station": "捷運中山國中站",
+          "predicted": 26.98,
+          "actual": 22,
+          "absoluteError": 4.98
+        },
+        {
+          "rank": 13,
+          "station": "捷運永春站(2號出口)",
+          "predicted": 26.16,
+          "actual": 24,
+          "absoluteError": 2.16
+        },
+        {
+          "rank": 14,
+          "station": "捷運劍南路站(2號出口)",
+          "predicted": 26.06,
+          "actual": 35,
+          "absoluteError": 8.94
+        },
+        {
+          "rank": 15,
+          "station": "捷運公館站(3號出口)",
+          "predicted": 25.51,
+          "actual": 12,
+          "absoluteError": 13.51
+        },
+        {
+          "rank": 16,
+          "station": "捷運象山站(2號出口)",
+          "predicted": 25.03,
+          "actual": 9,
+          "absoluteError": 16.03
+        },
+        {
+          "rank": 17,
+          "station": "捷運大安站(4號出口)",
+          "predicted": 24.88,
+          "actual": 23,
+          "absoluteError": 1.88
+        },
+        {
+          "rank": 18,
+          "station": "捷運行天宮站(3號出口)",
+          "predicted": 24.63,
+          "actual": 20,
+          "absoluteError": 4.63
+        },
+        {
+          "rank": 19,
+          "station": "捷運南港展覽館站(5號出口)",
+          "predicted": 23.98,
+          "actual": 22,
+          "absoluteError": 1.98
+        },
+        {
+          "rank": 20,
+          "station": "捷運古亭站(5號出口)",
+          "predicted": 23.85,
+          "actual": 22,
+          "absoluteError": 1.85
+        },
+        {
+          "rank": 21,
+          "station": "捷運北投站(1號出口)",
+          "predicted": 22.01,
+          "actual": 19,
+          "absoluteError": 3.01
+        },
+        {
+          "rank": 22,
+          "station": "捷運古亭站(2號出口)",
+          "predicted": 21.99,
+          "actual": 16,
+          "absoluteError": 5.99
+        },
+        {
+          "rank": 23,
+          "station": "捷運士林站(2號出口)",
+          "predicted": 21.87,
+          "actual": 19,
+          "absoluteError": 2.87
+        },
+        {
+          "rank": 24,
+          "station": "捷運信義安和站(4號出口)",
+          "predicted": 21.6,
+          "actual": 21,
+          "absoluteError": 0.6
+        },
+        {
+          "rank": 25,
+          "station": "捷運圓山站(2號出口)",
+          "predicted": 20.79,
+          "actual": 20,
+          "absoluteError": 0.79
+        },
+        {
+          "rank": 26,
+          "station": "捷運忠孝復興站(2號出口)",
+          "predicted": 19.56,
+          "actual": 21,
+          "absoluteError": 1.44
+        },
+        {
+          "rank": 27,
+          "station": "捷運石牌站(2號出口)",
+          "predicted": 19.4,
+          "actual": 16,
+          "absoluteError": 3.4
+        },
+        {
+          "rank": 28,
+          "station": "捷運後山埤站(2號出口)",
+          "predicted": 18.63,
+          "actual": 15,
+          "absoluteError": 3.63
+        },
+        {
+          "rank": 29,
+          "station": "捷運內湖站(1號出口)",
+          "predicted": 18.46,
+          "actual": 18,
+          "absoluteError": 0.46
+        },
+        {
+          "rank": 30,
+          "station": "捷運臺北101/世貿站(2號出口)",
+          "predicted": 18.04,
+          "actual": 13,
+          "absoluteError": 5.04
+        },
+        {
+          "rank": 31,
+          "station": "捷運大安森林公園站(5號出口)",
+          "predicted": 17.98,
+          "actual": 18,
+          "absoluteError": 0.02
+        },
+        {
+          "rank": 32,
+          "station": "捷運松山站(3號出口)",
+          "predicted": 17.39,
+          "actual": 11,
+          "absoluteError": 6.39
+        },
+        {
+          "rank": 33,
+          "station": "捷運北門站(3號出口)",
+          "predicted": 16.97,
+          "actual": 9,
+          "absoluteError": 7.97
+        },
+        {
+          "rank": 34,
+          "station": "捷運松山站(4號出口)",
+          "predicted": 15.76,
+          "actual": 20,
+          "absoluteError": 4.24
+        },
+        {
+          "rank": 35,
+          "station": "捷運中山站(5號出口)",
+          "predicted": 15.6,
+          "actual": 13,
+          "absoluteError": 2.6
+        },
+        {
+          "rank": 36,
+          "station": "捷運龍山寺站(1號出口)_1",
+          "predicted": 15.57,
+          "actual": 8,
+          "absoluteError": 7.57
+        },
+        {
+          "rank": 37,
+          "station": "捷運劍潭站(1號出口)",
+          "predicted": 14.92,
+          "actual": 18,
+          "absoluteError": 3.08
+        },
+        {
+          "rank": 38,
+          "station": "捷運士林站(1號出口)",
+          "predicted": 14.88,
+          "actual": 11,
+          "absoluteError": 3.88
+        },
+        {
+          "rank": 39,
+          "station": "西本願寺廣場",
+          "predicted": 14.52,
+          "actual": 9,
+          "absoluteError": 5.52
+        },
+        {
+          "rank": 40,
+          "station": "捷運奇岩站(三合街)",
+          "predicted": 14.42,
+          "actual": 10,
+          "absoluteError": 4.42
+        },
+        {
+          "rank": 41,
+          "station": "捷運大橋頭站(2號出口)",
+          "predicted": 14.4,
+          "actual": 11,
+          "absoluteError": 3.4
+        },
+        {
+          "rank": 42,
+          "station": "捷運中山站(2號出口)",
+          "predicted": 14.08,
+          "actual": 17,
+          "absoluteError": 2.92
+        },
+        {
+          "rank": 43,
+          "station": "捷運市政府站(3號出口)",
+          "predicted": 13.87,
+          "actual": 15,
+          "absoluteError": 1.13
+        },
+        {
+          "rank": 44,
+          "station": "捷運中山國小站(4號出口)",
+          "predicted": 13.83,
+          "actual": 13,
+          "absoluteError": 0.83
+        },
+        {
+          "rank": 45,
+          "station": "捷運國父紀念館站(2號出口)",
+          "predicted": 13.71,
+          "actual": 13,
+          "absoluteError": 0.71
+        },
+        {
+          "rank": 46,
+          "station": "捷運昆陽站(1號出口)",
+          "predicted": 13.56,
+          "actual": 14,
+          "absoluteError": 0.44
+        },
+        {
+          "rank": 47,
+          "station": "捷運松江南京站(7號出口)",
+          "predicted": 13.52,
+          "actual": 16,
+          "absoluteError": 2.48
+        },
+        {
+          "rank": 48,
+          "station": "捷運明德站(3號出口)",
+          "predicted": 13.38,
+          "actual": 15,
+          "absoluteError": 1.62
+        },
+        {
+          "rank": 49,
+          "station": "捷運文德站(2號出口)",
+          "predicted": 13.17,
+          "actual": 13,
+          "absoluteError": 0.17
+        },
+        {
+          "rank": 50,
+          "station": "捷運大安森林公園站(2號出口)",
+          "predicted": 12.77,
+          "actual": 14,
+          "absoluteError": 1.23
+        },
+        {
+          "rank": 51,
+          "station": "捷運臺電大樓站(2號出口)",
+          "predicted": 12.57,
+          "actual": 15,
+          "absoluteError": 2.43
+        },
+        {
+          "rank": 52,
+          "station": "捷運西門站(3號出口)",
+          "predicted": 10.75,
+          "actual": 12,
+          "absoluteError": 1.25
+        },
+        {
+          "rank": 53,
+          "station": "捷運景美站(2號出口)",
+          "predicted": 10.57,
+          "actual": 7,
+          "absoluteError": 3.57
+        },
+        {
+          "rank": 54,
+          "station": "捷運萬隆站(2號出口)",
+          "predicted": 10.41,
+          "actual": 6,
+          "absoluteError": 4.41
+        },
+        {
+          "rank": 55,
+          "station": "捷運大安站(5號出口)",
+          "predicted": 10.22,
+          "actual": 12,
+          "absoluteError": 1.78
+        },
+        {
+          "rank": 56,
+          "station": "捷運小巨蛋站(5號出口)_1",
+          "predicted": 9.82,
+          "actual": 8,
+          "absoluteError": 1.82
+        },
+        {
+          "rank": 57,
+          "station": "信義廣場(臺北101)",
+          "predicted": 9.79,
+          "actual": 2,
+          "absoluteError": 7.79
+        },
+        {
+          "rank": 58,
+          "station": "捷運南京復興站(7號出口)",
+          "predicted": 9.62,
+          "actual": 5,
+          "absoluteError": 4.62
+        },
+        {
+          "rank": 59,
+          "station": "松山車站",
+          "predicted": 9.49,
+          "actual": 7,
+          "absoluteError": 2.49
+        },
+        {
+          "rank": 60,
+          "station": "捷運南京復興站(5號出口)",
+          "predicted": 9.06,
+          "actual": 7,
+          "absoluteError": 2.06
+        },
+        {
+          "rank": 61,
+          "station": "捷運萬隆站(1號出口)",
+          "predicted": 8.96,
+          "actual": 7,
+          "absoluteError": 1.96
+        },
+        {
+          "rank": 62,
+          "station": "捷運信義安和站(1號出口)",
+          "predicted": 8.94,
+          "actual": 6,
+          "absoluteError": 2.94
+        },
+        {
+          "rank": 63,
+          "station": "捷運臺北101/世貿站(3號出口)",
+          "predicted": 8.84,
+          "actual": 1,
+          "absoluteError": 7.84
+        },
+        {
+          "rank": 64,
+          "station": "捷運善導寺站(3號出口)(忠孝東路側)",
+          "predicted": 8.78,
+          "actual": 8,
+          "absoluteError": 0.78
+        },
+        {
+          "rank": 65,
+          "station": "捷運港墘站(2號出口)",
+          "predicted": 8.77,
+          "actual": 4,
+          "absoluteError": 4.77
+        },
+        {
+          "rank": 66,
+          "station": "捷運唭哩岸站(2號出口)",
+          "predicted": 8.72,
+          "actual": 9,
+          "absoluteError": 0.28
+        },
+        {
+          "rank": 67,
+          "station": "捷運雙連站(2號出口)",
+          "predicted": 8.71,
+          "actual": 4,
+          "absoluteError": 4.71
+        },
+        {
+          "rank": 68,
+          "station": "復興南路二段273號前",
+          "predicted": 8.44,
+          "actual": 6,
+          "absoluteError": 2.44
+        },
+        {
+          "rank": 69,
+          "station": "捷運信義安和站(2號出口)",
+          "predicted": 8.1,
+          "actual": 6,
+          "absoluteError": 2.1
+        },
+        {
+          "rank": 70,
+          "station": "捷運小南門站(1號出口)",
+          "predicted": 7.87,
+          "actual": 1,
+          "absoluteError": 6.87
+        },
+        {
+          "rank": 71,
+          "station": "捷運忠孝敦化站(7號出口)",
+          "predicted": 7.86,
+          "actual": 7,
+          "absoluteError": 0.86
+        },
+        {
+          "rank": 72,
+          "station": "捷運關渡站(1號出口)",
+          "predicted": 7.83,
+          "actual": 12,
+          "absoluteError": 4.17
+        },
+        {
+          "rank": 73,
+          "station": "捷運象山站(1號出口)",
+          "predicted": 7.63,
+          "actual": 8,
+          "absoluteError": 0.37
+        },
+        {
+          "rank": 74,
+          "station": "捷運公館站(1號出口)",
+          "predicted": 7.62,
+          "actual": 7,
+          "absoluteError": 0.62
+        },
+        {
+          "rank": 75,
+          "station": "捷運古亭站(6號出口)",
+          "predicted": 7.36,
+          "actual": 5,
+          "absoluteError": 2.36
+        },
+        {
+          "rank": 76,
+          "station": "捷運後山埤站(3號出口)",
+          "predicted": 7.12,
+          "actual": 6,
+          "absoluteError": 1.12
+        },
+        {
+          "rank": 77,
+          "station": "南京遼寧街口",
+          "predicted": 7.11,
+          "actual": 5,
+          "absoluteError": 2.11
+        },
+        {
+          "rank": 78,
+          "station": "捷運忠孝新生站(4號出口)",
+          "predicted": 7.03,
+          "actual": 9,
+          "absoluteError": 1.97
+        },
+        {
+          "rank": 79,
+          "station": "捷運南京三民站(4號出口)",
+          "predicted": 7.02,
+          "actual": 11,
+          "absoluteError": 3.98
+        },
+        {
+          "rank": 80,
+          "station": "捷運萬隆站(4號出口)",
+          "predicted": 7.0,
+          "actual": 5,
+          "absoluteError": 2.0
+        },
+        {
+          "rank": 81,
+          "station": "捷運大安站(3號出口)",
+          "predicted": 6.99,
+          "actual": 14,
+          "absoluteError": 7.01
+        },
+        {
+          "rank": 82,
+          "station": "捷運後山埤站(1號出口)",
+          "predicted": 6.81,
+          "actual": 10,
+          "absoluteError": 3.19
+        },
+        {
+          "rank": 83,
+          "station": "捷運古亭站(8號出口)",
+          "predicted": 6.36,
+          "actual": 7,
+          "absoluteError": 0.64
+        },
+        {
+          "rank": 84,
+          "station": "捷運臺大醫院站(4號出口)",
+          "predicted": 6.24,
+          "actual": 0,
+          "absoluteError": 6.24
+        },
+        {
+          "rank": 85,
+          "station": "南港車站(市民大道)",
+          "predicted": 6.17,
+          "actual": 2,
+          "absoluteError": 4.17
+        },
+        {
+          "rank": 86,
+          "station": "臺大大一女舍北側",
+          "predicted": 6.01,
+          "actual": 4,
+          "absoluteError": 2.01
+        },
+        {
+          "rank": 87,
+          "station": "捷運北投站(1號出口)(北投路側)",
+          "predicted": 5.99,
+          "actual": 6,
+          "absoluteError": 0.01
+        },
+        {
+          "rank": 88,
+          "station": "捷運臺電大樓站(2號出口)_1",
+          "predicted": 5.73,
+          "actual": 5,
+          "absoluteError": 0.73
+        },
+        {
+          "rank": 89,
+          "station": "捷運南京三民站(2號出口)",
+          "predicted": 5.4,
+          "actual": 7,
+          "absoluteError": 1.6
+        },
+        {
+          "rank": 90,
+          "station": "捷運小巨蛋站(3號出口)",
+          "predicted": 5.22,
+          "actual": 9,
+          "absoluteError": 3.78
+        },
+        {
+          "rank": 91,
+          "station": "捷運松江南京站(8號出口)",
+          "predicted": 5.22,
+          "actual": 6,
+          "absoluteError": 0.78
+        },
+        {
+          "rank": 92,
+          "station": "捷運港墘站(1號出口)",
+          "predicted": 5.21,
+          "actual": 6,
+          "absoluteError": 0.79
+        },
+        {
+          "rank": 93,
+          "station": "捷運忠孝新生站(2號出口)",
+          "predicted": 5.0,
+          "actual": 4,
+          "absoluteError": 1.0
+        },
+        {
+          "rank": 94,
+          "station": "捷運西湖站(1號出口)",
+          "predicted": 4.81,
+          "actual": 2,
+          "absoluteError": 2.81
+        },
+        {
+          "rank": 95,
+          "station": "捷運松江南京站(4號出口)",
+          "predicted": 4.45,
+          "actual": 1,
+          "absoluteError": 3.45
+        },
+        {
+          "rank": 96,
+          "station": "捷運西門站(5號出口)",
+          "predicted": 4.32,
+          "actual": 3,
+          "absoluteError": 1.32
+        },
+        {
+          "rank": 97,
+          "station": "興雅松仁路口",
+          "predicted": 3.82,
+          "actual": 6,
+          "absoluteError": 2.18
+        },
+        {
+          "rank": 98,
+          "station": "捷運芝山站(2號出口)",
+          "predicted": 3.7,
+          "actual": 5,
+          "absoluteError": 1.3
+        },
+        {
+          "rank": 99,
+          "station": "臺大椰林小舖",
+          "predicted": 1.27,
+          "actual": 2,
+          "absoluteError": 0.73
+        },
+        {
+          "rank": 100,
+          "station": "臺大鹿鳴堂東側",
+          "predicted": 0.78,
+          "actual": 0,
+          "absoluteError": 0.78
+        }
+      ]
+    },
+    {
+      "id": "20231224-14",
+      "targetTime": "2023-12-24T14:00:00+08:00",
+      "dateLabel": "12 月 24 日",
+      "timeLabel": "14:00",
+      "weekdayLabel": "週日",
+      "periodLabel": "週末",
+      "weather": {
+        "temperatureC": 14.4,
+        "humidityPercent": 77,
+        "precipitationMm": 0.1,
+        "windSpeedKmh": 17.4,
+        "isRaining": true
+      },
+      "summary": {
+        "totalPredicted": 414,
+        "totalActual": 472,
+        "mae": 1.91,
+        "largestDemandStation": "捷運公館站(2號出口)"
+      },
+      "stations": [
+        {
+          "rank": 1,
+          "station": "捷運公館站(2號出口)",
+          "predicted": 24.45,
+          "actual": 35.0,
+          "absoluteError": 10.55
+        },
+        {
+          "rank": 2,
+          "station": "捷運公館站(3號出口)",
+          "predicted": 16.16,
+          "actual": 15.0,
+          "absoluteError": 1.16
+        },
+        {
+          "rank": 3,
+          "station": "捷運科技大樓站",
+          "predicted": 15.23,
+          "actual": 16.0,
+          "absoluteError": 0.77
+        },
+        {
+          "rank": 4,
+          "station": "捷運龍山寺站(1號出口)",
+          "predicted": 11.85,
+          "actual": 13.0,
+          "absoluteError": 1.15
+        },
+        {
+          "rank": 5,
+          "station": "捷運芝山站(2號出口)_1",
+          "predicted": 10.8,
+          "actual": 10.0,
+          "absoluteError": 0.8
+        },
+        {
+          "rank": 6,
+          "station": "捷運圓山站(1號出口)",
+          "predicted": 10.21,
+          "actual": 24.0,
+          "absoluteError": 13.79
+        },
+        {
+          "rank": 7,
+          "station": "捷運劍潭站(2號出口)",
+          "predicted": 10.16,
+          "actual": 15.0,
+          "absoluteError": 4.84
+        },
+        {
+          "rank": 8,
+          "station": "捷運芝山站(1號出口)",
+          "predicted": 9.59,
+          "actual": 7.0,
+          "absoluteError": 2.59
+        },
+        {
+          "rank": 9,
+          "station": "捷運中山國中站",
+          "predicted": 8.38,
+          "actual": 3.0,
+          "absoluteError": 5.38
+        },
+        {
+          "rank": 10,
+          "station": "捷運圓山站(2號出口)",
+          "predicted": 7.7,
+          "actual": 6.0,
+          "absoluteError": 1.7
+        },
+        {
+          "rank": 11,
+          "station": "捷運北門站(3號出口)",
+          "predicted": 7.61,
+          "actual": 3.0,
+          "absoluteError": 4.61
+        },
+        {
+          "rank": 12,
+          "station": "捷運東門站(5號出口)",
+          "predicted": 7.32,
+          "actual": 7.0,
+          "absoluteError": 0.32
+        },
+        {
+          "rank": 13,
+          "station": "捷運北投站(1號出口)",
+          "predicted": 7.32,
+          "actual": 8.0,
+          "absoluteError": 0.68
+        },
+        {
+          "rank": 14,
+          "station": "捷運南京三民站(1號出口)",
+          "predicted": 6.91,
+          "actual": 10.0,
+          "absoluteError": 3.09
+        },
+        {
+          "rank": 15,
+          "station": "捷運臺北101/世貿站(2號出口)",
+          "predicted": 6.75,
+          "actual": 13.0,
+          "absoluteError": 6.25
+        },
+        {
+          "rank": 16,
+          "station": "捷運古亭站(2號出口)",
+          "predicted": 6.68,
+          "actual": 9.0,
+          "absoluteError": 2.32
+        },
+        {
+          "rank": 17,
+          "station": "捷運大安森林公園站(5號出口)",
+          "predicted": 6.57,
+          "actual": 8.0,
+          "absoluteError": 1.43
+        },
+        {
+          "rank": 18,
+          "station": "捷運象山站(2號出口)",
+          "predicted": 6.26,
+          "actual": 9.0,
+          "absoluteError": 2.74
+        },
+        {
+          "rank": 19,
+          "station": "捷運六張犁站",
+          "predicted": 6.2,
+          "actual": 8.0,
+          "absoluteError": 1.8
+        },
+        {
+          "rank": 20,
+          "station": "捷運國父紀念館站(2號出口)",
+          "predicted": 6.04,
+          "actual": 1.0,
+          "absoluteError": 5.04
+        },
+        {
+          "rank": 21,
+          "station": "捷運士林站(2號出口)",
+          "predicted": 5.95,
+          "actual": 12.0,
+          "absoluteError": 6.05
+        },
+        {
+          "rank": 22,
+          "station": "捷運行天宮站(3號出口)",
+          "predicted": 5.89,
+          "actual": 4.0,
+          "absoluteError": 1.89
+        },
+        {
+          "rank": 23,
+          "station": "捷運劍南路站(2號出口)",
+          "predicted": 5.86,
+          "actual": 5.0,
+          "absoluteError": 0.86
+        },
+        {
+          "rank": 24,
+          "station": "捷運大橋頭站(2號出口)",
+          "predicted": 5.2,
+          "actual": 10.0,
+          "absoluteError": 4.8
+        },
+        {
+          "rank": 25,
+          "station": "捷運永春站(2號出口)",
+          "predicted": 5.03,
+          "actual": 4.0,
+          "absoluteError": 1.03
+        },
+        {
+          "rank": 26,
+          "station": "捷運石牌站(2號出口)",
+          "predicted": 4.94,
+          "actual": 4.0,
+          "absoluteError": 0.94
+        },
+        {
+          "rank": 27,
+          "station": "捷運忠孝復興站(2號出口)",
+          "predicted": 4.94,
+          "actual": 5.0,
+          "absoluteError": 0.06
+        },
+        {
+          "rank": 28,
+          "station": "捷運大安站(4號出口)",
+          "predicted": 4.56,
+          "actual": 4.0,
+          "absoluteError": 0.56
+        },
+        {
+          "rank": 29,
+          "station": "捷運大安森林公園站(2號出口)",
+          "predicted": 4.4,
+          "actual": 4.0,
+          "absoluteError": 0.4
+        },
+        {
+          "rank": 30,
+          "station": "捷運信義安和站(4號出口)",
+          "predicted": 4.32,
+          "actual": 6.0,
+          "absoluteError": 1.68
+        },
+        {
+          "rank": 31,
+          "station": "捷運劍潭站(1號出口)",
+          "predicted": 4.2,
+          "actual": 6.0,
+          "absoluteError": 1.8
+        },
+        {
+          "rank": 32,
+          "station": "捷運古亭站(5號出口)",
+          "predicted": 4.2,
+          "actual": 7.0,
+          "absoluteError": 2.8
+        },
+        {
+          "rank": 33,
+          "station": "捷運關渡站(1號出口)",
+          "predicted": 4.04,
+          "actual": 6.0,
+          "absoluteError": 1.96
+        },
+        {
+          "rank": 34,
+          "station": "捷運中山站(2號出口)",
+          "predicted": 3.94,
+          "actual": 4.0,
+          "absoluteError": 0.06
+        },
+        {
+          "rank": 35,
+          "station": "捷運象山站(3號出口)",
+          "predicted": 3.94,
+          "actual": 6.0,
+          "absoluteError": 2.06
+        },
+        {
+          "rank": 36,
+          "station": "捷運善導寺站(3號出口)(忠孝東路側)",
+          "predicted": 3.86,
+          "actual": 4.0,
+          "absoluteError": 0.14
+        },
+        {
+          "rank": 37,
+          "station": "捷運中山站(5號出口)",
+          "predicted": 3.85,
+          "actual": 3.0,
+          "absoluteError": 0.85
+        },
+        {
+          "rank": 38,
+          "station": "西本願寺廣場",
+          "predicted": 3.76,
+          "actual": 8.0,
+          "absoluteError": 4.24
+        },
+        {
+          "rank": 39,
+          "station": "捷運奇岩站(三合街)",
+          "predicted": 3.65,
+          "actual": 3.0,
+          "absoluteError": 0.65
+        },
+        {
+          "rank": 40,
+          "station": "捷運後山埤站(2號出口)",
+          "predicted": 3.64,
+          "actual": 4.0,
+          "absoluteError": 0.36
+        },
+        {
+          "rank": 41,
+          "station": "捷運松江南京站(7號出口)",
+          "predicted": 3.63,
+          "actual": 5.0,
+          "absoluteError": 1.37
+        },
+        {
+          "rank": 42,
+          "station": "捷運雙連站(2號出口)",
+          "predicted": 3.48,
+          "actual": 2.0,
+          "absoluteError": 1.48
+        },
+        {
+          "rank": 43,
+          "station": "捷運西門站(3號出口)",
+          "predicted": 3.44,
+          "actual": 3.0,
+          "absoluteError": 0.44
+        },
+        {
+          "rank": 44,
+          "station": "捷運文德站(2號出口)",
+          "predicted": 3.4,
+          "actual": 2.0,
+          "absoluteError": 1.4
+        },
+        {
+          "rank": 45,
+          "station": "捷運市政府站(3號出口)",
+          "predicted": 3.35,
+          "actual": 2.0,
+          "absoluteError": 1.35
+        },
+        {
+          "rank": 46,
+          "station": "捷運唭哩岸站(2號出口)",
+          "predicted": 3.33,
+          "actual": 3.0,
+          "absoluteError": 0.33
+        },
+        {
+          "rank": 47,
+          "station": "臺大大一女舍北側",
+          "predicted": 3.15,
+          "actual": 1.0,
+          "absoluteError": 2.15
+        },
+        {
+          "rank": 48,
+          "station": "捷運南京復興站(5號出口)",
+          "predicted": 3.14,
+          "actual": 3.0,
+          "absoluteError": 0.14
+        },
+        {
+          "rank": 49,
+          "station": "捷運南港展覽館站(5號出口)",
+          "predicted": 3.12,
+          "actual": 1.0,
+          "absoluteError": 2.12
+        },
+        {
+          "rank": 50,
+          "station": "捷運港墘站(2號出口)",
+          "predicted": 3.11,
+          "actual": 1.0,
+          "absoluteError": 2.11
+        },
+        {
+          "rank": 51,
+          "station": "捷運大安站(3號出口)",
+          "predicted": 3.02,
+          "actual": 6.0,
+          "absoluteError": 2.98
+        },
+        {
+          "rank": 52,
+          "station": "捷運臺大醫院站(4號出口)",
+          "predicted": 2.95,
+          "actual": 2.0,
+          "absoluteError": 0.95
+        },
+        {
+          "rank": 53,
+          "station": "南京遼寧街口",
+          "predicted": 2.92,
+          "actual": 1.0,
+          "absoluteError": 1.92
+        },
+        {
+          "rank": 54,
+          "station": "捷運龍山寺站(1號出口)_1",
+          "predicted": 2.88,
+          "actual": 1.0,
+          "absoluteError": 1.88
+        },
+        {
+          "rank": 55,
+          "station": "捷運萬隆站(2號出口)",
+          "predicted": 2.76,
+          "actual": 2.0,
+          "absoluteError": 0.76
+        },
+        {
+          "rank": 56,
+          "station": "捷運中山國小站(4號出口)",
+          "predicted": 2.71,
+          "actual": 2.0,
+          "absoluteError": 0.71
+        },
+        {
+          "rank": 57,
+          "station": "捷運士林站(1號出口)",
+          "predicted": 2.59,
+          "actual": 4.0,
+          "absoluteError": 1.41
+        },
+        {
+          "rank": 58,
+          "station": "捷運大安站(5號出口)",
+          "predicted": 2.57,
+          "actual": 1.0,
+          "absoluteError": 1.57
+        },
+        {
+          "rank": 59,
+          "station": "捷運公館站(1號出口)",
+          "predicted": 2.57,
+          "actual": 3.0,
+          "absoluteError": 0.43
+        },
+        {
+          "rank": 60,
+          "station": "捷運小巨蛋站(3號出口)",
+          "predicted": 2.56,
+          "actual": 3.0,
+          "absoluteError": 0.44
+        },
+        {
+          "rank": 61,
+          "station": "捷運明德站(3號出口)",
+          "predicted": 2.52,
+          "actual": 5.0,
+          "absoluteError": 2.48
+        },
+        {
+          "rank": 62,
+          "station": "捷運內湖站(1號出口)",
+          "predicted": 2.52,
+          "actual": 2.0,
+          "absoluteError": 0.52
+        },
+        {
+          "rank": 63,
+          "station": "捷運臺電大樓站(2號出口)",
+          "predicted": 2.46,
+          "actual": 3.0,
+          "absoluteError": 0.54
+        },
+        {
+          "rank": 64,
+          "station": "捷運松江南京站(8號出口)",
+          "predicted": 2.44,
+          "actual": 4.0,
+          "absoluteError": 1.56
+        },
+        {
+          "rank": 65,
+          "station": "興雅松仁路口",
+          "predicted": 2.42,
+          "actual": 1.0,
+          "absoluteError": 1.42
+        },
+        {
+          "rank": 66,
+          "station": "信義廣場(臺北101)",
+          "predicted": 2.38,
+          "actual": 4.0,
+          "absoluteError": 1.62
+        },
+        {
+          "rank": 67,
+          "station": "捷運忠孝新生站(4號出口)",
+          "predicted": 2.32,
+          "actual": 4.0,
+          "absoluteError": 1.68
+        },
+        {
+          "rank": 68,
+          "station": "捷運忠孝新生站(2號出口)",
+          "predicted": 2.31,
+          "actual": 11.0,
+          "absoluteError": 8.69
+        },
+        {
+          "rank": 69,
+          "station": "捷運昆陽站(1號出口)",
+          "predicted": 2.19,
+          "actual": 4.0,
+          "absoluteError": 1.81
+        },
+        {
+          "rank": 70,
+          "station": "捷運臺北101/世貿站(3號出口)",
+          "predicted": 2.15,
+          "actual": 5.0,
+          "absoluteError": 2.85
+        },
+        {
+          "rank": 71,
+          "station": "捷運西門站(5號出口)",
+          "predicted": 2.14,
+          "actual": 3.0,
+          "absoluteError": 0.86
+        },
+        {
+          "rank": 72,
+          "station": "捷運北投站(1號出口)(北投路側)",
+          "predicted": 2.1,
+          "actual": 0.0,
+          "absoluteError": 2.1
+        },
+        {
+          "rank": 73,
+          "station": "捷運信義安和站(1號出口)",
+          "predicted": 2.08,
+          "actual": 1.0,
+          "absoluteError": 1.08
+        },
+        {
+          "rank": 74,
+          "station": "捷運小巨蛋站(5號出口)_1",
+          "predicted": 2.05,
+          "actual": 2.0,
+          "absoluteError": 0.05
+        },
+        {
+          "rank": 75,
+          "station": "捷運南京復興站(7號出口)",
+          "predicted": 2.0,
+          "actual": 5.0,
+          "absoluteError": 3.0
+        },
+        {
+          "rank": 76,
+          "station": "捷運後山埤站(3號出口)",
+          "predicted": 1.97,
+          "actual": 4.0,
+          "absoluteError": 2.03
+        },
+        {
+          "rank": 77,
+          "station": "捷運松山站(3號出口)",
+          "predicted": 1.95,
+          "actual": 4.0,
+          "absoluteError": 2.05
+        },
+        {
+          "rank": 78,
+          "station": "捷運古亭站(8號出口)",
+          "predicted": 1.9,
+          "actual": 1.0,
+          "absoluteError": 0.9
+        },
+        {
+          "rank": 79,
+          "station": "臺大椰林小舖",
+          "predicted": 1.88,
+          "actual": 1.0,
+          "absoluteError": 0.88
+        },
+        {
+          "rank": 80,
+          "station": "捷運松山站(4號出口)",
+          "predicted": 1.87,
+          "actual": 6.0,
+          "absoluteError": 4.13
+        },
+        {
+          "rank": 81,
+          "station": "捷運南京三民站(2號出口)",
+          "predicted": 1.78,
+          "actual": 2.0,
+          "absoluteError": 0.22
+        },
+        {
+          "rank": 82,
+          "station": "捷運小南門站(1號出口)",
+          "predicted": 1.76,
+          "actual": 6.0,
+          "absoluteError": 4.24
+        },
+        {
+          "rank": 83,
+          "station": "捷運景美站(2號出口)",
+          "predicted": 1.76,
+          "actual": 1.0,
+          "absoluteError": 0.76
+        },
+        {
+          "rank": 84,
+          "station": "捷運松江南京站(4號出口)",
+          "predicted": 1.68,
+          "actual": 0.0,
+          "absoluteError": 1.68
+        },
+        {
+          "rank": 85,
+          "station": "松山車站",
+          "predicted": 1.54,
+          "actual": 1.0,
+          "absoluteError": 0.54
+        },
+        {
+          "rank": 86,
+          "station": "復興南路二段273號前",
+          "predicted": 1.52,
+          "actual": 0.0,
+          "absoluteError": 1.52
+        },
+        {
+          "rank": 87,
+          "station": "捷運忠孝敦化站(7號出口)",
+          "predicted": 1.51,
+          "actual": 1.0,
+          "absoluteError": 0.51
+        },
+        {
+          "rank": 88,
+          "station": "捷運萬隆站(1號出口)",
+          "predicted": 1.5,
+          "actual": 0.0,
+          "absoluteError": 1.5
+        },
+        {
+          "rank": 89,
+          "station": "捷運萬隆站(4號出口)",
+          "predicted": 1.49,
+          "actual": 1.0,
+          "absoluteError": 0.49
+        },
+        {
+          "rank": 90,
+          "station": "捷運臺電大樓站(2號出口)_1",
+          "predicted": 1.48,
+          "actual": 1.0,
+          "absoluteError": 0.48
+        },
+        {
+          "rank": 91,
+          "station": "捷運古亭站(6號出口)",
+          "predicted": 1.47,
+          "actual": 1.0,
+          "absoluteError": 0.47
+        },
+        {
+          "rank": 92,
+          "station": "捷運南京三民站(4號出口)",
+          "predicted": 1.47,
+          "actual": 1.0,
+          "absoluteError": 0.47
+        },
+        {
+          "rank": 93,
+          "station": "捷運信義安和站(2號出口)",
+          "predicted": 1.41,
+          "actual": 2.0,
+          "absoluteError": 0.59
+        },
+        {
+          "rank": 94,
+          "station": "捷運港墘站(1號出口)",
+          "predicted": 1.4,
+          "actual": 1.0,
+          "absoluteError": 0.4
+        },
+        {
+          "rank": 95,
+          "station": "捷運西湖站(1號出口)",
+          "predicted": 1.31,
+          "actual": 0.0,
+          "absoluteError": 1.31
+        },
+        {
+          "rank": 96,
+          "station": "南港車站(市民大道)",
+          "predicted": 1.11,
+          "actual": 0.0,
+          "absoluteError": 1.11
+        },
+        {
+          "rank": 97,
+          "station": "捷運芝山站(2號出口)",
+          "predicted": 1.07,
+          "actual": 2.0,
+          "absoluteError": 0.93
+        },
+        {
+          "rank": 98,
+          "station": "捷運象山站(1號出口)",
+          "predicted": 1.01,
+          "actual": 2.0,
+          "absoluteError": 0.99
+        },
+        {
+          "rank": 99,
+          "station": "捷運後山埤站(1號出口)",
+          "predicted": 0.64,
+          "actual": 3.0,
+          "absoluteError": 2.36
+        },
+        {
+          "rank": 100,
+          "station": "臺大鹿鳴堂東側",
+          "predicted": 0.47,
+          "actual": 0.0,
+          "absoluteError": 0.47
+        }
+      ]
+    },
+    {
+      "id": "20231224-18",
+      "targetTime": "2023-12-24T18:00:00+08:00",
+      "dateLabel": "12 月 24 日",
+      "timeLabel": "18:00",
+      "weekdayLabel": "週日",
+      "periodLabel": "週末",
+      "weather": {
+        "temperatureC": 13.6,
+        "humidityPercent": 72,
+        "precipitationMm": 0.0,
+        "windSpeedKmh": 11.2,
+        "isRaining": false
+      },
+      "summary": {
+        "totalPredicted": 563,
+        "totalActual": 589,
+        "mae": 2.1,
+        "largestDemandStation": "捷運公館站(2號出口)"
+      },
+      "stations": [
+        {
+          "rank": 1,
+          "station": "捷運公館站(2號出口)",
+          "predicted": 23.52,
+          "actual": 37.0,
+          "absoluteError": 13.48
+        },
+        {
+          "rank": 2,
+          "station": "捷運芝山站(2號出口)_1",
+          "predicted": 20.65,
+          "actual": 21.0,
+          "absoluteError": 0.35
+        },
+        {
+          "rank": 3,
+          "station": "捷運劍潭站(2號出口)",
+          "predicted": 19.45,
+          "actual": 18.0,
+          "absoluteError": 1.45
+        },
+        {
+          "rank": 4,
+          "station": "捷運科技大樓站",
+          "predicted": 19.29,
+          "actual": 17.0,
+          "absoluteError": 2.29
+        },
+        {
+          "rank": 5,
+          "station": "捷運龍山寺站(1號出口)",
+          "predicted": 19.18,
+          "actual": 27.0,
+          "absoluteError": 7.82
+        },
+        {
+          "rank": 6,
+          "station": "捷運公館站(3號出口)",
+          "predicted": 12.42,
+          "actual": 13.0,
+          "absoluteError": 0.58
+        },
+        {
+          "rank": 7,
+          "station": "捷運芝山站(1號出口)",
+          "predicted": 12.05,
+          "actual": 10.0,
+          "absoluteError": 2.05
+        },
+        {
+          "rank": 8,
+          "station": "捷運北投站(1號出口)",
+          "predicted": 11.66,
+          "actual": 18.0,
+          "absoluteError": 6.34
+        },
+        {
+          "rank": 9,
+          "station": "捷運中山國中站",
+          "predicted": 11.52,
+          "actual": 21.0,
+          "absoluteError": 9.48
+        },
+        {
+          "rank": 10,
+          "station": "捷運圓山站(1號出口)",
+          "predicted": 11.19,
+          "actual": 8.0,
+          "absoluteError": 3.19
+        },
+        {
+          "rank": 11,
+          "station": "捷運圓山站(2號出口)",
+          "predicted": 10.84,
+          "actual": 3.0,
+          "absoluteError": 7.84
+        },
+        {
+          "rank": 12,
+          "station": "捷運南京三民站(1號出口)",
+          "predicted": 10.22,
+          "actual": 7.0,
+          "absoluteError": 3.22
+        },
+        {
+          "rank": 13,
+          "station": "捷運東門站(5號出口)",
+          "predicted": 9.91,
+          "actual": 13.0,
+          "absoluteError": 3.09
+        },
+        {
+          "rank": 14,
+          "station": "捷運劍南路站(2號出口)",
+          "predicted": 9.43,
+          "actual": 6.0,
+          "absoluteError": 3.43
+        },
+        {
+          "rank": 15,
+          "station": "捷運臺北101/世貿站(2號出口)",
+          "predicted": 9.22,
+          "actual": 22.0,
+          "absoluteError": 12.78
+        },
+        {
+          "rank": 16,
+          "station": "捷運行天宮站(3號出口)",
+          "predicted": 8.91,
+          "actual": 7.0,
+          "absoluteError": 1.91
+        },
+        {
+          "rank": 17,
+          "station": "捷運古亭站(2號出口)",
+          "predicted": 8.82,
+          "actual": 12.0,
+          "absoluteError": 3.18
+        },
+        {
+          "rank": 18,
+          "station": "捷運永春站(2號出口)",
+          "predicted": 8.8,
+          "actual": 5.0,
+          "absoluteError": 3.8
+        },
+        {
+          "rank": 19,
+          "station": "捷運象山站(2號出口)",
+          "predicted": 8.41,
+          "actual": 7.0,
+          "absoluteError": 1.41
+        },
+        {
+          "rank": 20,
+          "station": "捷運六張犁站",
+          "predicted": 8.29,
+          "actual": 6.0,
+          "absoluteError": 2.29
+        },
+        {
+          "rank": 21,
+          "station": "捷運北門站(3號出口)",
+          "predicted": 8.13,
+          "actual": 10.0,
+          "absoluteError": 1.87
+        },
+        {
+          "rank": 22,
+          "station": "捷運後山埤站(2號出口)",
+          "predicted": 7.87,
+          "actual": 4.0,
+          "absoluteError": 3.87
+        },
+        {
+          "rank": 23,
+          "station": "捷運大安森林公園站(5號出口)",
+          "predicted": 7.32,
+          "actual": 5.0,
+          "absoluteError": 2.32
+        },
+        {
+          "rank": 24,
+          "station": "捷運石牌站(2號出口)",
+          "predicted": 7.06,
+          "actual": 4.0,
+          "absoluteError": 3.06
+        },
+        {
+          "rank": 25,
+          "station": "捷運士林站(2號出口)",
+          "predicted": 6.87,
+          "actual": 5.0,
+          "absoluteError": 1.87
+        },
+        {
+          "rank": 26,
+          "station": "捷運忠孝復興站(2號出口)",
+          "predicted": 6.58,
+          "actual": 6.0,
+          "absoluteError": 0.58
+        },
+        {
+          "rank": 27,
+          "station": "捷運象山站(3號出口)",
+          "predicted": 6.51,
+          "actual": 7.0,
+          "absoluteError": 0.49
+        },
+        {
+          "rank": 28,
+          "station": "捷運北投站(1號出口)(北投路側)",
+          "predicted": 6.4,
+          "actual": 10.0,
+          "absoluteError": 3.6
+        },
+        {
+          "rank": 29,
+          "station": "捷運古亭站(5號出口)",
+          "predicted": 6.32,
+          "actual": 8.0,
+          "absoluteError": 1.68
+        },
+        {
+          "rank": 30,
+          "station": "捷運信義安和站(4號出口)",
+          "predicted": 6.09,
+          "actual": 6.0,
+          "absoluteError": 0.09
+        },
+        {
+          "rank": 31,
+          "station": "捷運大安站(4號出口)",
+          "predicted": 6.08,
+          "actual": 5.0,
+          "absoluteError": 1.08
+        },
+        {
+          "rank": 32,
+          "station": "捷運士林站(1號出口)",
+          "predicted": 6.01,
+          "actual": 7.0,
+          "absoluteError": 0.99
+        },
+        {
+          "rank": 33,
+          "station": "捷運奇岩站(三合街)",
+          "predicted": 6.0,
+          "actual": 4.0,
+          "absoluteError": 2.0
+        },
+        {
+          "rank": 34,
+          "station": "捷運中山站(5號出口)",
+          "predicted": 5.72,
+          "actual": 3.0,
+          "absoluteError": 2.72
+        },
+        {
+          "rank": 35,
+          "station": "捷運劍潭站(1號出口)",
+          "predicted": 5.72,
+          "actual": 4.0,
+          "absoluteError": 1.72
+        },
+        {
+          "rank": 36,
+          "station": "捷運大橋頭站(2號出口)",
+          "predicted": 5.42,
+          "actual": 3.0,
+          "absoluteError": 2.42
+        },
+        {
+          "rank": 37,
+          "station": "捷運國父紀念館站(2號出口)",
+          "predicted": 5.24,
+          "actual": 9.0,
+          "absoluteError": 3.76
+        },
+        {
+          "rank": 38,
+          "station": "捷運南港展覽館站(5號出口)",
+          "predicted": 5.21,
+          "actual": 12.0,
+          "absoluteError": 6.79
+        },
+        {
+          "rank": 39,
+          "station": "捷運市政府站(3號出口)",
+          "predicted": 5.14,
+          "actual": 5.0,
+          "absoluteError": 0.14
+        },
+        {
+          "rank": 40,
+          "station": "捷運大安森林公園站(2號出口)",
+          "predicted": 5.01,
+          "actual": 4.0,
+          "absoluteError": 1.01
+        },
+        {
+          "rank": 41,
+          "station": "捷運西門站(3號出口)",
+          "predicted": 4.96,
+          "actual": 6.0,
+          "absoluteError": 1.04
+        },
+        {
+          "rank": 42,
+          "station": "捷運中山站(2號出口)",
+          "predicted": 4.88,
+          "actual": 6.0,
+          "absoluteError": 1.12
+        },
+        {
+          "rank": 43,
+          "station": "捷運雙連站(2號出口)",
+          "predicted": 4.79,
+          "actual": 4.0,
+          "absoluteError": 0.79
+        },
+        {
+          "rank": 44,
+          "station": "捷運龍山寺站(1號出口)_1",
+          "predicted": 4.62,
+          "actual": 5.0,
+          "absoluteError": 0.38
+        },
+        {
+          "rank": 45,
+          "station": "捷運關渡站(1號出口)",
+          "predicted": 4.62,
+          "actual": 4.0,
+          "absoluteError": 0.62
+        },
+        {
+          "rank": 46,
+          "station": "捷運善導寺站(3號出口)(忠孝東路側)",
+          "predicted": 4.61,
+          "actual": 3.0,
+          "absoluteError": 1.61
+        },
+        {
+          "rank": 47,
+          "station": "捷運松江南京站(7號出口)",
+          "predicted": 4.55,
+          "actual": 4.0,
+          "absoluteError": 0.55
+        },
+        {
+          "rank": 48,
+          "station": "捷運松山站(3號出口)",
+          "predicted": 4.55,
+          "actual": 4.0,
+          "absoluteError": 0.55
+        },
+        {
+          "rank": 49,
+          "station": "捷運公館站(1號出口)",
+          "predicted": 4.47,
+          "actual": 3.0,
+          "absoluteError": 1.47
+        },
+        {
+          "rank": 50,
+          "station": "捷運臺北101/世貿站(3號出口)",
+          "predicted": 4.35,
+          "actual": 3.0,
+          "absoluteError": 1.35
+        },
+        {
+          "rank": 51,
+          "station": "捷運文德站(2號出口)",
+          "predicted": 4.21,
+          "actual": 3.0,
+          "absoluteError": 1.21
+        },
+        {
+          "rank": 52,
+          "station": "西本願寺廣場",
+          "predicted": 4.17,
+          "actual": 9.0,
+          "absoluteError": 4.83
+        },
+        {
+          "rank": 53,
+          "station": "捷運南京復興站(5號出口)",
+          "predicted": 4.08,
+          "actual": 4.0,
+          "absoluteError": 0.08
+        },
+        {
+          "rank": 54,
+          "station": "捷運忠孝新生站(4號出口)",
+          "predicted": 4.08,
+          "actual": 4.0,
+          "absoluteError": 0.08
+        },
+        {
+          "rank": 55,
+          "station": "捷運昆陽站(1號出口)",
+          "predicted": 4.06,
+          "actual": 4.0,
+          "absoluteError": 0.06
+        },
+        {
+          "rank": 56,
+          "station": "捷運大安站(3號出口)",
+          "predicted": 4.02,
+          "actual": 5.0,
+          "absoluteError": 0.98
+        },
+        {
+          "rank": 57,
+          "station": "捷運臺電大樓站(2號出口)",
+          "predicted": 4.0,
+          "actual": 6.0,
+          "absoluteError": 2.0
+        },
+        {
+          "rank": 58,
+          "station": "捷運中山國小站(4號出口)",
+          "predicted": 3.92,
+          "actual": 6.0,
+          "absoluteError": 2.08
+        },
+        {
+          "rank": 59,
+          "station": "捷運明德站(3號出口)",
+          "predicted": 3.86,
+          "actual": 2.0,
+          "absoluteError": 1.86
+        },
+        {
+          "rank": 60,
+          "station": "捷運萬隆站(2號出口)",
+          "predicted": 3.82,
+          "actual": 3.0,
+          "absoluteError": 0.82
+        },
+        {
+          "rank": 61,
+          "station": "捷運唭哩岸站(2號出口)",
+          "predicted": 3.77,
+          "actual": 9.0,
+          "absoluteError": 5.23
+        },
+        {
+          "rank": 62,
+          "station": "臺大大一女舍北側",
+          "predicted": 3.76,
+          "actual": 2.0,
+          "absoluteError": 1.76
+        },
+        {
+          "rank": 63,
+          "station": "捷運萬隆站(1號出口)",
+          "predicted": 3.53,
+          "actual": 5.0,
+          "absoluteError": 1.47
+        },
+        {
+          "rank": 64,
+          "station": "捷運景美站(2號出口)",
+          "predicted": 3.53,
+          "actual": 2.0,
+          "absoluteError": 1.53
+        },
+        {
+          "rank": 65,
+          "station": "捷運內湖站(1號出口)",
+          "predicted": 3.38,
+          "actual": 3.0,
+          "absoluteError": 0.38
+        },
+        {
+          "rank": 66,
+          "station": "捷運松山站(4號出口)",
+          "predicted": 3.36,
+          "actual": 7.0,
+          "absoluteError": 3.64
+        },
+        {
+          "rank": 67,
+          "station": "捷運港墘站(2號出口)",
+          "predicted": 3.34,
+          "actual": 3.0,
+          "absoluteError": 0.34
+        },
+        {
+          "rank": 68,
+          "station": "捷運松江南京站(8號出口)",
+          "predicted": 3.24,
+          "actual": 2.0,
+          "absoluteError": 1.24
+        },
+        {
+          "rank": 69,
+          "station": "捷運小巨蛋站(3號出口)",
+          "predicted": 3.24,
+          "actual": 0.0,
+          "absoluteError": 3.24
+        },
+        {
+          "rank": 70,
+          "station": "捷運南京三民站(4號出口)",
+          "predicted": 3.23,
+          "actual": 2.0,
+          "absoluteError": 1.23
+        },
+        {
+          "rank": 71,
+          "station": "捷運大安站(5號出口)",
+          "predicted": 3.08,
+          "actual": 5.0,
+          "absoluteError": 1.92
+        },
+        {
+          "rank": 72,
+          "station": "捷運南京復興站(7號出口)",
+          "predicted": 3.03,
+          "actual": 5.0,
+          "absoluteError": 1.97
+        },
+        {
+          "rank": 73,
+          "station": "南京遼寧街口",
+          "predicted": 2.99,
+          "actual": 4.0,
+          "absoluteError": 1.01
+        },
+        {
+          "rank": 74,
+          "station": "捷運後山埤站(3號出口)",
+          "predicted": 2.79,
+          "actual": 3.0,
+          "absoluteError": 0.21
+        },
+        {
+          "rank": 75,
+          "station": "信義廣場(臺北101)",
+          "predicted": 2.67,
+          "actual": 6.0,
+          "absoluteError": 3.33
+        },
+        {
+          "rank": 76,
+          "station": "捷運忠孝新生站(2號出口)",
+          "predicted": 2.47,
+          "actual": 2.0,
+          "absoluteError": 0.47
+        },
+        {
+          "rank": 77,
+          "station": "捷運臺電大樓站(2號出口)_1",
+          "predicted": 2.4,
+          "actual": 2.0,
+          "absoluteError": 0.4
+        },
+        {
+          "rank": 78,
+          "station": "捷運象山站(1號出口)",
+          "predicted": 2.4,
+          "actual": 3.0,
+          "absoluteError": 0.6
+        },
+        {
+          "rank": 79,
+          "station": "捷運信義安和站(1號出口)",
+          "predicted": 2.35,
+          "actual": 3.0,
+          "absoluteError": 0.65
+        },
+        {
+          "rank": 80,
+          "station": "捷運小巨蛋站(5號出口)_1",
+          "predicted": 2.35,
+          "actual": 1.0,
+          "absoluteError": 1.35
+        },
+        {
+          "rank": 81,
+          "station": "捷運忠孝敦化站(7號出口)",
+          "predicted": 2.34,
+          "actual": 3.0,
+          "absoluteError": 0.66
+        },
+        {
+          "rank": 82,
+          "station": "捷運小南門站(1號出口)",
+          "predicted": 2.32,
+          "actual": 3.0,
+          "absoluteError": 0.68
+        },
+        {
+          "rank": 83,
+          "station": "復興南路二段273號前",
+          "predicted": 2.31,
+          "actual": 3.0,
+          "absoluteError": 0.69
+        },
+        {
+          "rank": 84,
+          "station": "捷運萬隆站(4號出口)",
+          "predicted": 2.22,
+          "actual": 3.0,
+          "absoluteError": 0.78
+        },
+        {
+          "rank": 85,
+          "station": "捷運臺大醫院站(4號出口)",
+          "predicted": 2.19,
+          "actual": 0.0,
+          "absoluteError": 2.19
+        },
+        {
+          "rank": 86,
+          "station": "興雅松仁路口",
+          "predicted": 2.18,
+          "actual": 4.0,
+          "absoluteError": 1.82
+        },
+        {
+          "rank": 87,
+          "station": "捷運港墘站(1號出口)",
+          "predicted": 2.08,
+          "actual": 3.0,
+          "absoluteError": 0.92
+        },
+        {
+          "rank": 88,
+          "station": "捷運後山埤站(1號出口)",
+          "predicted": 2.02,
+          "actual": 0.0,
+          "absoluteError": 2.02
+        },
+        {
+          "rank": 89,
+          "station": "捷運芝山站(2號出口)",
+          "predicted": 1.99,
+          "actual": 0.0,
+          "absoluteError": 1.99
+        },
+        {
+          "rank": 90,
+          "station": "捷運古亭站(8號出口)",
+          "predicted": 1.91,
+          "actual": 4.0,
+          "absoluteError": 2.09
+        },
+        {
+          "rank": 91,
+          "station": "捷運西湖站(1號出口)",
+          "predicted": 1.88,
+          "actual": 0.0,
+          "absoluteError": 1.88
+        },
+        {
+          "rank": 92,
+          "station": "南港車站(市民大道)",
+          "predicted": 1.86,
+          "actual": 1.0,
+          "absoluteError": 0.86
+        },
+        {
+          "rank": 93,
+          "station": "捷運南京三民站(2號出口)",
+          "predicted": 1.83,
+          "actual": 2.0,
+          "absoluteError": 0.17
+        },
+        {
+          "rank": 94,
+          "station": "捷運西門站(5號出口)",
+          "predicted": 1.79,
+          "actual": 2.0,
+          "absoluteError": 0.21
+        },
+        {
+          "rank": 95,
+          "station": "捷運信義安和站(2號出口)",
+          "predicted": 1.76,
+          "actual": 3.0,
+          "absoluteError": 1.24
+        },
+        {
+          "rank": 96,
+          "station": "捷運古亭站(6號出口)",
+          "predicted": 1.75,
+          "actual": 1.0,
+          "absoluteError": 0.75
+        },
+        {
+          "rank": 97,
+          "station": "捷運松江南京站(4號出口)",
+          "predicted": 1.46,
+          "actual": 1.0,
+          "absoluteError": 0.46
+        },
+        {
+          "rank": 98,
+          "station": "松山車站",
+          "predicted": 1.19,
+          "actual": 0.0,
+          "absoluteError": 1.19
+        },
+        {
+          "rank": 99,
+          "station": "臺大椰林小舖",
+          "predicted": 0.91,
+          "actual": 0.0,
+          "absoluteError": 0.91
+        },
+        {
+          "rank": 100,
+          "station": "臺大鹿鳴堂東側",
+          "predicted": 0.71,
+          "actual": 0.0,
+          "absoluteError": 0.71
+        }
+      ]
+    },
+    {
+      "id": "20231231-08",
+      "targetTime": "2023-12-31T08:00:00+08:00",
+      "dateLabel": "12 月 31 日",
+      "timeLabel": "08:00",
+      "weekdayLabel": "週日",
+      "periodLabel": "週末",
+      "weather": {
+        "temperatureC": 17.8,
+        "humidityPercent": 91,
+        "precipitationMm": 0.0,
+        "windSpeedKmh": 3.7,
+        "isRaining": false
+      },
+      "summary": {
+        "totalPredicted": 324,
+        "totalActual": 261,
+        "mae": 1.33,
+        "largestDemandStation": "捷運公館站(2號出口)"
+      },
+      "stations": [
+        {
+          "rank": 1,
+          "station": "捷運公館站(2號出口)",
+          "predicted": 18.18,
+          "actual": 12.0,
+          "absoluteError": 6.18
+        },
+        {
+          "rank": 2,
+          "station": "捷運芝山站(2號出口)_1",
+          "predicted": 11.71,
+          "actual": 9.0,
+          "absoluteError": 2.71
+        },
+        {
+          "rank": 3,
+          "station": "捷運龍山寺站(1號出口)",
+          "predicted": 10.33,
+          "actual": 5.0,
+          "absoluteError": 5.33
+        },
+        {
+          "rank": 4,
+          "station": "捷運行天宮站(3號出口)",
+          "predicted": 8.19,
+          "actual": 7.0,
+          "absoluteError": 1.19
+        },
+        {
+          "rank": 5,
+          "station": "捷運大安森林公園站(5號出口)",
+          "predicted": 8.1,
+          "actual": 3.0,
+          "absoluteError": 5.1
+        },
+        {
+          "rank": 6,
+          "station": "捷運關渡站(1號出口)",
+          "predicted": 7.51,
+          "actual": 7.0,
+          "absoluteError": 0.51
+        },
+        {
+          "rank": 7,
+          "station": "捷運中山國中站",
+          "predicted": 7.42,
+          "actual": 10.0,
+          "absoluteError": 2.58
+        },
+        {
+          "rank": 8,
+          "station": "捷運公館站(3號出口)",
+          "predicted": 7.12,
+          "actual": 4.0,
+          "absoluteError": 3.12
+        },
+        {
+          "rank": 9,
+          "station": "捷運科技大樓站",
+          "predicted": 6.75,
+          "actual": 6.0,
+          "absoluteError": 0.75
+        },
+        {
+          "rank": 10,
+          "station": "捷運臺北101/世貿站(2號出口)",
+          "predicted": 6.3,
+          "actual": 4.0,
+          "absoluteError": 2.3
+        },
+        {
+          "rank": 11,
+          "station": "捷運北投站(1號出口)",
+          "predicted": 6.05,
+          "actual": 5.0,
+          "absoluteError": 1.05
+        },
+        {
+          "rank": 12,
+          "station": "捷運東門站(5號出口)",
+          "predicted": 5.82,
+          "actual": 3.0,
+          "absoluteError": 2.82
+        },
+        {
+          "rank": 13,
+          "station": "捷運圓山站(1號出口)",
+          "predicted": 5.74,
+          "actual": 7.0,
+          "absoluteError": 1.26
+        },
+        {
+          "rank": 14,
+          "station": "捷運六張犁站",
+          "predicted": 5.72,
+          "actual": 4.0,
+          "absoluteError": 1.72
+        },
+        {
+          "rank": 15,
+          "station": "捷運大橋頭站(2號出口)",
+          "predicted": 5.51,
+          "actual": 6.0,
+          "absoluteError": 0.49
+        },
+        {
+          "rank": 16,
+          "station": "捷運芝山站(1號出口)",
+          "predicted": 5.38,
+          "actual": 3.0,
+          "absoluteError": 2.38
+        },
+        {
+          "rank": 17,
+          "station": "捷運永春站(2號出口)",
+          "predicted": 5.25,
+          "actual": 5.0,
+          "absoluteError": 0.25
+        },
+        {
+          "rank": 18,
+          "station": "捷運象山站(2號出口)",
+          "predicted": 4.85,
+          "actual": 4.0,
+          "absoluteError": 0.85
+        },
+        {
+          "rank": 19,
+          "station": "捷運劍潭站(1號出口)",
+          "predicted": 4.8,
+          "actual": 5.0,
+          "absoluteError": 0.2
+        },
+        {
+          "rank": 20,
+          "station": "捷運後山埤站(2號出口)",
+          "predicted": 4.7,
+          "actual": 5.0,
+          "absoluteError": 0.3
+        },
+        {
+          "rank": 21,
+          "station": "捷運南京復興站(5號出口)",
+          "predicted": 4.47,
+          "actual": 3.0,
+          "absoluteError": 1.47
+        },
+        {
+          "rank": 22,
+          "station": "捷運士林站(2號出口)",
+          "predicted": 4.29,
+          "actual": 5.0,
+          "absoluteError": 0.71
+        },
+        {
+          "rank": 23,
+          "station": "捷運北門站(3號出口)",
+          "predicted": 4.17,
+          "actual": 3.0,
+          "absoluteError": 1.17
+        },
+        {
+          "rank": 24,
+          "station": "捷運松江南京站(7號出口)",
+          "predicted": 4.0,
+          "actual": 1.0,
+          "absoluteError": 3.0
+        },
+        {
+          "rank": 25,
+          "station": "捷運圓山站(2號出口)",
+          "predicted": 3.89,
+          "actual": 5.0,
+          "absoluteError": 1.11
+        },
+        {
+          "rank": 26,
+          "station": "捷運雙連站(2號出口)",
+          "predicted": 3.82,
+          "actual": 1.0,
+          "absoluteError": 2.82
+        },
+        {
+          "rank": 27,
+          "station": "捷運忠孝復興站(2號出口)",
+          "predicted": 3.79,
+          "actual": 3.0,
+          "absoluteError": 0.79
+        },
+        {
+          "rank": 28,
+          "station": "捷運古亭站(5號出口)",
+          "predicted": 3.76,
+          "actual": 3.0,
+          "absoluteError": 0.76
+        },
+        {
+          "rank": 29,
+          "station": "捷運中山國小站(4號出口)",
+          "predicted": 3.73,
+          "actual": 2.0,
+          "absoluteError": 1.73
+        },
+        {
+          "rank": 30,
+          "station": "捷運西門站(3號出口)",
+          "predicted": 3.58,
+          "actual": 2.0,
+          "absoluteError": 1.58
+        },
+        {
+          "rank": 31,
+          "station": "捷運大安森林公園站(2號出口)",
+          "predicted": 3.52,
+          "actual": 4.0,
+          "absoluteError": 0.48
+        },
+        {
+          "rank": 32,
+          "station": "捷運劍南路站(2號出口)",
+          "predicted": 3.52,
+          "actual": 2.0,
+          "absoluteError": 1.52
+        },
+        {
+          "rank": 33,
+          "station": "捷運中山站(5號出口)",
+          "predicted": 3.44,
+          "actual": 3.0,
+          "absoluteError": 0.44
+        },
+        {
+          "rank": 34,
+          "station": "捷運南京三民站(1號出口)",
+          "predicted": 3.43,
+          "actual": 7.0,
+          "absoluteError": 3.57
+        },
+        {
+          "rank": 35,
+          "station": "捷運象山站(3號出口)",
+          "predicted": 3.39,
+          "actual": 2.0,
+          "absoluteError": 1.39
+        },
+        {
+          "rank": 36,
+          "station": "捷運石牌站(2號出口)",
+          "predicted": 3.24,
+          "actual": 4.0,
+          "absoluteError": 0.76
+        },
+        {
+          "rank": 37,
+          "station": "捷運國父紀念館站(2號出口)",
+          "predicted": 3.09,
+          "actual": 0.0,
+          "absoluteError": 3.09
+        },
+        {
+          "rank": 38,
+          "station": "捷運忠孝新生站(2號出口)",
+          "predicted": 2.97,
+          "actual": 1.0,
+          "absoluteError": 1.97
+        },
+        {
+          "rank": 39,
+          "station": "捷運南港展覽館站(5號出口)",
+          "predicted": 2.95,
+          "actual": 3.0,
+          "absoluteError": 0.05
+        },
+        {
+          "rank": 40,
+          "station": "捷運善導寺站(3號出口)(忠孝東路側)",
+          "predicted": 2.88,
+          "actual": 4.0,
+          "absoluteError": 1.12
+        },
+        {
+          "rank": 41,
+          "station": "捷運忠孝新生站(4號出口)",
+          "predicted": 2.82,
+          "actual": 1.0,
+          "absoluteError": 1.82
+        },
+        {
+          "rank": 42,
+          "station": "捷運港墘站(2號出口)",
+          "predicted": 2.79,
+          "actual": 4.0,
+          "absoluteError": 1.21
+        },
+        {
+          "rank": 43,
+          "station": "捷運大安站(4號出口)",
+          "predicted": 2.77,
+          "actual": 3.0,
+          "absoluteError": 0.23
+        },
+        {
+          "rank": 44,
+          "station": "捷運奇岩站(三合街)",
+          "predicted": 2.76,
+          "actual": 2.0,
+          "absoluteError": 0.76
+        },
+        {
+          "rank": 45,
+          "station": "捷運中山站(2號出口)",
+          "predicted": 2.74,
+          "actual": 0.0,
+          "absoluteError": 2.74
+        },
+        {
+          "rank": 46,
+          "station": "捷運士林站(1號出口)",
+          "predicted": 2.5,
+          "actual": 3.0,
+          "absoluteError": 0.5
+        },
+        {
+          "rank": 47,
+          "station": "捷運古亭站(6號出口)",
+          "predicted": 2.49,
+          "actual": 0.0,
+          "absoluteError": 2.49
+        },
+        {
+          "rank": 48,
+          "station": "捷運小巨蛋站(3號出口)",
+          "predicted": 2.45,
+          "actual": 2.0,
+          "absoluteError": 0.45
+        },
+        {
+          "rank": 49,
+          "station": "南京遼寧街口",
+          "predicted": 2.44,
+          "actual": 4.0,
+          "absoluteError": 1.56
+        },
+        {
+          "rank": 50,
+          "station": "捷運公館站(1號出口)",
+          "predicted": 2.44,
+          "actual": 3.0,
+          "absoluteError": 0.56
+        },
+        {
+          "rank": 51,
+          "station": "西本願寺廣場",
+          "predicted": 2.43,
+          "actual": 2.0,
+          "absoluteError": 0.43
+        },
+        {
+          "rank": 52,
+          "station": "捷運大安站(3號出口)",
+          "predicted": 2.43,
+          "actual": 3.0,
+          "absoluteError": 0.57
+        },
+        {
+          "rank": 53,
+          "station": "復興南路二段273號前",
+          "predicted": 2.37,
+          "actual": 0.0,
+          "absoluteError": 2.37
+        },
+        {
+          "rank": 54,
+          "station": "捷運臺電大樓站(2號出口)_1",
+          "predicted": 2.34,
+          "actual": 0.0,
+          "absoluteError": 2.34
+        },
+        {
+          "rank": 55,
+          "station": "捷運臺北101/世貿站(3號出口)",
+          "predicted": 2.32,
+          "actual": 4.0,
+          "absoluteError": 1.68
+        },
+        {
+          "rank": 56,
+          "station": "捷運市政府站(3號出口)",
+          "predicted": 2.29,
+          "actual": 4.0,
+          "absoluteError": 1.71
+        },
+        {
+          "rank": 57,
+          "station": "捷運松江南京站(4號出口)",
+          "predicted": 2.27,
+          "actual": 1.0,
+          "absoluteError": 1.27
+        },
+        {
+          "rank": 58,
+          "station": "捷運劍潭站(2號出口)",
+          "predicted": 2.26,
+          "actual": 1.0,
+          "absoluteError": 1.26
+        },
+        {
+          "rank": 59,
+          "station": "捷運內湖站(1號出口)",
+          "predicted": 2.19,
+          "actual": 0.0,
+          "absoluteError": 2.19
+        },
+        {
+          "rank": 60,
+          "station": "捷運松山站(3號出口)",
+          "predicted": 2.14,
+          "actual": 0.0,
+          "absoluteError": 2.14
+        },
+        {
+          "rank": 61,
+          "station": "信義廣場(臺北101)",
+          "predicted": 2.1,
+          "actual": 1.0,
+          "absoluteError": 1.1
+        },
+        {
+          "rank": 62,
+          "station": "捷運港墘站(1號出口)",
+          "predicted": 2.07,
+          "actual": 3.0,
+          "absoluteError": 0.93
+        },
+        {
+          "rank": 63,
+          "station": "捷運信義安和站(4號出口)",
+          "predicted": 2.06,
+          "actual": 1.0,
+          "absoluteError": 1.06
+        },
+        {
+          "rank": 64,
+          "station": "捷運小巨蛋站(5號出口)_1",
+          "predicted": 2.04,
+          "actual": 2.0,
+          "absoluteError": 0.04
+        },
+        {
+          "rank": 65,
+          "station": "捷運臺大醫院站(4號出口)",
+          "predicted": 2.03,
+          "actual": 4.0,
+          "absoluteError": 1.97
+        },
+        {
+          "rank": 66,
+          "station": "捷運小南門站(1號出口)",
+          "predicted": 2.0,
+          "actual": 1.0,
+          "absoluteError": 1.0
+        },
+        {
+          "rank": 67,
+          "station": "捷運大安站(5號出口)",
+          "predicted": 1.95,
+          "actual": 3.0,
+          "absoluteError": 1.05
+        },
+        {
+          "rank": 68,
+          "station": "捷運萬隆站(2號出口)",
+          "predicted": 1.87,
+          "actual": 2.0,
+          "absoluteError": 0.13
+        },
+        {
+          "rank": 69,
+          "station": "捷運松江南京站(8號出口)",
+          "predicted": 1.82,
+          "actual": 1.0,
+          "absoluteError": 0.82
+        },
+        {
+          "rank": 70,
+          "station": "捷運昆陽站(1號出口)",
+          "predicted": 1.81,
+          "actual": 3.0,
+          "absoluteError": 1.19
+        },
+        {
+          "rank": 71,
+          "station": "捷運松山站(4號出口)",
+          "predicted": 1.74,
+          "actual": 2.0,
+          "absoluteError": 0.26
+        },
+        {
+          "rank": 72,
+          "station": "興雅松仁路口",
+          "predicted": 1.73,
+          "actual": 1.0,
+          "absoluteError": 0.73
+        },
+        {
+          "rank": 73,
+          "station": "捷運南京三民站(2號出口)",
+          "predicted": 1.71,
+          "actual": 1.0,
+          "absoluteError": 0.71
+        },
+        {
+          "rank": 74,
+          "station": "捷運信義安和站(1號出口)",
+          "predicted": 1.71,
+          "actual": 1.0,
+          "absoluteError": 0.71
+        },
+        {
+          "rank": 75,
+          "station": "捷運臺電大樓站(2號出口)",
+          "predicted": 1.68,
+          "actual": 3.0,
+          "absoluteError": 1.32
+        },
+        {
+          "rank": 76,
+          "station": "捷運龍山寺站(1號出口)_1",
+          "predicted": 1.68,
+          "actual": 1.0,
+          "absoluteError": 0.68
+        },
+        {
+          "rank": 77,
+          "station": "捷運古亭站(2號出口)",
+          "predicted": 1.63,
+          "actual": 5.0,
+          "absoluteError": 3.37
+        },
+        {
+          "rank": 78,
+          "station": "捷運文德站(2號出口)",
+          "predicted": 1.61,
+          "actual": 0.0,
+          "absoluteError": 1.61
+        },
+        {
+          "rank": 79,
+          "station": "捷運南京三民站(4號出口)",
+          "predicted": 1.6,
+          "actual": 2.0,
+          "absoluteError": 0.4
+        },
+        {
+          "rank": 80,
+          "station": "捷運明德站(3號出口)",
+          "predicted": 1.54,
+          "actual": 1.0,
+          "absoluteError": 0.54
+        },
+        {
+          "rank": 81,
+          "station": "捷運南京復興站(7號出口)",
+          "predicted": 1.5,
+          "actual": 0.0,
+          "absoluteError": 1.5
+        },
+        {
+          "rank": 82,
+          "station": "捷運西門站(5號出口)",
+          "predicted": 1.48,
+          "actual": 1.0,
+          "absoluteError": 0.48
+        },
+        {
+          "rank": 83,
+          "station": "南港車站(市民大道)",
+          "predicted": 1.47,
+          "actual": 0.0,
+          "absoluteError": 1.47
+        },
+        {
+          "rank": 84,
+          "station": "捷運唭哩岸站(2號出口)",
+          "predicted": 1.46,
+          "actual": 2.0,
+          "absoluteError": 0.54
+        },
+        {
+          "rank": 85,
+          "station": "臺大大一女舍北側",
+          "predicted": 1.4,
+          "actual": 0.0,
+          "absoluteError": 1.4
+        },
+        {
+          "rank": 86,
+          "station": "捷運萬隆站(4號出口)",
+          "predicted": 1.36,
+          "actual": 0.0,
+          "absoluteError": 1.36
+        },
+        {
+          "rank": 87,
+          "station": "捷運信義安和站(2號出口)",
+          "predicted": 1.32,
+          "actual": 1.0,
+          "absoluteError": 0.32
+        },
+        {
+          "rank": 88,
+          "station": "捷運景美站(2號出口)",
+          "predicted": 1.28,
+          "actual": 2.0,
+          "absoluteError": 0.72
+        },
+        {
+          "rank": 89,
+          "station": "捷運古亭站(8號出口)",
+          "predicted": 1.26,
+          "actual": 1.0,
+          "absoluteError": 0.26
+        },
+        {
+          "rank": 90,
+          "station": "捷運象山站(1號出口)",
+          "predicted": 1.15,
+          "actual": 2.0,
+          "absoluteError": 0.85
+        },
+        {
+          "rank": 91,
+          "station": "捷運北投站(1號出口)(北投路側)",
+          "predicted": 1.14,
+          "actual": 1.0,
+          "absoluteError": 0.14
+        },
+        {
+          "rank": 92,
+          "station": "臺大椰林小舖",
+          "predicted": 0.98,
+          "actual": 0.0,
+          "absoluteError": 0.98
+        },
+        {
+          "rank": 93,
+          "station": "捷運萬隆站(1號出口)",
+          "predicted": 0.87,
+          "actual": 1.0,
+          "absoluteError": 0.13
+        },
+        {
+          "rank": 94,
+          "station": "捷運忠孝敦化站(7號出口)",
+          "predicted": 0.82,
+          "actual": 0.0,
+          "absoluteError": 0.82
+        },
+        {
+          "rank": 95,
+          "station": "捷運西湖站(1號出口)",
+          "predicted": 0.66,
+          "actual": 0.0,
+          "absoluteError": 0.66
+        },
+        {
+          "rank": 96,
+          "station": "捷運後山埤站(3號出口)",
+          "predicted": 0.65,
+          "actual": 1.0,
+          "absoluteError": 0.35
+        },
+        {
+          "rank": 97,
+          "station": "臺大鹿鳴堂東側",
+          "predicted": 0.65,
+          "actual": 0.0,
+          "absoluteError": 0.65
+        },
+        {
+          "rank": 98,
+          "station": "捷運後山埤站(1號出口)",
+          "predicted": 0.6,
+          "actual": 1.0,
+          "absoluteError": 0.4
+        },
+        {
+          "rank": 99,
+          "station": "松山車站",
+          "predicted": 0.56,
+          "actual": 0.0,
+          "absoluteError": 0.56
+        },
+        {
+          "rank": 100,
+          "station": "捷運芝山站(2號出口)",
+          "predicted": 0.53,
+          "actual": 1.0,
+          "absoluteError": 0.47
+        }
+      ]
+    },
+    {
+      "id": "20231231-18",
+      "targetTime": "2023-12-31T18:00:00+08:00",
+      "dateLabel": "12 月 31 日",
+      "timeLabel": "18:00",
+      "weekdayLabel": "週日",
+      "periodLabel": "週末",
+      "weather": {
+        "temperatureC": 17.7,
+        "humidityPercent": 70,
+        "precipitationMm": 0.0,
+        "windSpeedKmh": 19.5,
+        "isRaining": false
+      },
+      "summary": {
+        "totalPredicted": 579,
+        "totalActual": 548,
+        "mae": 2.47,
+        "largestDemandStation": "捷運公館站(2號出口)"
+      },
+      "stations": [
+        {
+          "rank": 1,
+          "station": "捷運公館站(2號出口)",
+          "predicted": 27.83,
+          "actual": 24.0,
+          "absoluteError": 3.83
+        },
+        {
+          "rank": 2,
+          "station": "捷運芝山站(2號出口)_1",
+          "predicted": 18.14,
+          "actual": 20.0,
+          "absoluteError": 1.86
+        },
+        {
+          "rank": 3,
+          "station": "捷運龍山寺站(1號出口)",
+          "predicted": 16.9,
+          "actual": 22.0,
+          "absoluteError": 5.1
+        },
+        {
+          "rank": 4,
+          "station": "捷運中山國中站",
+          "predicted": 16.19,
+          "actual": 13.0,
+          "absoluteError": 3.19
+        },
+        {
+          "rank": 5,
+          "station": "捷運科技大樓站",
+          "predicted": 16.03,
+          "actual": 15.0,
+          "absoluteError": 1.03
+        },
+        {
+          "rank": 6,
+          "station": "捷運公館站(3號出口)",
+          "predicted": 13.14,
+          "actual": 6.0,
+          "absoluteError": 7.14
+        },
+        {
+          "rank": 7,
+          "station": "捷運北門站(3號出口)",
+          "predicted": 11.88,
+          "actual": 6.0,
+          "absoluteError": 5.88
+        },
+        {
+          "rank": 8,
+          "station": "捷運六張犁站",
+          "predicted": 10.68,
+          "actual": 16.0,
+          "absoluteError": 5.32
+        },
+        {
+          "rank": 9,
+          "station": "捷運南京三民站(1號出口)",
+          "predicted": 10.2,
+          "actual": 13.0,
+          "absoluteError": 2.8
+        },
+        {
+          "rank": 10,
+          "station": "捷運圓山站(1號出口)",
+          "predicted": 9.99,
+          "actual": 5.0,
+          "absoluteError": 4.99
+        },
+        {
+          "rank": 11,
+          "station": "捷運東門站(5號出口)",
+          "predicted": 9.85,
+          "actual": 17.0,
+          "absoluteError": 7.15
+        },
+        {
+          "rank": 12,
+          "station": "捷運劍南路站(2號出口)",
+          "predicted": 9.84,
+          "actual": 7.0,
+          "absoluteError": 2.84
+        },
+        {
+          "rank": 13,
+          "station": "捷運永春站(2號出口)",
+          "predicted": 9.83,
+          "actual": 7.0,
+          "absoluteError": 2.83
+        },
+        {
+          "rank": 14,
+          "station": "捷運芝山站(1號出口)",
+          "predicted": 9.54,
+          "actual": 15.0,
+          "absoluteError": 5.46
+        },
+        {
+          "rank": 15,
+          "station": "捷運後山埤站(2號出口)",
+          "predicted": 9.36,
+          "actual": 11.0,
+          "absoluteError": 1.64
+        },
+        {
+          "rank": 16,
+          "station": "捷運北投站(1號出口)",
+          "predicted": 9.28,
+          "actual": 5.0,
+          "absoluteError": 4.28
+        },
+        {
+          "rank": 17,
+          "station": "捷運信義安和站(4號出口)",
+          "predicted": 9.26,
+          "actual": 11.0,
+          "absoluteError": 1.74
+        },
+        {
+          "rank": 18,
+          "station": "捷運圓山站(2號出口)",
+          "predicted": 8.92,
+          "actual": 12.0,
+          "absoluteError": 3.08
+        },
+        {
+          "rank": 19,
+          "station": "捷運大安森林公園站(5號出口)",
+          "predicted": 8.37,
+          "actual": 10.0,
+          "absoluteError": 1.63
+        },
+        {
+          "rank": 20,
+          "station": "捷運行天宮站(3號出口)",
+          "predicted": 8.33,
+          "actual": 15.0,
+          "absoluteError": 6.67
+        },
+        {
+          "rank": 21,
+          "station": "捷運石牌站(2號出口)",
+          "predicted": 8.01,
+          "actual": 8.0,
+          "absoluteError": 0.01
+        },
+        {
+          "rank": 22,
+          "station": "捷運南港展覽館站(5號出口)",
+          "predicted": 7.69,
+          "actual": 5.0,
+          "absoluteError": 2.69
+        },
+        {
+          "rank": 23,
+          "station": "捷運士林站(2號出口)",
+          "predicted": 7.65,
+          "actual": 13.0,
+          "absoluteError": 5.35
+        },
+        {
+          "rank": 24,
+          "station": "西本願寺廣場",
+          "predicted": 7.46,
+          "actual": 11.0,
+          "absoluteError": 3.54
+        },
+        {
+          "rank": 25,
+          "station": "捷運中山站(5號出口)",
+          "predicted": 7.16,
+          "actual": 6.0,
+          "absoluteError": 1.16
+        },
+        {
+          "rank": 26,
+          "station": "捷運古亭站(2號出口)",
+          "predicted": 7.12,
+          "actual": 9.0,
+          "absoluteError": 1.88
+        },
+        {
+          "rank": 27,
+          "station": "捷運雙連站(2號出口)",
+          "predicted": 6.78,
+          "actual": 9.0,
+          "absoluteError": 2.22
+        },
+        {
+          "rank": 28,
+          "station": "捷運忠孝復興站(2號出口)",
+          "predicted": 6.74,
+          "actual": 7.0,
+          "absoluteError": 0.26
+        },
+        {
+          "rank": 29,
+          "station": "捷運士林站(1號出口)",
+          "predicted": 6.18,
+          "actual": 4.0,
+          "absoluteError": 2.18
+        },
+        {
+          "rank": 30,
+          "station": "捷運大橋頭站(2號出口)",
+          "predicted": 6.18,
+          "actual": 8.0,
+          "absoluteError": 1.82
+        },
+        {
+          "rank": 31,
+          "station": "捷運大安森林公園站(2號出口)",
+          "predicted": 6.13,
+          "actual": 5.0,
+          "absoluteError": 1.13
+        },
+        {
+          "rank": 32,
+          "station": "捷運古亭站(5號出口)",
+          "predicted": 6.08,
+          "actual": 10.0,
+          "absoluteError": 3.92
+        },
+        {
+          "rank": 33,
+          "station": "捷運龍山寺站(1號出口)_1",
+          "predicted": 5.97,
+          "actual": 8.0,
+          "absoluteError": 2.03
+        },
+        {
+          "rank": 34,
+          "station": "捷運象山站(2號出口)",
+          "predicted": 5.95,
+          "actual": 0.0,
+          "absoluteError": 5.95
+        },
+        {
+          "rank": 35,
+          "station": "捷運臺北101/世貿站(2號出口)",
+          "predicted": 5.94,
+          "actual": 0.0,
+          "absoluteError": 5.94
+        },
+        {
+          "rank": 36,
+          "station": "捷運大安站(4號出口)",
+          "predicted": 5.94,
+          "actual": 7.0,
+          "absoluteError": 1.06
+        },
+        {
+          "rank": 37,
+          "station": "捷運奇岩站(三合街)",
+          "predicted": 5.9,
+          "actual": 7.0,
+          "absoluteError": 1.1
+        },
+        {
+          "rank": 38,
+          "station": "捷運中山站(2號出口)",
+          "predicted": 5.66,
+          "actual": 10.0,
+          "absoluteError": 4.34
+        },
+        {
+          "rank": 39,
+          "station": "捷運萬隆站(2號出口)",
+          "predicted": 5.58,
+          "actual": 4.0,
+          "absoluteError": 1.58
+        },
+        {
+          "rank": 40,
+          "station": "捷運臺電大樓站(2號出口)",
+          "predicted": 5.52,
+          "actual": 2.0,
+          "absoluteError": 3.52
+        },
+        {
+          "rank": 41,
+          "station": "捷運劍潭站(1號出口)",
+          "predicted": 5.48,
+          "actual": 5.0,
+          "absoluteError": 0.48
+        },
+        {
+          "rank": 42,
+          "station": "捷運內湖站(1號出口)",
+          "predicted": 5.47,
+          "actual": 6.0,
+          "absoluteError": 0.53
+        },
+        {
+          "rank": 43,
+          "station": "捷運南京復興站(5號出口)",
+          "predicted": 5.45,
+          "actual": 6.0,
+          "absoluteError": 0.55
+        },
+        {
+          "rank": 44,
+          "station": "捷運松江南京站(7號出口)",
+          "predicted": 5.43,
+          "actual": 3.0,
+          "absoluteError": 2.43
+        },
+        {
+          "rank": 45,
+          "station": "捷運市政府站(3號出口)",
+          "predicted": 5.35,
+          "actual": 0.0,
+          "absoluteError": 5.35
+        },
+        {
+          "rank": 46,
+          "station": "捷運西門站(3號出口)",
+          "predicted": 5.31,
+          "actual": 6.0,
+          "absoluteError": 0.69
+        },
+        {
+          "rank": 47,
+          "station": "捷運關渡站(1號出口)",
+          "predicted": 5.27,
+          "actual": 3.0,
+          "absoluteError": 2.27
+        },
+        {
+          "rank": 48,
+          "station": "捷運象山站(3號出口)",
+          "predicted": 5.21,
+          "actual": 0.0,
+          "absoluteError": 5.21
+        },
+        {
+          "rank": 49,
+          "station": "捷運中山國小站(4號出口)",
+          "predicted": 5.14,
+          "actual": 4.0,
+          "absoluteError": 1.14
+        },
+        {
+          "rank": 50,
+          "station": "捷運唭哩岸站(2號出口)",
+          "predicted": 5.08,
+          "actual": 3.0,
+          "absoluteError": 2.08
+        },
+        {
+          "rank": 51,
+          "station": "捷運劍潭站(2號出口)",
+          "predicted": 4.94,
+          "actual": 1.0,
+          "absoluteError": 3.94
+        },
+        {
+          "rank": 52,
+          "station": "南京遼寧街口",
+          "predicted": 4.9,
+          "actual": 3.0,
+          "absoluteError": 1.9
+        },
+        {
+          "rank": 53,
+          "station": "捷運昆陽站(1號出口)",
+          "predicted": 4.84,
+          "actual": 2.0,
+          "absoluteError": 2.84
+        },
+        {
+          "rank": 54,
+          "station": "捷運景美站(2號出口)",
+          "predicted": 4.8,
+          "actual": 2.0,
+          "absoluteError": 2.8
+        },
+        {
+          "rank": 55,
+          "station": "捷運松山站(3號出口)",
+          "predicted": 4.79,
+          "actual": 4.0,
+          "absoluteError": 0.79
+        },
+        {
+          "rank": 56,
+          "station": "捷運大安站(3號出口)",
+          "predicted": 4.74,
+          "actual": 8.0,
+          "absoluteError": 3.26
+        },
+        {
+          "rank": 57,
+          "station": "捷運松山站(4號出口)",
+          "predicted": 4.67,
+          "actual": 9.0,
+          "absoluteError": 4.33
+        },
+        {
+          "rank": 58,
+          "station": "捷運公館站(1號出口)",
+          "predicted": 4.4,
+          "actual": 2.0,
+          "absoluteError": 2.4
+        },
+        {
+          "rank": 59,
+          "station": "捷運忠孝新生站(4號出口)",
+          "predicted": 4.34,
+          "actual": 1.0,
+          "absoluteError": 3.34
+        },
+        {
+          "rank": 60,
+          "station": "捷運後山埤站(3號出口)",
+          "predicted": 4.27,
+          "actual": 5.0,
+          "absoluteError": 0.73
+        },
+        {
+          "rank": 61,
+          "station": "捷運忠孝敦化站(7號出口)",
+          "predicted": 4.11,
+          "actual": 1.0,
+          "absoluteError": 3.11
+        },
+        {
+          "rank": 62,
+          "station": "捷運大安站(5號出口)",
+          "predicted": 3.89,
+          "actual": 2.0,
+          "absoluteError": 1.89
+        },
+        {
+          "rank": 63,
+          "station": "臺大大一女舍北側",
+          "predicted": 3.84,
+          "actual": 4.0,
+          "absoluteError": 0.16
+        },
+        {
+          "rank": 64,
+          "station": "捷運港墘站(2號出口)",
+          "predicted": 3.71,
+          "actual": 3.0,
+          "absoluteError": 0.71
+        },
+        {
+          "rank": 65,
+          "station": "復興南路二段273號前",
+          "predicted": 3.6,
+          "actual": 2.0,
+          "absoluteError": 1.6
+        },
+        {
+          "rank": 66,
+          "station": "捷運善導寺站(3號出口)(忠孝東路側)",
+          "predicted": 3.6,
+          "actual": 9.0,
+          "absoluteError": 5.4
+        },
+        {
+          "rank": 67,
+          "station": "捷運文德站(2號出口)",
+          "predicted": 3.51,
+          "actual": 5.0,
+          "absoluteError": 1.49
+        },
+        {
+          "rank": 68,
+          "station": "捷運北投站(1號出口)(北投路側)",
+          "predicted": 3.47,
+          "actual": 5.0,
+          "absoluteError": 1.53
+        },
+        {
+          "rank": 69,
+          "station": "捷運信義安和站(1號出口)",
+          "predicted": 3.32,
+          "actual": 0.0,
+          "absoluteError": 3.32
+        },
+        {
+          "rank": 70,
+          "station": "捷運國父紀念館站(2號出口)",
+          "predicted": 3.3,
+          "actual": 0.0,
+          "absoluteError": 3.3
+        },
+        {
+          "rank": 71,
+          "station": "捷運南京三民站(4號出口)",
+          "predicted": 3.22,
+          "actual": 1.0,
+          "absoluteError": 2.22
+        },
+        {
+          "rank": 72,
+          "station": "捷運港墘站(1號出口)",
+          "predicted": 3.12,
+          "actual": 4.0,
+          "absoluteError": 0.88
+        },
+        {
+          "rank": 73,
+          "station": "捷運信義安和站(2號出口)",
+          "predicted": 3.09,
+          "actual": 11.0,
+          "absoluteError": 7.91
+        },
+        {
+          "rank": 74,
+          "station": "捷運萬隆站(4號出口)",
+          "predicted": 3.07,
+          "actual": 1.0,
+          "absoluteError": 2.07
+        },
+        {
+          "rank": 75,
+          "station": "捷運小巨蛋站(5號出口)_1",
+          "predicted": 3.07,
+          "actual": 2.0,
+          "absoluteError": 1.07
+        },
+        {
+          "rank": 76,
+          "station": "南港車站(市民大道)",
+          "predicted": 2.92,
+          "actual": 2.0,
+          "absoluteError": 0.92
+        },
+        {
+          "rank": 77,
+          "station": "捷運臺北101/世貿站(3號出口)",
+          "predicted": 2.89,
+          "actual": 0.0,
+          "absoluteError": 2.89
+        },
+        {
+          "rank": 78,
+          "station": "捷運明德站(3號出口)",
+          "predicted": 2.82,
+          "actual": 2.0,
+          "absoluteError": 0.82
+        },
+        {
+          "rank": 79,
+          "station": "捷運西門站(5號出口)",
+          "predicted": 2.73,
+          "actual": 3.0,
+          "absoluteError": 0.27
+        },
+        {
+          "rank": 80,
+          "station": "捷運南京復興站(7號出口)",
+          "predicted": 2.71,
+          "actual": 1.0,
+          "absoluteError": 1.71
+        },
+        {
+          "rank": 81,
+          "station": "捷運南京三民站(2號出口)",
+          "predicted": 2.7,
+          "actual": 7.0,
+          "absoluteError": 4.3
+        },
+        {
+          "rank": 82,
+          "station": "捷運古亭站(8號出口)",
+          "predicted": 2.65,
+          "actual": 3.0,
+          "absoluteError": 0.35
+        },
+        {
+          "rank": 83,
+          "station": "信義廣場(臺北101)",
+          "predicted": 2.61,
+          "actual": 0.0,
+          "absoluteError": 2.61
+        },
+        {
+          "rank": 84,
+          "station": "捷運萬隆站(1號出口)",
+          "predicted": 2.45,
+          "actual": 2.0,
+          "absoluteError": 0.45
+        },
+        {
+          "rank": 85,
+          "station": "捷運象山站(1號出口)",
+          "predicted": 2.44,
+          "actual": 0.0,
+          "absoluteError": 2.44
+        },
+        {
+          "rank": 86,
+          "station": "捷運忠孝新生站(2號出口)",
+          "predicted": 2.4,
+          "actual": 1.0,
+          "absoluteError": 1.4
+        },
+        {
+          "rank": 87,
+          "station": "捷運後山埤站(1號出口)",
+          "predicted": 2.37,
+          "actual": 4.0,
+          "absoluteError": 1.63
+        },
+        {
+          "rank": 88,
+          "station": "捷運松江南京站(8號出口)",
+          "predicted": 2.33,
+          "actual": 1.0,
+          "absoluteError": 1.33
+        },
+        {
+          "rank": 89,
+          "station": "捷運小南門站(1號出口)",
+          "predicted": 2.28,
+          "actual": 1.0,
+          "absoluteError": 1.28
+        },
+        {
+          "rank": 90,
+          "station": "捷運小巨蛋站(3號出口)",
+          "predicted": 2.27,
+          "actual": 1.0,
+          "absoluteError": 1.27
+        },
+        {
+          "rank": 91,
+          "station": "松山車站",
+          "predicted": 2.25,
+          "actual": 3.0,
+          "absoluteError": 0.75
+        },
+        {
+          "rank": 92,
+          "station": "興雅松仁路口",
+          "predicted": 2.23,
+          "actual": 0.0,
+          "absoluteError": 2.23
+        },
+        {
+          "rank": 93,
+          "station": "捷運臺電大樓站(2號出口)_1",
+          "predicted": 2.16,
+          "actual": 2.0,
+          "absoluteError": 0.16
+        },
+        {
+          "rank": 94,
+          "station": "捷運松江南京站(4號出口)",
+          "predicted": 2.12,
+          "actual": 1.0,
+          "absoluteError": 1.12
+        },
+        {
+          "rank": 95,
+          "station": "捷運古亭站(6號出口)",
+          "predicted": 1.8,
+          "actual": 1.0,
+          "absoluteError": 0.8
+        },
+        {
+          "rank": 96,
+          "station": "捷運臺大醫院站(4號出口)",
+          "predicted": 1.47,
+          "actual": 2.0,
+          "absoluteError": 0.53
+        },
+        {
+          "rank": 97,
+          "station": "臺大椰林小舖",
+          "predicted": 1.13,
+          "actual": 0.0,
+          "absoluteError": 1.13
+        },
+        {
+          "rank": 98,
+          "station": "捷運西湖站(1號出口)",
+          "predicted": 1.06,
+          "actual": 2.0,
+          "absoluteError": 0.94
+        },
+        {
+          "rank": 99,
+          "station": "捷運芝山站(2號出口)",
+          "predicted": 0.68,
+          "actual": 2.0,
+          "absoluteError": 1.32
+        },
+        {
+          "rank": 100,
+          "station": "臺大鹿鳴堂東側",
+          "predicted": 0.32,
+          "actual": 1.0,
+          "absoluteError": 0.68
+        }
+      ]
+    }
+  ],
+  "modelComparison": [
+    {
+      "model": "persistence_1h",
+      "label": "前一小時",
+      "mae": 2.441,
+      "rmse": 4.129,
+      "r2": 0.46
+    },
+    {
+      "model": "seasonal_168h",
+      "label": "前一週同時段",
+      "mae": 2.176,
+      "rmse": 3.701,
+      "r2": 0.566
+    },
+    {
+      "model": "ridge_time_history",
+      "label": "Ridge",
+      "mae": 1.81,
+      "rmse": 2.911,
+      "r2": 0.731
+    },
+    {
+      "model": "ridge_time_history_weather",
+      "label": "Ridge + 天氣",
+      "mae": 1.793,
+      "rmse": 2.889,
+      "r2": 0.736
+    },
+    {
+      "model": "hist_gradient_boosting",
+      "label": "HGB",
+      "mae": 1.601,
+      "rmse": 2.567,
+      "r2": 0.791
+    },
+    {
+      "model": "hist_gradient_boosting_weather",
+      "label": "HGB + 天氣",
+      "mae": 1.575,
+      "rmse": 2.549,
+      "r2": 0.794
+    }
+  ],
+  "rollingOrigin": [
+    {
+      "fold": "fold_1",
+      "period": "10/01–10/20",
+      "mae": 1.636,
+      "rmse": 2.716,
+      "r2": 0.762
+    },
+    {
+      "fold": "fold_2",
+      "period": "10/21–11/10",
+      "mae": 1.592,
+      "rmse": 2.573,
+      "r2": 0.818
+    },
+    {
+      "fold": "fold_3",
+      "period": "11/11–11/30",
+      "mae": 1.606,
+      "rmse": 2.608,
+      "r2": 0.797
+    }
+  ],
+  "featureImportance": [
+    {
+      "feature": "hour_cos",
+      "label": "小時週期（cos）",
+      "mae_increase_mean": 0.507
+    },
+    {
+      "feature": "borrow_lag_1h",
+      "label": "前一小時借車量",
+      "mae_increase_mean": 0.408
+    },
+    {
+      "feature": "hour_sin",
+      "label": "小時週期（sin）",
+      "mae_increase_mean": 0.23
+    },
+    {
+      "feature": "station_name",
+      "label": "站點",
+      "mae_increase_mean": 0.188
+    },
+    {
+      "feature": "borrow_lag_168h",
+      "label": "前一週同時段",
+      "mae_increase_mean": 0.176
+    },
+    {
+      "feature": "borrow_rolling_mean_24h",
+      "label": "前 24 小時平均",
+      "mae_increase_mean": 0.149
+    },
+    {
+      "feature": "borrow_lag_24h",
+      "label": "前一天同時段",
+      "mae_increase_mean": 0.119
+    },
+    {
+      "feature": "weekday_sin",
+      "label": "星期週期",
+      "mae_increase_mean": 0.051
+    }
+  ]
+}

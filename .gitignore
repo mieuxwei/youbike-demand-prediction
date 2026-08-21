@@ -135,6 +135,9 @@ ipython_config.py
 .pdm-python
 .pdm-build/
 
+# Local pnpm content-addressable store
+.pnpm-store/
+
 # pixi
 #   Similar to Pipfile.lock, it is generally recommended to include pixi.lock in version control.
 # pixi.lock

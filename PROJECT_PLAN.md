@@ -556,10 +556,12 @@ Completed Stage:
 > Stage 7 — Tree Model Comparison + Rolling-origin Evaluation
 >
 > Stage 8 — Reproducible Prediction Interface + Model Card
+>
+> Stage 9 — Interactive Historical Prediction Dashboard
 
 Current Stage:
 
-> Visualization Demo + Historical Snapshot Accumulation
+> Historical Snapshot Accumulation
 
 ### Milestone 2 Deliverables
 
@@ -684,3 +686,20 @@ Next Stage:
 ### Prediction Interface Scope
 
 目前介面可重現 2023 歷史 holdout prediction。真正未來預測必須提供更新至 target 前一小時、相同定義的 transfer-demand history，以及 target 時點可取得的 weather forecast。介面輸出是 hourly transfer-related borrowing demand ranking，不能直接當成補車數量、缺車風險或 30／60 分鐘可用車數。
+
+### Stage 9 Deliverables
+
+- [x] 建立獨立 Vinext／React 歷史預測儀表板
+- [x] 建立 10 個代表性 holdout 時段設定
+- [x] 建立可重複執行的 dashboard data builder
+- [x] 重新驗證模型 SHA-256、feature schema 與 168 小時歷史覆蓋
+- [x] 顯示 100 站預測、actual 與 absolute error
+- [x] 建立站點搜尋、完整表格與 responsive layout
+- [x] 顯示 model comparison、rolling-origin 與 feature importance
+- [x] 建立專屬社群分享圖與 Open Graph／X metadata
+- [x] 建立 dashboard lint、production build 與 SSR 測試
+- [x] 撰寫 Stage 9 中文說明文件
+
+### Dashboard Scope
+
+Stage 9 儀表板只展示 2023 年 12 月 hourly transfer-related borrowing demand 的歷史 holdout 回測。畫面中的 actual 只在預測後附加，未進入 target-hour features。此成果不是即時可借車數、缺車預警或調度建議；真正的 30／60 分鐘 station availability 模型仍須等待至少 7 天且包含平日與週末的即時快照。

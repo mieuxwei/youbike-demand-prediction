@@ -234,15 +234,31 @@ transfer-demand history and weather forecasts with the same schemas; the bundled
 [Stage 8 guide](docs/STAGE_8_PREDICTION_INTERFACE.md), and executed
 [prediction demo notebook](notebooks/08_prediction_demo.ipynb).
 
+## Interactive Historical Dashboard
+
+Stage 9 adds a responsive Vinext/React dashboard for exploring 10 representative
+December holdout hours. It shows all 100 station predictions, post-prediction
+actuals, absolute errors, model comparisons, rolling-origin results, and feature
+importance. Rebuild its compact data bundle with:
+
+```bash
+python src/build_dashboard_data.py
+```
+
+Then run the local interface from `dashboard/`. The display remains explicitly
+historical: it does not claim current bike availability, shortage risk, or a
+redistribution recommendation. See the
+[Stage 9 historical dashboard guide](docs/STAGE_9_HISTORICAL_DASHBOARD.md).
+
 ## Project Status
 
 🚧 **In development**
 
-Milestones 1 and 2 plus Stage 3 through 8 are complete. The repository now
+Milestones 1 and 2 plus Stage 3 through 9 are complete. The repository now
 includes reproducible API samples, validated collection and cleaning pipelines,
 leakage-aware time-series feature engineering, automated tests, quality reports,
 official full-year 2023 transfer-demand and weather analysis, a chronological
 hourly Ridge baseline, a rolling-origin validated gradient-boosting model, and
-an integrity-checked prediction interface with eight executed notebooks.
-Multi-day live snapshot coverage, visualization, deep learning, and optimization
-are still in development.
+an integrity-checked prediction interface with eight executed notebooks and an
+interactive historical dashboard. Multi-day live snapshot coverage, deep learning,
+and optimization are still in development.
