@@ -16,5 +16,6 @@ test("server-renders the historical demand dashboard", async () => {
   assert.match(html, /看見城市/);
   assert.match(html, /歷史回測模式/);
   assert.match(html, /2023-12-01 至 2023-12-31/);
+  assert.match(html, /XGBoost \+ 天氣/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton|Your site is taking shape/);
 });

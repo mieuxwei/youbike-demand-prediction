@@ -7287,6 +7287,13 @@
       "mae": 1.575,
       "rmse": 2.549,
       "r2": 0.794
+    },
+    {
+      "model": "xgboost_weather",
+      "label": "XGBoost + 天氣",
+      "mae": 1.597,
+      "rmse": 2.58,
+      "r2": 0.789
     }
   ],
   "rollingOrigin": [

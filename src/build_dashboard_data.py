@@ -177,6 +177,7 @@ def main() -> None:
             "ridge_time_history_weather": "Ridge + 天氣",
             "hist_gradient_boosting": "HGB",
             "hist_gradient_boosting_weather": "HGB + 天氣",
+            "xgboost_weather": "XGBoost + 天氣",
         }
     )
     comparison = comparison[["model", "label", "mae", "rmse", "r2"]]

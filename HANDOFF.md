@@ -4,7 +4,7 @@
 
 目前專案已有一條成熟的歷史需求研究線與一條仍在累積資料的即時 availability 研究線。接手者必須保持兩者的 target、資料、評估與對外說法分離。
 
-- **Track A：歷史轉乘需求預測** — 已完成 2023 全年資料、天氣、Naive／Ridge／HGB、rolling-origin validation、預測介面與 Interactive Web Demo；下一步是 XGBoost、完整 ablation 與完整 error analysis。
+- **Track A：歷史轉乘需求預測** — 已完成 2023 全年資料、天氣、Naive／Ridge／HGB／XGBoost、rolling-origin validation、預測介面與 Interactive Web Demo；下一步是完整 ablation 與完整 error analysis。
 - **Track B：即時可用車／缺車風險** — 已完成蒐集、清理與特徵工程基礎，但連續快照不足，尚未開始正式建模。
 - **Deep Learning 與 Optimization** — 尚未開始；Optimization 不能使用 Track A demand 直接當 shortage。
 
@@ -27,6 +27,7 @@
 - Previous-hour persistence 與 previous-week same-hour baselines。
 - Ridge without／with weather。
 - HGB without／with weather。
+- XGBoost with weather；相同 scope 與時間切分，validation 選參數。
 - 三段 expanding-window rolling-origin evaluation。
 - Permutation importance。
 - Station-level 與 hour-level error reports。
@@ -82,8 +83,9 @@
 | Ridge with weather | 1.793 | 2.889 | 0.736 |
 | HGB without weather | 1.601 | 2.567 | 0.791 |
 | HGB with weather | **1.575** | **2.549** | **0.794** |
+| XGBoost with weather | 1.597 | 2.580 | 0.789 |
 
-Rolling-origin HGB folds 的 MAE 為 1.636、1.592、1.606。這些結果不可解讀為即時可用車、缺車風險或補車數量的預測表現。
+Rolling-origin HGB folds 的 MAE 為 1.636、1.592、1.606；XGBoost folds 為 1.673、1.624、1.644。HGB 在 holdout 與 rolling-origin 都略優於 XGBoost，因此仍是 Track A 主模型。這些結果不可解讀為即時可用車、缺車風險或補車數量的預測表現。
 
 ## 5. Ablation 與 Error Analysis 狀態
 
@@ -95,6 +97,7 @@ Rolling-origin HGB folds 的 MAE 為 1.636、1.592、1.606。這些結果不可�
 - Station-level error ranking。
 - Hour-level error analysis；17:00、18:00 與 08:00 等尖峰仍較難預測。
 - Rolling-origin stability evaluation。
+- XGBoost validation-only tuning、holdout comparison、permutation importance 與 100 筆 worst cases。
 
 ### 尚待完成
 
@@ -115,25 +118,25 @@ Rolling-origin HGB folds 的 MAE 為 1.636、1.592、1.606。這些結果不可�
 7. Track B 尚無足夠多日連續快照；正式 availability／risk model 未開始。
 8. 快照車輛數差異不是純租借事件。
 9. HGB 雖是現有最佳模型，仍有尖峰時段與高需求站誤差。
-10. XGBoost 未完成，Random Forest 僅為選配；Deep Learning 與 Optimization 未開始。
+10. XGBoost 已完成但未超越 HGB；Random Forest 僅為選配，Deep Learning 與 Optimization 未開始。
 
 ## 7. Track 狀態
 
 | Track | 狀態 | 下一個有效成果 |
 |---|---|---|
-| Track A：歷史轉乘需求 | 主要 pipeline 與展示已完成 | XGBoost + 完整 ablation／error analysis + research summary |
+| Track A：歷史轉乘需求 | Naive／Ridge／HGB／XGBoost 與展示已完成 | 完整 ablation／error analysis + research summary |
 | Track B：即時 availability／risk | 資料與 feature pipeline 已完成；資料不足 | 多日 snapshot dataset + coverage／gap audit |
 | Deep Learning | 未開始 | Track A 研究鏈完成後再決定是否執行 |
 | Optimization | 未開始 | Track B 有效預測與營運限制定義完成後才設計 |
 
 ## 8. 下一步優先順序
 
-1. **Track A：補 XGBoost。** 使用完全相同的 target、top-100 stations、特徵規則、time split 與 metrics，比較 HGB；不要預設 XGBoost 一定較好。
-2. **Track A：完成 ablation。** 先補 holiday 定義，再做 feature-group 比較；現有 weather on／off 結果保留。
-3. **Track A：完成 error analysis。** 建立可重現的 worst-case 與情境化結果，不加入無資料支持的原因解釋。
+1. **Track A：完成 ablation。** 先補 holiday 定義，再做 feature-group 比較；現有 weather on／off 結果保留。
+2. **Track A：完成 error analysis。** 沿用 XGBoost worst cases，建立可重現的情境化結果，不加入無資料支持的原因解釋。
+3. **Track A：完成 research summary。** 統整 Naive、Ridge、HGB、XGBoost 與 rolling-origin，忠實保留 HGB 為主模型。
 4. **Track B：持續蒐集 snapshots。** 至少 7 天且包含平日／週末，較佳為 14–28 天；記錄中斷與資料缺口。
 5. **Track B：重新做 coverage audit。** 只有 30／60 分鐘 targets 足夠後，才定義 baseline 與 time split。
-6. **延後 Deep Learning。** 等 XGBoost、ablation、error analysis 完成後再決定是否有比較價值。
+6. **延後 Deep Learning。** 等 ablation、error analysis 完成後再決定是否有比較價值。
 7. **延後 Optimization。** 不得以 Track A hourly demand 直接推導缺車或調度。
 8. **沿用現有 Web Demo。** Streamlit 不是必要工作；不要為符合舊計畫重做前端。
 

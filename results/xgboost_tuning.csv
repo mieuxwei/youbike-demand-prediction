@@ -1,0 +1,3 @@
+candidate,n_estimators,learning_rate,max_depth,min_child_weight,subsample,colsample_bytree,reg_alpha,reg_lambda,rows,mae,rmse,r2
+compact,300,0.05,6,20.0,0.85,0.9,0.0,2.0,146400,1.6648488266572172,2.716437583635868,0.7815613014577169
+regularized,500,0.03,8,30.0,0.85,0.9,0.1,5.0,146400,1.646297172870712,2.6869995272205807,0.7862700917958654

@@ -60,6 +60,7 @@
 - Ridge with weather。
 - Histogram Gradient Boosting（HGB）without weather。
 - Histogram Gradient Boosting（HGB）with weather。
+- XGBoost with weather，使用相同 scope 與時間切分公平比較。
 - 三段 expanding-window rolling-origin validation。
 - Permutation importance。
 - Station-level 與 hour-level error analysis。
@@ -76,6 +77,7 @@
 | Ridge with weather | 1.793 | 2.889 | 0.736 |
 | HGB without weather | 1.601 | 2.567 | 0.791 |
 | HGB with weather | **1.575** | **2.549** | **0.794** |
+| XGBoost with weather | 1.597 | 2.580 | 0.789 |
 
 上述結果只適用於定義內的 100 個站點及 hourly transfer-related borrowing demand，不可外推成全臺北所有 YouBike 需求或 Track B 的 availability 表現。
 
@@ -97,7 +99,7 @@
 | Naive baselines | 已完成 | Previous hour、previous week same hour |
 | Ridge | 已完成 | 有／無天氣版本 |
 | HGB | 已完成 | 有／無天氣版本，現有最佳模型 |
-| XGBoost | 待補 | 應使用與現有模型一致的 target、站點範圍與時間評估規則 |
+| XGBoost | 已完成 | 相同 target、站點、特徵與時間切分；HGB 仍較佳 |
 | Random Forest | 選配 | 不是進入下一階段的必要條件 |
 | Ablation Study | 部分完成 | 已比較 Ridge、HGB 的有／無天氣版本；holiday 與移除主要 lag feature groups 尚未完成 |
 | Error Analysis | 部分完成 | 已有 station／hour errors 與尖峰觀察；極端天氣、假日、worst cases 等完整情境分析尚未完成 |
@@ -108,13 +110,13 @@
 
 ## 6. 下一步優先順序
 
-### Priority 1 — 完成 Track A 的研究比較
+### Priority 1 — 完成 Track A 的 Ablation 與 Error Analysis
 
-1. 補做 XGBoost，沿用相同 top-100 scope、feature definition、time split、validation 與 holdout test。
+1. XGBoost 已使用相同 top-100 scope、feature definition、time split、validation、holdout test 與 rolling-origin 完成比較；HGB 仍保留為主模型。
 2. 完成尚缺的 ablation；新增 holiday feature 前必須先確認可靠資料來源與定義。
 3. 擴充 error analysis，優先處理 worst cases、尖峰／離峰、高／低需求站、天氣條件與假日；沒有資料支持的事件不得自行推論。
-4. 將 XGBoost 與現有 Naive、Ridge、HGB 放入同一比較表。Random Forest 只在比較價值明確且資源允許時補做。
-5. 完成 Track A 研究摘要；若 HGB 仍優於 XGBoost，應忠實保留 HGB 為主模型。
+4. Random Forest 只在比較價值明確且資源允許時補做，不是完成 Track A 的必要條件。
+5. 完成 Track A 研究摘要，忠實記錄 HGB 略優於 XGBoost。
 
 ### Priority 2 — 平行累積 Track B 資料
 
@@ -125,7 +127,7 @@
 
 ### Priority 3 — 延後研究
 
-- Deep Learning：Track A 的 XGBoost、ablation 與 error analysis 完成後，再判斷是否值得加入 LSTM／GRU。
+- Deep Learning：Track A 的 ablation 與 error analysis 完成後，再判斷是否值得加入 LSTM／GRU。
 - Optimization：Track B 建立有效的 availability／risk prediction、站點容量與營運限制後才開始。
 - Demo 擴充：沿用現有 Interactive Web Demo；Streamlit 僅為選配。
 
@@ -154,7 +156,7 @@ Track A 可以作為長期需求背景訊號或候選特徵，但必須先經驗
 ## 9. 主要交付物
 
 - 可重現的資料與模型 pipeline。
-- Naive、Ridge、HGB，以及待補的 XGBoost 統一比較。
+- Naive、Ridge、HGB 與 XGBoost 統一比較。
 - Ablation、error analysis、rolling-origin validation 與 model documentation。
 - React 19 + Vinext + Cloudflare／Sites Interactive Web Demo。
 - `README.md`、`PROJECT_PLAN.md`、`HANDOFF.md` 與各 Stage 文件。
@@ -163,9 +165,7 @@ Track A 可以作為長期需求背景訊號或候選特徵，但必須先經驗
 ## 10. Current Priority
 
 ```text
-Track A: XGBoost
-        ↓
-Complete Ablation + Error Analysis
+Track A: Complete Ablation + Error Analysis
         ↓
 Track A Research Summary
 

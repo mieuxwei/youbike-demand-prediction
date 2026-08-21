@@ -60,6 +60,7 @@ location.
 - NumPy
 - Matplotlib
 - scikit-learn
+- XGBoost
 - Requests
 
 Additional libraries will be added only when the project reaches the stage that
@@ -214,6 +215,23 @@ demand are the strongest signals; weather provides a smaller incremental gain.
 See the executed [tree comparison notebook](notebooks/07_tree_model_comparison.ipynb)
 and [Stage 7 guide](docs/STAGE_7_TREE_MODEL_COMPARISON.md).
 
+## XGBoost Comparison
+
+Run the bounded XGBoost comparison on the same Track A target, top-100 stations,
+features, and chronological splits:
+
+```bash
+python src/train_xgboost.py
+```
+
+The validation-selected XGBoost model reaches December holdout MAE 1.597, RMSE
+2.580, and R² 0.789. It improves MAE by about 10.9% over weather Ridge but does
+not beat weather HGB at MAE 1.575. Three rolling-origin folds confirm the same
+ordering, so HGB remains the primary Track A model. On macOS, XGBoost also
+requires the OpenMP runtime (`brew install libomp`). See the executed
+[XGBoost notebook](notebooks/09_xgboost_comparison.ipynb) and
+[Stage 10 guide](docs/STAGE_10_XGBOOST_COMPARISON.md).
+
 ## Prediction Interface
 
 Generate a ranked prediction for one target hour:
@@ -254,11 +272,11 @@ redistribution recommendation. See the
 
 🚧 **In development**
 
-Milestones 1 and 2 plus Stage 3 through 9 are complete. The repository now
+Milestones 1 and 2 plus Stage 3 through 10 are complete. The repository now
 includes reproducible API samples, validated collection and cleaning pipelines,
 leakage-aware time-series feature engineering, automated tests, quality reports,
 official full-year 2023 transfer-demand and weather analysis, a chronological
-hourly Ridge baseline, a rolling-origin validated gradient-boosting model, and
-an integrity-checked prediction interface with eight executed notebooks and an
+hourly Ridge baseline, rolling-origin validated HGB and XGBoost comparisons, and
+an integrity-checked prediction interface with nine executed notebooks and an
 interactive historical dashboard. Multi-day live snapshot coverage, deep learning,
 and optimization are still in development.

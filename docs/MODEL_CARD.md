@@ -66,6 +66,10 @@
 
 模型在 17:00–18:00 與高需求捷運站的誤差較高。這些指標不能外推至未列入的站點、其他年份或全體 YouBike 旅次。
 
+## XGBoost challenger 比較
+
+Stage 10 以相同 Track A target、100 站、feature schema 與時間切分建立 XGBoost challenger。其 12 月 holdout MAE 為 1.597、RMSE 2.580、R² 0.789；三段 rolling-origin 平均 MAE 為 1.647。兩組評估都略遜於本 HGB，因此沒有替換目前主模型。這項結論只表示在目前受控實驗中 HGB 較佳，不代表 HGB 在所有資料或參數設定下一定優於 XGBoost。
+
 ## 主要限制與風險
 
 1. 只有 2023 一年，尚未驗證跨年度穩定性。
