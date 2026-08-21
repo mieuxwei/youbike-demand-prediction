@@ -1,705 +1,179 @@
-# YouBike Demand Prediction & Optimization
+# YouBike Demand Prediction & Optimization — Current-State v2
 
-## 1. Project Overview
+## 1. 文件目的
 
-本專題目標為建立一套 **YouBike 站點需求預測與智慧調度系統**。
+本文件以目前 repository 的實際成果為基準，取代把專案描述成「準備建立 Baseline」的舊計畫。專案分為兩條目標、資料與評估方式不同的研究線；兩者不可共用 target，也不可把其中一條的輸出直接解讀成另一條的成果。
 
-系統將使用臺北市 YouBike 開放資料、時間特徵與天氣資料，分析不同站點的使用情況，並建立 Machine Learning / Deep Learning 模型預測未來短時間內的租借需求與可用車輛變化。
+- **Track A：歷史轉乘需求預測** — 已完成可重現的主要研究與展示鏈。
+- **Track B：即時可用車／缺車風險** — 已完成蒐集與特徵管線基礎，目前仍需累積足夠的連續即時資料。
 
-在需求預測完成後，再加入最佳化模型，計算不同站點之間較合理的車輛調度方式。
+## 2. 核心研究定義
 
-本專題同時作為 AI / Data Science 研究所申請與實習作品集使用，因此重點不只是完成預測系統，也必須完整呈現：
+### Track A：歷史轉乘需求預測
 
-- Data Collection
-- Data Cleaning
-- Exploratory Data Analysis
-- Feature Engineering
-- Machine Learning
-- Deep Learning
-- Model Evaluation
-- Optimization
-- Visualization
-- Git / GitHub 專案管理
+研究問題：能否用站點、時間、歷史需求與天氣特徵，預測指定站點在某小時的**轉乘相關借車量**？
 
----
+- Target：每站每小時的轉乘相關借車量。
+- 資料範圍：2023 年官方轉乘 YouBike 旅次；這不是所有 YouBike 旅次。
+- 模型範圍：只涵蓋依 2023 年 1–9 月 training activity 選出的 100 個高需求站點。
+- 評估方式：依時間順序切分；1–9 月 training、10–11 月 validation、12 月 holdout test。
+- 用途：歷史需求排名、模型比較、回測、研究展示。
+- 不代表：現在可借車數、30／60 分鐘後可借車數、缺車／滿站風險或補車數量。
 
-## 2. Research Question
+### Track B：即時可用車／缺車風險
 
-主要研究問題：
+研究問題：在有足夠連續即時快照後，能否預測站點 30／60 分鐘後的可借車數，或建立缺車／滿站風險？
 
-> 是否能透過歷史 YouBike 使用資料、時間資訊與天氣資訊，預測特定站點未來的短期使用需求，並進一步利用最佳化方法改善站點間的車輛調度？
+- Target：`target_available_bikes_30m`、`target_available_bikes_60m`，或後續明確定義的缺車／滿站標籤。
+- 可能輸入：目前可借車數、可還車位、站點容量、時間特徵、只向過去對齊的 lag／rolling 特徵，以及經驗證可取得的外部資訊。
+- 現況：蒐集器、清理流程、15／30／60 分鐘 lag／rolling 與 future target 建立流程已完成；可供訓練的多日連續快照仍不足。
+- 注意：快照間的車輛數變化可能同時包含租借、還車、調度與資料修正，不能直接當作租借需求。
 
-延伸問題：
+## 3. 已驗證資料狀態
 
-1. 哪些因素最影響 YouBike 使用需求？
-2. 不同 Machine Learning 模型的預測效果有何差異？
-3. Deep Learning 是否能比傳統 Machine Learning 提供更好的時間序列預測？
-4. 天氣資料加入後是否能改善模型表現？
-5. 如何將預測結果轉換為實際的車輛調度建議？
+### Track A
 
----
+- 2023 全年 12 個月份。
+- 7,388,479 筆轉乘相關旅次。
+- 4,670,320 筆有活動的 station-hour demand rows。
+- 8,760 小時臺北單一參考點歷史天氣。
+- 需求資料與天氣同小時匹配率 100%。
+- 天氣屬 Open-Meteo 歷史再分析資料，不是每站現地觀測；真正未來預測必須使用預測當下可取得的 weather forecast。
 
-## 3. Project Objectives
+### Track B
 
-### Phase 1 — Data Analysis
+- Repository 內固定樣本為 2 個快照、3,580 rows，主要用於重現清理與特徵流程。
+- 固定樣本的 30／60 分鐘 future target coverage 均為 0%。
+- 曾完成 12 份、約一小時的本機蒐集測試；這仍不足以涵蓋平日、週末與多種需求情境，也不是可用於正式建模的多日資料集。
+- 正式建模前至少要有連續 7 天且包含平日與週末的資料；14–28 天會更有利於涵蓋週間差異。這是資料規劃門檻，不是模型有效性的保證。
 
-- 收集 YouBike 官方 Open Data
-- 整理與清理資料
-- 分析不同站點的租借模式
-- 分析尖峰與離峰時段
-- 分析平日與假日差異
-- 分析天氣與使用需求的關係
+## 4. Track A 目前成果
 
-### Phase 2 — Machine Learning
+### 4.1 已完成
 
-建立基礎預測模型，例如：
+- 全年歷史資料下載、清理、稽核與 station-hour 聚合。
+- 小時天氣整合與描述性 EDA。
+- Past-only lag／rolling features 與 leakage-aware 時間切分。
+- Previous-hour persistence baseline。
+- Previous-week same-hour baseline。
+- Ridge without weather。
+- Ridge with weather。
+- Histogram Gradient Boosting（HGB）without weather。
+- Histogram Gradient Boosting（HGB）with weather。
+- 三段 expanding-window rolling-origin validation。
+- Permutation importance。
+- Station-level 與 hour-level error analysis。
+- 含 schema、時間覆蓋、站點、天氣與模型 SHA-256 驗證的單一小時預測介面。
+- 歷史回測 Interactive Web Demo。
 
-- Linear Regression
-- Random Forest
-- XGBoost
+### 4.2 2023 年 12 月 holdout 結果
 
-預測目標可能包含：
+| Model | MAE | RMSE | R² |
+|---|---:|---:|---:|
+| Previous hour | 2.441 | 4.129 | 0.460 |
+| Previous week, same hour | 2.176 | 3.701 | 0.566 |
+| Ridge without weather | 1.810 | 2.911 | 0.731 |
+| Ridge with weather | 1.793 | 2.889 | 0.736 |
+| HGB without weather | 1.601 | 2.567 | 0.791 |
+| HGB with weather | **1.575** | **2.549** | **0.794** |
 
-- 未來 30 分鐘需求量
-- 未來 60 分鐘需求量
-- 未來可用車輛數量
-- 是否即將發生缺車 / 滿站
+上述結果只適用於定義內的 100 個站點及 hourly transfer-related borrowing demand，不可外推成全臺北所有 YouBike 需求或 Track B 的 availability 表現。
 
-### Phase 3 — Deep Learning
+### 4.3 Interactive Web Demo
 
-嘗試時間序列模型：
+- React 19 + Vinext 儀表板已完成。
+- 已透過 Cloudflare／Sites 專案配置部署。
+- 展示 2023 年 12 月 10 個代表性 holdout 時段、100 站預測／actual／absolute error、模型比較、rolling-origin 結果與 permutation importance。
+- 定位為 **Interactive Historical Prediction Dashboard**，不是 Live shortage dashboard。
+- Streamlit 不是必要交付項；只有在未來出現明確需求時才列為選配。
 
-- LSTM
-- GRU（選做）
+## 5. 研究工作完成度
 
-並與傳統 Machine Learning 模型比較。
+| 項目 | 狀態 | 說明 |
+|---|---|---|
+| 2023 全年歷史資料 | 已完成 | 12 個月、7,388,479 筆旅次 |
+| Station-hour demand | 已完成 | 4,670,320 rows |
+| 8,760 小時天氣 | 已完成 | Demand join match 100% |
+| Naive baselines | 已完成 | Previous hour、previous week same hour |
+| Ridge | 已完成 | 有／無天氣版本 |
+| HGB | 已完成 | 有／無天氣版本，現有最佳模型 |
+| XGBoost | 待補 | 應使用與現有模型一致的 target、站點範圍與時間評估規則 |
+| Random Forest | 選配 | 不是進入下一階段的必要條件 |
+| Ablation Study | 部分完成 | 已比較 Ridge、HGB 的有／無天氣版本；holiday 與移除主要 lag feature groups 尚未完成 |
+| Error Analysis | 部分完成 | 已有 station／hour errors 與尖峰觀察；極端天氣、假日、worst cases 等完整情境分析尚未完成 |
+| Deep Learning | 未開始 | 須待 Track A 傳統模型研究鏈完整後再評估必要性 |
+| Track B availability model | 未開始訓練 | 等待多日連續快照與 target coverage |
+| Optimization | 未開始 | 必須建立在 Track B 的有效狀態／風險預測與明確營運限制上 |
+| Interactive Web Demo | 已完成 | React 19 + Vinext + Cloudflare／Sites；歷史回測展示 |
 
-### Phase 4 — Optimization
+## 6. 下一步優先順序
 
-將模型預測的各站需求轉換為最佳化問題。
+### Priority 1 — 完成 Track A 的研究比較
 
-例如：
+1. 補做 XGBoost，沿用相同 top-100 scope、feature definition、time split、validation 與 holdout test。
+2. 完成尚缺的 ablation；新增 holiday feature 前必須先確認可靠資料來源與定義。
+3. 擴充 error analysis，優先處理 worst cases、尖峰／離峰、高／低需求站、天氣條件與假日；沒有資料支持的事件不得自行推論。
+4. 將 XGBoost 與現有 Naive、Ridge、HGB 放入同一比較表。Random Forest 只在比較價值明確且資源允許時補做。
+5. 完成 Track A 研究摘要；若 HGB 仍優於 XGBoost，應忠實保留 HGB 為主模型。
 
-- 哪些站需要補車？
-- 哪些站有多餘車輛？
-- 每個站應調入 / 調出幾輛？
-- 如何降低調度距離與缺車成本？
+### Priority 2 — 平行累積 Track B 資料
 
-可考慮：
+1. 穩定蒐集至少 7 天、同時包含平日與週末的 5 分鐘左右快照；若可行，以 14–28 天為較佳範圍。
+2. 記錄資料缺口、時間間隔、站點 coverage 與 API／設備中斷。
+3. 重建 feature coverage，確認 30／60 分鐘 target 有足夠非空資料後，才設計時間切分與 baseline。
+4. 明確定義 shortage／full-station label、預測 horizon 與評估指標後，才開始 Track B 模型。
 
-- Linear Programming
-- Mixed Integer Programming
-- OR-Tools
-- PuLP
+### Priority 3 — 延後研究
 
-### Phase 5 — Visualization / Demo
+- Deep Learning：Track A 的 XGBoost、ablation 與 error analysis 完成後，再判斷是否值得加入 LSTM／GRU。
+- Optimization：Track B 建立有效的 availability／risk prediction、站點容量與營運限制後才開始。
+- Demo 擴充：沿用現有 Interactive Web Demo；Streamlit 僅為選配。
 
-建立簡單 Dashboard 或視覺化成果，例如：
+## 7. Optimization 邊界
+
+Optimization 不得把 Track A 的「每小時轉乘相關借車需求」直接標記成 shortage、surplus 或需補車數量。
+
+進入 Optimization 前至少需要：
+
+1. Track B 對未來可借車數或 shortage／full-station risk 的有效預測。
+2. 清楚的站點容量與安全庫存／風險定義。
+3. 可用車輛、調度數量、距離、成本與其他營運限制。
+4. 與 baseline 比較及時間外推評估。
+
+Track A 可以作為長期需求背景訊號或候選特徵，但必須先經驗證，不能等同即時庫存缺口。
+
+## 8. 評估與資料洩漏規則
+
+- 主要評估不得使用 random split。
+- Station selection、feature construction、tuning 與 scaling 只能使用當時可取得的 training／validation 資訊。
+- Lag 與 rolling features 必須只向過去對齊；future target 不得進入 predictors。
+- Holdout actual 只能在預測完成後用於評估或展示。
+- 未來天氣輸入必須是預測當下可取得的 forecast，不可使用事後觀測冒充線上特徵。
+- 所有新增模型都必須報告實際 MAE、RMSE、R²；未執行的實驗保留為待辦，不填 placeholder 或假數據。
+
+## 9. 主要交付物
+
+- 可重現的資料與模型 pipeline。
+- Naive、Ridge、HGB，以及待補的 XGBoost 統一比較。
+- Ablation、error analysis、rolling-origin validation 與 model documentation。
+- React 19 + Vinext + Cloudflare／Sites Interactive Web Demo。
+- `README.md`、`PROJECT_PLAN.md`、`HANDOFF.md` 與各 Stage 文件。
+- Deep Learning、Track B 模型及 Optimization 僅在其前置條件滿足後加入。
+
+## 10. Current Priority
 
 ```text
-捷運公館站
+Track A: XGBoost
+        ↓
+Complete Ablation + Error Analysis
+        ↓
+Track A Research Summary
 
-目前可借：12 輛
-
-AI Prediction
-30 分鐘後：7 輛
-60 分鐘後：2 輛
-
-⚠ High risk of bike shortage
-
-Suggested Redistribution:
-+6 bikes
+Track B: Continue Multi-day Snapshot Collection
+        ↓
+Coverage / Gap Audit
+        ↓
+Availability Baseline Only When Data Is Ready
 ```
 
----
-
-## 4. Planned Data Sources
-
-優先使用官方或公開資料來源。
-
-### YouBike Data
-
-可能使用：
-
-- YouBike 2.0 即時站點資料
-- YouBike 歷史借還紀錄
-- 站點基本資訊
-- 起訖站交易量
-
-需要確認：
-
-- Dataset 欄位
-- 更新頻率
-- 資料期間
-- License
-- 是否適合 Machine Learning
-
-### Weather Data
-
-可能使用中央氣象署 Open Data。
-
-特徵可能包含：
-
-- Temperature
-- Rainfall
-- Weather condition
-- Humidity
-
----
-
-## 5. Possible Features
-
-模型輸入特徵可能包含：
-
-### Time Features
-
-- Hour
-- Day of week
-- Month
-- Weekend
-- Holiday
-- Rush hour
-
-### Station Features
-
-- Station ID
-- Location
-- Capacity
-- Previous available bikes
-
-### Historical Features
-
-- Previous 15-minute demand
-- Previous 30-minute demand
-- Previous 60-minute demand
-- Moving average
-
-### Weather Features
-
-- Temperature
-- Rainfall
-- Humidity
-- Weather condition
-
----
-
-## 6. Machine Learning Workflow
-
-完整流程：
-
-```text
-Raw Data
-    ↓
-Data Cleaning
-    ↓
-Exploratory Data Analysis
-    ↓
-Feature Engineering
-    ↓
-Train / Validation / Test Split
-    ↓
-Baseline Model
-    ↓
-Machine Learning Models
-    ↓
-Deep Learning Model
-    ↓
-Model Evaluation
-    ↓
-Error Analysis
-    ↓
-Demand Prediction
-    ↓
-Optimization
-    ↓
-Dashboard / Visualization
-```
-
----
-
-## 7. Model Evaluation
-
-Regression 問題預計使用：
-
-- MAE
-- RMSE
-- R²
-
-如果建立缺車 / 滿站分類模型：
-
-- Accuracy
-- Precision
-- Recall
-- F1-score
-- Confusion Matrix
-
-避免只報告單一 Accuracy。
-
----
-
-## 8. Planned Tech Stack
-
-### Programming
-
-- Python
-
-### Data Processing
-
-- Pandas
-- NumPy
-
-### Visualization
-
-- Matplotlib
-
-### Machine Learning
-
-- scikit-learn
-- XGBoost
-
-### Deep Learning
-
-後期加入：
-
-- PyTorch
-
-### Optimization
-
-後期評估：
-
-- OR-Tools
-- PuLP
-
-### Development
-
-- Git
-- GitHub
-- Jupyter Notebook
-- Codex
-
----
-
-## 9. Repository Structure
-
-```text
-youbike-demand-prediction/
-│
-├── README.md
-├── PROJECT_PLAN.md
-├── requirements.txt
-├── .gitignore
-│
-├── data/
-│   ├── raw/
-│   └── processed/
-│
-├── notebooks/
-│   ├── 01_data_exploration.ipynb
-│   ├── 02_data_cleaning.ipynb
-│   ├── 03_feature_engineering.ipynb
-│   ├── 04_machine_learning.ipynb
-│   └── 05_model_evaluation.ipynb
-│
-├── src/
-│
-├── models/
-│
-├── results/
-│
-└── images/
-```
-
-資料夾用途：
-
-### data/raw
-
-保存原始資料。
-
-原則：
-
-> 不直接修改原始資料。
-
-### data/processed
-
-保存經過清理與轉換後的資料。
-
-### notebooks
-
-保存資料分析與模型實驗 Notebook。
-
-### src
-
-正式 Python 程式碼。
-
-未來可以包含：
-
-```text
-data_loader.py
-preprocessing.py
-features.py
-train.py
-predict.py
-optimization.py
-```
-
-### models
-
-保存訓練完成的模型。
-
-### results
-
-保存：
-
-- evaluation results
-- CSV
-- experiment results
-
-### images
-
-保存：
-
-- EDA charts
-- model evaluation charts
-- architecture diagrams
-- README images
-
----
-
-## 10. GitHub Rules
-
-### Commit 原則
-
-每完成一個有意義的小階段就 Commit。
-
-例如：
-
-```text
-Initialize project structure
-
-Add YouBike data loader
-
-Add exploratory data analysis
-
-Add weather data integration
-
-Train baseline model
-
-Add XGBoost model
-
-Add model evaluation
-
-Add optimization model
-```
-
-避免使用：
-
-```text
-update
-fix
-test
-123
-final
-```
-
-作為主要 Commit message。
-
----
-
-## 11. Security Rules
-
-禁止將以下內容 Push 到 GitHub：
-
-- API Key
-- Access Token
-- Password
-- Secret
-- Private credential
-- .env
-
-`.gitignore` 至少加入：
-
-```text
-.env
-.venv/
-__pycache__/
-.DS_Store
-.ipynb_checkpoints/
-```
-
----
-
-## 12. README Requirements
-
-README 最終至少需要包含：
-
-1. Project Overview
-2. Problem
-3. Research Question
-4. Dataset
-5. System Architecture
-6. Data Analysis
-7. Models
-8. Evaluation
-9. Results
-10. Optimization
-11. Demo
-12. Tech Stack
-13. Project Structure
-14. Future Work
-
-禁止在模型尚未完成之前填寫假的：
-
-- Accuracy
-- RMSE
-- F1-score
-- Prediction Result
-
-尚未完成的部分標示：
-
-> 🚧 In Development
-
----
-
-## 13. First Development Milestone
-
-目前先不要開始 Deep Learning 或 Optimization。
-
-第一階段只完成以下內容：
-
-### Milestone 1
-
-- [x] 建立 Repository 基礎架構
-- [x] 建立 README.md
-- [x] 建立 PROJECT_PLAN.md
-- [x] 建立 requirements.txt
-- [x] 建立 .gitignore
-- [x] 找到官方 YouBike Dataset
-- [x] 確認 Dataset 欄位
-- [x] 下載一小部分資料進行測試
-- [x] 建立 `01_data_exploration.ipynb`
-- [x] 使用 Pandas 載入資料
-- [x] 顯示資料前 5 筆
-- [x] 檢查資料 Shape
-- [x] 檢查 Columns
-- [x] 檢查 Missing Values
-- [x] 基本 Descriptive Statistics
-- [x] 建立第一張資料視覺化圖表
-
-完成 Milestone 1 後才進入資料清理。
-
----
-
-## 14. Instructions for Codex
-
-在修改此 Repository 前，請先閱讀：
-
-`PROJECT_PLAN.md`
-
-所有程式與檔案修改應遵循此文件。
-
-### Current Priority
-
-目前只處理：
-
-> Prediction Interface + Model Documentation
-
-請不要提前：
-
-- 建立 LSTM
-- 建立 PyTorch Model
-- 建立 Optimization
-- 宣稱模型已有成果
-- 填寫假的 Evaluation Metrics
-
-### When Writing Code
-
-請：
-
-1. 保持程式易讀。
-2. 避免過度複雜設計。
-3. 為重要程式加入簡短註解。
-4. 不要硬編 Dataset 欄位。
-5. 若 Dataset 格式尚未確認，先檢查資料。
-6. 不要把 API Key 寫入原始碼。
-7. 優先建立容易理解的版本，再逐步改善。
-
-### After Every Task
-
-完成任務後請說明：
-
-1. 新增哪些檔案
-2. 修改哪些檔案
-3. 每個修改的用途
-4. 下一步建議
-5. 是否有任何需要使用者決定的事項
-
----
-
-## 15. Project Status
-
-🚧 **In Development**
-
-Completed Stage:
-
-> Milestone 1 — Project Setup, Data Collection & Initial Exploration
->
-> Milestone 2 — Reproducible Data Collection & Cleaning Pipeline
->
-> Stage 3 Tooling — Historical Collection & Feature Engineering Foundation
->
-> Stage 4 — Official Historical Transfer-Demand Integration
->
-> Stage 5 — Full-year Historical Demand + Weather Integration
->
-> Stage 6 — Time-aware Hourly Baseline Model
->
-> Stage 7 — Tree Model Comparison + Rolling-origin Evaluation
->
-> Stage 8 — Reproducible Prediction Interface + Model Card
->
-> Stage 9 — Interactive Historical Prediction Dashboard
-
-Current Stage:
-
-> Historical Snapshot Accumulation
-
-### Milestone 2 Deliverables
-
-- [x] 建立可重複執行的官方 API 快照蒐集器
-- [x] 驗證 JSON 結構與必要欄位
-- [x] 建立多快照載入與合併流程
-- [x] 統一欄位名稱、資料型別與臺北時區
-- [x] 檢查負數、經緯度、重複列與容量一致性
-- [x] 保留不可用車柱與站點資料延遲資訊
-- [x] 建立跨快照車輛淨變化特徵
-- [x] 產生資料品質與快照摘要報告
-- [x] 建立並執行 `02_data_cleaning.ipynb`
-- [x] 建立資料管線自動化測試
-- [x] 撰寫 Stage 2 中文說明文件
-
-Next Stage:
-
-> Historical Prediction Demo / Dashboard Foundation
-
-### Stage 3 Deliverables
-
-- [x] 建立固定間隔與指定份數的歷史快照蒐集器
-- [ ] 累積至少 7 天且包含平日與週末的真實快照
-- [x] 建立 hour、weekday、month、weekend、rush hour 特徵
-- [x] 建立週期性 sine / cosine 時間特徵
-- [x] 建立 15／30／60 分鐘 backward-only lag 特徵
-- [x] 建立排除當前列的 30／60 分鐘 rolling 特徵
-- [x] 建立獨立的 30／60 分鐘 future target 欄位
-- [x] 建立 feature coverage 報告
-- [x] 建立並執行 `03_feature_engineering.ipynb`
-- [x] 建立 future leakage 防護測試
-- [x] 撰寫 Stage 3 中文說明文件
-
-### Model Readiness
-
-兩份公開固定樣本的 30／60 分鐘 future target coverage 為 0%；本機一小時蒐集測試已使 30 分鐘 coverage 達 42.16%，但 60 分鐘仍為 0%。因此短期 station availability 模型仍未開始。另一方面，2023 全年 hourly transfer-demand 已具備足夠期間，Stage 6 已針對此獨立 target 建立 Baseline Model，兩者不可混為同一模型成果。
-
-### Stage 4 Deliverables
-
-- [x] 確認官方 2023 轉乘 YouBike 歷史資料來源與授權
-- [x] 下載並稽核 2023 年 1 月 593,616 筆資料
-- [x] 確認借還時間為 hourly granularity
-- [x] 建立大型歷史 CSV 串流下載器與來源 registry
-- [x] 建立歷史交易欄位驗證與清理管線
-- [x] 保留並揭露無法安全刪除的相同交易列
-- [x] 建立歷史站名正規化與現行站點對應檢查
-- [x] 建立 station-hour 借還需求聚合
-- [x] 建立 daily、hourly、top-station 與 quality reports
-- [x] 建立並執行 `04_historical_demand_analysis.ipynb`
-- [x] 撰寫 Stage 4 中文說明文件
-
-### Historical Dataset Scope
-
-2023 歷史資料僅涵蓋公車／捷運轉乘 YouBike 的租借紀錄，不代表所有 YouBike 使用者。此資料用於 hourly historical demand；自行蒐集的即時快照持續用於 30／60 分鐘 station availability 預測，兩者不可混為同一 target。
-
-### Stage 5 Deliverables
-
-- [x] 註冊並下載 2023 全年 12 個官方歷史月份
-- [x] 建立逐月處理、全年合併的記憶體友善管線
-- [x] 稽核全年 7,388,479 筆轉乘相關旅次
-- [x] 揭露 7 個缺漏站名並保留每筆仍可使用的借／還事件
-- [x] 建立 4,670,320 筆 station-hour demand 資料
-- [x] 建立全年 monthly、daily、hourly、station 與 quality reports
-- [x] 下載並清理 2023 全年 8,760 小時歷史天氣
-- [x] 建立需求與天氣 many-to-one 同小時合併，匹配率 100%
-- [x] 建立雨天／非雨天分層比較，避免直接混合平假日與小時
-- [x] 建立並執行 `05_weather_integration.ipynb`
-- [x] 撰寫 Stage 5 中文說明文件
-
-### Weather Dataset Scope
-
-目前天氣使用 Open-Meteo Historical Weather API 的臺北單一參考點歷史再分析資料，以確保流程不依賴寫入原始碼的 API Key 且可重現。此資料不是每個 YouBike 站點的現地氣象站觀測；中央氣象署資料留待後續作實測驗證。雨天與需求差異目前僅為描述性關聯，不宣稱因果效果。
-
-### Stage 6 Deliverables
-
-- [x] 定義 top-100 station hourly transfer-demand 預測範圍
-- [x] 站點排名只使用 training period，避免 test leakage
-- [x] 建立站點活動期間內的完整 hourly grid 與零需求列
-- [x] 建立 1／24／168 小時 past-only lag 與 24 小時 rolling 特徵
-- [x] 建立 1–9 月 train、10–11 月 validation、12 月 test 時間切分
-- [x] 建立 previous-hour 與 previous-week naive baselines
-- [x] 建立有／無天氣 Ridge baselines
-- [x] 使用 validation 選擇 alpha，test 僅作一次最終評估
-- [x] 產出 MAE、RMSE、R² 與站點／小時誤差報告
-- [x] 建立並執行 `06_baseline_model.ipynb`
-- [x] 撰寫 Stage 6 中文說明文件
-
-### Baseline Result Scope
-
-含天氣 Ridge 的 2023 年 12 月 holdout 結果為 MAE 1.793、RMSE 2.889、R² 0.736；相較不含天氣 Ridge，MAE 改善約 0.9%。這些結果只適用於定義的 100 個站點與 hourly transfer-related demand，不代表所有 YouBike 旅次，也不是短期可用車預測成果。正式部署時必須以預測當下可取得的 weather forecast 取代事後實際天氣。
-
-### Stage 7 Deliverables
-
-- [x] 建立 Histogram Gradient Boosting 非線性樹模型
-- [x] 在相同 top-100、特徵與時間切分下公平比較 Ridge
-- [x] 分別訓練有／無天氣 HGB，量化天氣增量
-- [x] 使用 validation MAE 選擇樹模型參數
-- [x] 使用 12 月 holdout 產出 MAE、RMSE、R²
-- [x] 建立三段 expanding-window rolling-origin evaluation
-- [x] 建立 permutation importance 報告
-- [x] 更新 station／hour error analysis
-- [x] 建立並執行 `07_tree_model_comparison.ipynb`
-- [x] 撰寫 Stage 7 中文說明文件
-
-### Tree Model Result Scope
-
-含天氣 HGB 的 2023 年 12 月 holdout 結果為 MAE 1.575、RMSE 2.549、R² 0.794；相較含天氣 Ridge，MAE 改善約 12.2%。三段 rolling-origin MAE 介於 1.592–1.636。天氣相較無天氣 HGB 再改善約 1.7%，主要預測力仍來自小時週期、前一小時需求、站點與前一週需求。結果仍只適用於 100 個站點的 hourly transfer-related demand。
-
-### Stage 8 Deliverables
-
-- [x] 建立單一目標小時的 top-100 station prediction CLI
-- [x] 建立只讀取 target 前 168 小時歷史的推論特徵管線
-- [x] 驗證需求時間覆蓋、站點、重複列與 target-hour weather
-- [x] 建立 model metadata：feature schema、站點清單、版本與評估
-- [x] 推論前驗證 model artifact SHA-256
-- [x] 建立歷史 actual 僅在預測後附加的 backtest 模式
-- [x] 產生 2023-12-31 18:00 的 100 站預測範例
-- [x] 撰寫完整 Model Card
-- [x] 建立並執行 `08_prediction_demo.ipynb`
-- [x] 撰寫 Stage 8 中文說明文件
-
-### Prediction Interface Scope
-
-目前介面可重現 2023 歷史 holdout prediction。真正未來預測必須提供更新至 target 前一小時、相同定義的 transfer-demand history，以及 target 時點可取得的 weather forecast。介面輸出是 hourly transfer-related borrowing demand ranking，不能直接當成補車數量、缺車風險或 30／60 分鐘可用車數。
-
-### Stage 9 Deliverables
-
-- [x] 建立獨立 Vinext／React 歷史預測儀表板
-- [x] 建立 10 個代表性 holdout 時段設定
-- [x] 建立可重複執行的 dashboard data builder
-- [x] 重新驗證模型 SHA-256、feature schema 與 168 小時歷史覆蓋
-- [x] 顯示 100 站預測、actual 與 absolute error
-- [x] 建立站點搜尋、完整表格與 responsive layout
-- [x] 顯示 model comparison、rolling-origin 與 feature importance
-- [x] 建立專屬社群分享圖與 Open Graph／X metadata
-- [x] 建立 dashboard lint、production build 與 SSR 測試
-- [x] 撰寫 Stage 9 中文說明文件
-
-### Dashboard Scope
-
-Stage 9 儀表板只展示 2023 年 12 月 hourly transfer-related borrowing demand 的歷史 holdout 回測。畫面中的 actual 只在預測後附加，未進入 target-hour features。此成果不是即時可借車數、缺車預警或調度建議；真正的 30／60 分鐘 station availability 模型仍須等待至少 7 天且包含平日與週末的即時快照。
+目前不要優先進行：Deep Learning、Optimization、重做 Streamlit，或把歷史 Dashboard 改稱 Live prediction。
