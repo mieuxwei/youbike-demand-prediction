@@ -17,8 +17,8 @@ targets:
   dashboard is a historical holdout demonstration of this track.
 - **Track B — live bike-availability forecasting:** will predict available
   bikes 30 or 60 minutes ahead and later study shortage/full-station risk. Its
-  cloud data-collection infrastructure is implemented, but production deployment
-  and multi-day data accumulation are still in progress. No Track B prediction
+  cloud data-collection infrastructure is deployed and multi-day data
+  accumulation is in progress. No Track B prediction
   model or optimization result is claimed yet.
 
 Track A hourly demand is not interchangeable with Track B future station
@@ -129,15 +129,18 @@ Trigger, and D1. It validates the confirmed official API schema, stores UTC
 station-time rows with database-level duplicate prevention, retries bounded API
 failures, logs every run, and exposes a protected paginated CSV export.
 
-The cloud source is under `cloudflare/track-b-collector/`. It is ready for owner
-deployment but is **not running yet** because a real Cloudflare login, D1 database
-ID, and export secret must be created by the repository owner. Follow the exact
-[Stage 11 deployment checklist](docs/STAGE_11_TRACK_B_CLOUD_COLLECTION.md).
+The cloud source is under `cloudflare/track-b-collector/`. The production Worker
+is running at `https://youbike-track-b-collector.mieuxander.workers.dev`, with a
+`*/5 * * * *` Cron Trigger and D1 storage. The first scheduled run on 2026-08-21
+wrote 1,794 station rows successfully. Multi-day accumulation is still in
+progress, and the repository owner must still configure `EXPORT_TOKEN` before
+using the protected CSV export. See the
+[Stage 11 deployment record](docs/STAGE_11_TRACK_B_CLOUD_COLLECTION.md).
 
 After deployment, export a date range for Python with:
 
 ```bash
-export TRACK_B_EXPORT_URL="https://<worker>.workers.dev/export.csv"
+export TRACK_B_EXPORT_URL="https://youbike-track-b-collector.mieuxander.workers.dev/export.csv"
 export TRACK_B_EXPORT_TOKEN="<secret>"
 python src/export_track_b.py \
   --start 2026-08-21 \

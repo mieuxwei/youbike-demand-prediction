@@ -4,7 +4,7 @@
 
 本階段只建立 Track B 的雲端資料蒐集、儲存、品質控管、查詢與匯出基礎，不訓練新模型，也不修改 Track A 的 HGB／XGBoost 或歷史 Dashboard。
 
-程式碼與 D1 schema 已完成並通過本機測試；正式 Cloudflare Worker、D1 與 Cron 尚未部署，因為建立資源與綁定必須由 repository owner 登入自己的 Cloudflare 帳號完成。在正式部署並實際累積資料以前，仍不可宣稱 30／60 分鐘 availability prediction、shortage prediction 或 optimization 已完成。
+程式碼與 D1 schema 已完成並通過本機測試；正式 Cloudflare Worker、D1 與 Cron 已於 2026-08-21 部署。第一輪排程在 15:50:02（Asia/Taipei）成功寫入 1,794 個站點。資料仍在累積，`EXPORT_TOKEN` 尚待 repository owner 設定；仍不可宣稱 30／60 分鐘 availability prediction、shortage prediction 或 optimization 已完成。
 
 ## 2. D1 與 R2 評估
 
@@ -159,7 +159,7 @@ Worker 提供 bearer-token 保護的 `/export.csv`，支援：
 範例：
 
 ```bash
-export TRACK_B_EXPORT_URL="https://<worker>.workers.dev/export.csv"
+export TRACK_B_EXPORT_URL="https://youbike-track-b-collector.mieuxander.workers.dev/export.csv"
 export TRACK_B_EXPORT_TOKEN="<secret>"
 python src/export_track_b.py \
   --start 2026-08-21 \
@@ -167,20 +167,22 @@ python src/export_track_b.py \
   --output data/processed/track_b_week_1.csv
 ```
 
-## 11. 部署前需要使用者完成的 Cloudflare 操作
+## 11. 正式部署紀錄與剩餘使用者操作
 
-目前刻意停在 credential boundary，沒有假設 account ID、D1 ID 或 secret。
+已由 repository owner 完成登入與 OAuth 授權；D1 Database ID、migration、Worker 與 Cron 已正式設定。沒有自行產生或保存任何 secret。
 
-1. 登入 Cloudflare Dashboard。
-2. 開啟 **Storage & databases → D1 SQL database → Create database**。
-3. Database name 輸入 `youbike-track-b-live`，建立後複製 Database ID。
-4. D1 Database ID 已寫入 `cloudflare/track-b-collector/wrangler.jsonc`，無須再次修改。
-5. 在 `cloudflare/track-b-collector/` 安裝依賴並執行 `pnpm exec wrangler login`；瀏覽器出現授權頁時由本人確認。
-6. 執行 `pnpm run db:migrate:remote` 套用兩張表與索引。
-7. 執行 `pnpm run deploy`。Wrangler 會依設定同時建立 `*/5 * * * *` Cron Trigger。
-8. 產生一個長且隨機的 export token，執行 `pnpm exec wrangler secret put EXPORT_TOKEN`，依提示貼入；不要把 token 寫進檔案或 Git。
-9. 回到 Cloudflare **Workers & Pages → youbike-track-b-collector → Triggers**，確認 Cron 顯示 `*/5 * * * *`。
-10. 等待至少 5–15 分鐘後查看 `/health`、Worker Logs 與 D1 Console：
+已完成：
+
+1. D1 `youbike-track-b-live` 已建立並套用 `0001_track_b_live.sql`，共 6 個 schema commands。
+2. Worker 已部署至 `https://youbike-track-b-collector.mieuxander.workers.dev`。
+3. Cron 已建立為 `*/5 * * * *`。
+4. `/health` 已驗證第一輪排程成功：scheduled time `2026-08-21T07:50:02.000Z`、1,794 stations、1,794 inserted rows、1 attempt、無錯誤。
+
+仍需 owner 完成：
+
+1. 產生一個長且隨機的 export token，執行 `pnpm exec wrangler secret put EXPORT_TOKEN`，依提示貼入；不要把 token 寫進檔案、對話或 Git。
+2. 設定後執行一次受保護 `/export.csv` smoke test。
+3. 持續查看 `/health`、Worker Logs 與 D1 Console：
 
 ```sql
 SELECT * FROM collection_runs ORDER BY scheduled_time DESC LIMIT 10;
