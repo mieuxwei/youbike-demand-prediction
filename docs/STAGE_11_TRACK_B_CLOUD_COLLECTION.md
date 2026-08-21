@@ -174,7 +174,7 @@ python src/export_track_b.py \
 1. 登入 Cloudflare Dashboard。
 2. 開啟 **Storage & databases → D1 SQL database → Create database**。
 3. Database name 輸入 `youbike-track-b-live`，建立後複製 Database ID。
-4. 將 `cloudflare/track-b-collector/wrangler.jsonc` 的 `REPLACE_WITH_D1_DATABASE_ID` 換成真實 ID。
+4. D1 Database ID 已寫入 `cloudflare/track-b-collector/wrangler.jsonc`，無須再次修改。
 5. 在 `cloudflare/track-b-collector/` 安裝依賴並執行 `pnpm exec wrangler login`；瀏覽器出現授權頁時由本人確認。
 6. 執行 `pnpm run db:migrate:remote` 套用兩張表與索引。
 7. 執行 `pnpm run deploy`。Wrangler 會依設定同時建立 `*/5 * * * *` Cron Trigger。

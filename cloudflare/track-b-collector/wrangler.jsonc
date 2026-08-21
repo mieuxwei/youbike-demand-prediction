@@ -11,7 +11,7 @@
     {
       "binding": "DB",
       "database_name": "youbike-track-b-live",
-      "database_id": "REPLACE_WITH_D1_DATABASE_ID",
+      "database_id": "c7954c1a-4f80-4415-adf0-db94de6e9644",
       "migrations_dir": "migrations"
     }
   ],
