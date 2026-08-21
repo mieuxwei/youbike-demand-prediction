@@ -2,7 +2,7 @@
 
 **Date:** 2026-08-21
 
-**Current Stage:** Stage 11 — Track B Cloud Live Data Collection Infrastructure
+**Current Stage:** Stage 12 — Track A Feature-group Ablation + Complete Error Analysis
 
 **Deployment status:** Cloudflare D1／Worker／Cron production deployment active; consecutive scheduled snapshots succeeded. `EXPORT_TOKEN` is configured and unauthorized export protection is verified.
 
@@ -10,7 +10,7 @@
 
 目前專案已有一條成熟的歷史需求研究線與一條仍在累積資料的即時 availability 研究線。接手者必須保持兩者的 target、資料、評估與對外說法分離。
 
-- **Track A：歷史轉乘需求預測** — 已完成 2023 全年資料、天氣、Naive／Ridge／HGB／XGBoost、rolling-origin validation、預測介面與 Interactive Web Demo；下一步是完整 ablation 與完整 error analysis。
+- **Track A：歷史轉乘需求預測** — 已完成 2023 全年資料、天氣、Naive／Ridge／HGB／XGBoost、rolling-origin validation、feature-group ablation、完整 error analysis、預測介面與 Interactive Web Demo；下一步是整合 research summary。
 - **Track B：即時可用車／缺車風險** — 已完成本機 pipeline 並正式部署 Cloudflare Worker + Cron + D1；正在累積多日資料，尚未開始正式建模。
 - **Deep Learning 與 Optimization** — 尚未開始；Optimization 不能使用 Track A demand 直接當 shortage。
 
@@ -37,7 +37,8 @@
 - XGBoost with weather；相同 scope 與時間切分，validation 選參數。
 - 三段 expanding-window rolling-origin evaluation。
 - Permutation importance。
-- Station-level 與 hour-level error reports。
+- 固定參數 HGB 的 6 組 leave-one-feature-group-out ablation 與 official day-off 增量檢查。
+- Station、hour、weekday、尖離峰、需求層級、weather、official day type、daily 與 worst-case error reports。
 
 ### Inference and presentation
 
@@ -98,7 +99,7 @@ Rolling-origin HGB folds 的 MAE 為 1.636、1.592、1.606；XGBoost folds 為 1
 
 ## 5. Ablation 與 Error Analysis 狀態
 
-### 已完成部分
+### 已完成
 
 - Ridge：with weather vs without weather。
 - HGB：with weather vs without weather。
@@ -107,14 +108,11 @@ Rolling-origin HGB folds 的 MAE 為 1.636、1.592、1.606；XGBoost folds 為 1
 - Hour-level error analysis；17:00、18:00 與 08:00 等尖峰仍較難預測。
 - Rolling-origin stability evaluation。
 - XGBoost validation-only tuning、holdout comparison、permutation importance 與 100 筆 worst cases。
+- 固定 `deeper` HGB 參數的 station／calendar／immediate／daily／weekly／weather feature-group ablation。
+- 行政院人事行政總處 2023 政府機關辦公日曆定義與增量實驗；validation/test 方向不一致，因此不加入主模型。
+- HGB 100 筆 worst cases、daily errors 與統一情境比較。
 
-### 尚待完成
-
-- Holiday feature 的可靠來源、定義與 ablation。
-- 移除主要 historical lag groups 的 ablation。
-- Worst prediction cases。
-- 天氣條件、假日、尖峰／離峰、高／低需求站的統一情境比較。
-- 大型活動或交通事件只能在取得可信資料後分析，不得根據誤差自行猜測原因。
+大型活動或交通事件仍沒有可信資料，不得根據誤差自行猜測原因。
 
 ## 6. 已知限制
 
@@ -133,7 +131,7 @@ Rolling-origin HGB folds 的 MAE 為 1.636、1.592、1.606；XGBoost folds 為 1
 
 | Track | 狀態 | 下一個有效成果 |
 |---|---|---|
-| Track A：歷史轉乘需求 | Naive／Ridge／HGB／XGBoost 與展示已完成 | 完整 ablation／error analysis + research summary |
+| Track A：歷史轉乘需求 | Naive／Ridge／HGB／XGBoost、ablation、完整 error analysis 與展示已完成 | Consolidated research summary |
 | Track B：即時 availability／risk | 雲端 collector 已部署；資料累積中、仍不足以建模 | 持續累積並做 coverage／gap audit；需要時做授權 export smoke test |
 | Deep Learning | 未開始 | Track A 研究鏈完成後再決定是否執行 |
 | Optimization | 未開始 | Track B 有效預測與營運限制定義完成後才設計 |
@@ -143,7 +141,7 @@ Rolling-origin HGB folds 的 MAE 為 1.636、1.592、1.606；XGBoost folds 為 1
 1. **Track B：持續監控。** `EXPORT_TOKEN` 已生效；需要匯出時由 owner 在本機安全輸入 token，完成授權 CSV export smoke test。
 2. **Track B：持續蒐集 snapshots。** 7 天做初步可行性、14 天比較平假日、28 天作為第一版正式模型建議最低目標；記錄中斷與資料缺口。
 3. **Track B：重新做 coverage audit。** 只有 30／60 分鐘 targets 足夠後，才定義 baseline 與 time split。
-4. **Track A：完成 ablation／error analysis／research summary。** 恢復 Track A 時沿用現有 HGB／XGBoost 結果，不重做已完成模型。
+4. **Track A：完成 research summary。** 沿用現有 HGB／XGBoost／ablation／error results，不重做已完成模型。
 5. **延後 Deep Learning。** 等 ablation、error analysis 完成後再決定是否有比較價值。
 6. **延後 Optimization。** 不得以 Track A hourly demand 直接推導缺車或調度。
 7. **沿用現有 Web Demo。** Streamlit 不是必要工作；不要為符合舊計畫重做前端。
@@ -226,7 +224,7 @@ Cloudflare D1 migration、Worker 與 `*/5 * * * *` Cron 已正式啟用。Produc
 
 ### Known limitations
 
-1. 雲端資料只有剛開始的單一 snapshot，仍不足以建立 30／60 分鐘 target 或模型。
+1. 雲端資料仍在第一天累積，尚不足以建立 30／60 分鐘 target 或模型。
 2. 5 分鐘 Cron 不能保證無抖動；必須以實際 gap audit 判斷 target coverage。
 3. API station count 會變動，不可固定為 1,790。
 4. 28 天估計約 14.43M rows、約 2.36 GiB SQLite planning size；Cloudflare 實際用量與帳號方案需由 Console 確認。
@@ -238,7 +236,64 @@ Cloudflare D1 migration、Worker 與 `*/5 * * * *` Cron 已正式啟用。Produc
 
 Collector 持續執行；需要匯出時由 owner 在本機安全輸入 token 完成授權 smoke test。7 天後做第一輪 coverage／gap audit，但 collector 不停止；14／28 天再逐步進入 Track B 資料研究。不要自動開始新模型 Stage。
 
-## 11. 交接時應更新的欄位
+## 11. Stage 12 最新交接紀錄
+
+### Track A Status
+
+- 固定沿用 Stage 7 validation 選出的 HGB `deeper` 參數，不使用 test 調參。
+- 完整 HGB 精確重現 2023 年 12 月 holdout：MAE 1.575、RMSE 2.549、R² 0.794。
+- 8 個 variants、16 次 fit 已完成；6 組 feature-group removal 加 full 與 full + official day off。
+- Test MAE 退化排序：calendar +10.44%、daily history +3.25%、station identity +2.80%、immediate history +2.22%、weather +1.69%、weekly history +0.70%。
+- Official day-off flag 的 validation MAE 改善 0.24%，test MAE 惡化 0.43%；證據不一致，不加入主模型。
+- Evening peak MAE 2.631、morning peak 2.267、off peak 1.204；high／medium／low station tiers 為 2.255／1.384／1.065。
+- Actual demand ≥10 的 rows MAE 4.231 且平均偏低估；最大個別 absolute error 41.122。
+
+### Track B Status
+
+Cloudflare Worker + D1 + `*/5 * * * *` Cron 持續獨立運作；本階段沒有修改、重新部署或啟動 Track B 模型。
+
+### New files
+
+- `config/track_a_analysis.json`
+- `src/track_a_analysis.py`
+- `src/run_track_a_analysis.py`
+- `tests/test_track_a_analysis.py`
+- `results/track_a_ablation_metrics.csv`
+- `results/track_a_ablation_test_summary.csv`
+- `results/track_a_error_by_context.csv`
+- `results/track_a_station_errors_complete.csv`
+- `results/track_a_daily_errors.csv`
+- `results/track_a_worst_cases.csv`
+- `results/track_a_analysis_summary.json`
+- `docs/STAGE_12_FEATURE_ABLATION_ERROR_ANALYSIS.md`
+
+### Modified files
+
+- `PROJECT_PLAN.md`
+- `README.md`
+- `HANDOFF.md`
+- `docs/MODEL_CARD.md`
+
+### Test results
+
+- 完整 repository tests：48 passed。
+- 完整分析 runner：8 variants、16 fits 成功。
+- Full HGB holdout metrics 與既有 Stage 7 完全一致。
+- Sites／Dashboard source 未變更，因此本階段不需要重新 build 或 deploy Dashboard。
+
+### Known limitations
+
+1. Ablation 差異描述模型對資訊群的依賴，不是因果效果。
+2. DGPA 行事曆代表政府行政機關，不代表所有企業、學校或旅次目的。
+3. 12 月 test 沒有特殊 weekday holiday／weekend makeup workday，holiday test evidence 有限。
+4. 雨勢、溫度與需求量組成不同，情境 MAE 不可直接解讀成天氣因果。
+5. 沒有 event／transit disruption 資料，worst-case 原因不得臆測。
+
+### Next recommended step
+
+整理 Track A consolidated research summary，不新增 Random Forest、LSTM 或 Optimization。Track B collector 繼續累積，滿 7 天後另做 coverage／gap audit。
+
+## 12. 交接時應更新的欄位
 
 每次階段性交接至少記錄：
 

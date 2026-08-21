@@ -1,0 +1,70 @@
+{
+  "target": "borrow_count",
+  "target_scope": "hourly transfer-related borrowing demand",
+  "station_count": 100,
+  "train_rows": 638098,
+  "validation_rows": 146400,
+  "test_rows": 74282,
+  "candidate": {
+    "candidate": "deeper",
+    "learning_rate": 0.05,
+    "max_iter": 200,
+    "max_leaf_nodes": 63,
+    "min_samples_leaf": 40,
+    "l2_regularization": 1.0
+  },
+  "selection_rule": "Fixed previously selected HGB candidate; ablations do not tune on test.",
+  "official_calendar": {
+    "name": "112年中華民國政府行政機關辦公日曆表",
+    "provider": "行政院人事行政總處",
+    "dataset_page": "https://data.gov.tw/dataset/14718",
+    "source_url": "https://www.dgpa.gov.tw/FileConversion?filename=dgpa%2Ffiles%2F202407%2Fdd89fe8c-25f5-4035-a31e-7c14b44a74d7.csv&name=112%E5%B9%B4%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E6%94%BF%E5%BA%9C%E8%A1%8C%E6%94%BF%E6%A9%9F%E9%97%9C%E8%BE%A6%E5%85%AC%E6%97%A5%E6%9B%86%E8%A1%A8.csv&nfix=",
+    "source_sha256": "6cdc13b2e33a38abeabf3ae1e31555f828f2f0f7f9263e531fb36bba531dacea",
+    "source_rows": 365,
+    "weekday_days_off": [
+      "2023-01-02",
+      "2023-01-20",
+      "2023-01-23",
+      "2023-01-24",
+      "2023-01-25",
+      "2023-01-26",
+      "2023-01-27",
+      "2023-02-27",
+      "2023-02-28",
+      "2023-04-03",
+      "2023-04-04",
+      "2023-04-05",
+      "2023-06-22",
+      "2023-06-23",
+      "2023-09-29",
+      "2023-10-09",
+      "2023-10-10"
+    ],
+    "weekend_workdays": [
+      "2023-01-07",
+      "2023-02-04",
+      "2023-02-18",
+      "2023-03-25",
+      "2023-06-17",
+      "2023-09-23"
+    ],
+    "scope_note": "Government administrative office calendar; it is a reproducible day-off proxy, not a claim about every employer, school, or individual trip purpose."
+  },
+  "context_thresholds_derived_from_training_only": {
+    "rainy_hour_training_median_mm": 0.2,
+    "training_temperature_q25_c": 19.1,
+    "training_temperature_q75_c": 28.0
+  },
+  "full_test_metrics": {
+    "mae": 1.5747426189106093,
+    "rmse": 2.5487425907864982,
+    "r2": 0.7942066182333527
+  },
+  "lowest_test_mae_variant_for_analysis_only": "full",
+  "limitations": [
+    "Ablation holdout differences describe feature dependence; they are not causal effects.",
+    "The DGPA calendar represents government administrative offices, not every employer or school.",
+    "Weather uses historical reanalysis; live forecasting would require contemporaneously available forecasts.",
+    "Event and transit-disruption data are unavailable, so worst-case causes are not inferred."
+  ]
+}

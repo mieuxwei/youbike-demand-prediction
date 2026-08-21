@@ -62,6 +62,8 @@
 - Histogram Gradient Boosting（HGB）without weather。
 - Histogram Gradient Boosting（HGB）with weather。
 - XGBoost with weather，使用相同 scope 與時間切分公平比較。
+- 固定參數 HGB feature-group ablation 與官方政府機關 day-off 增量檢查。
+- Worst cases、尖離峰、站點需求層級、星期、天氣、放假類型與 daily error analysis。
 - 三段 expanding-window rolling-origin validation。
 - Permutation importance。
 - Station-level 與 hour-level error analysis。
@@ -102,8 +104,8 @@
 | HGB | 已完成 | 有／無天氣版本，現有最佳模型 |
 | XGBoost | 已完成 | 相同 target、站點、特徵與時間切分；HGB 仍較佳 |
 | Random Forest | 選配 | 不是進入下一階段的必要條件 |
-| Ablation Study | 部分完成 | 已比較 Ridge、HGB 的有／無天氣版本；holiday 與移除主要 lag feature groups 尚未完成 |
-| Error Analysis | 部分完成 | 已有 station／hour errors 與尖峰觀察；極端天氣、假日、worst cases 等完整情境分析尚未完成 |
+| Ablation Study | 已完成 | 固定 HGB 參數移除 6 個 feature groups；calendar 移除造成最大 MAE 退化 10.44%，holiday 增量方向不一致 |
+| Error Analysis | 已完成 | 已涵蓋 worst cases、hour／weekday、尖離峰、站點需求層級、天氣、政府機關放假類型與 daily errors |
 | Deep Learning | 未開始 | 須待 Track A 傳統模型研究鏈完整後再評估必要性 |
 | Track B availability model | 未開始訓練 | 等待多日連續快照與 target coverage |
 | Track B Cloud Live Collector | 已部署／資料累積中 | Worker + `*/5` Cron + D1 + validation／retry／logging；連續三輪成功、5,382 rows，CSV export secret 已生效 |
@@ -118,13 +120,12 @@
 2. `EXPORT_TOKEN` 與未授權拒絕已驗證；未來匯出時由 owner 在本機安全輸入 token，完成授權下載 smoke test。
 3. 30／60 分鐘 target coverage 足夠以前，不開始 availability／risk model，也不宣稱 live prediction 完成。
 
-### Priority 2 — 完成 Track A 的 Ablation 與 Error Analysis
+### Priority 2 — 完成 Track A Research Summary
 
-1. XGBoost 已使用相同 top-100 scope、feature definition、time split、validation、holdout test 與 rolling-origin 完成比較；HGB 仍保留為主模型。
-2. 完成尚缺的 ablation；新增 holiday feature 前必須先確認可靠資料來源與定義。
-3. 擴充 error analysis，優先處理 worst cases、尖峰／離峰、高／低需求站、天氣條件與假日；沒有資料支持的事件不得自行推論。
-4. Random Forest 只在比較價值明確且資源允許時補做，不是完成 Track A 的必要條件。
-5. 完成 Track A 研究摘要，忠實記錄 HGB 略優於 XGBoost。
+1. Feature-group ablation 與完整 error analysis 已完成；維持 HGB 主模型與既有 feature schema。
+2. 撰寫 Track A 研究摘要，整合 Naive／Ridge／HGB／XGBoost、rolling-origin、ablation 與限制。
+3. 忠實記錄 holiday flag 沒有一致改善，且不得用 worst cases 猜測事件原因。
+4. Random Forest 不再是必要項；Deep Learning 只在研究問題與資源價值明確時重新評估。
 
 ### Priority 3 — 平行累積 Track B 資料
 
@@ -174,7 +175,7 @@ Track A 可以作為長期需求背景訊號或候選特徵，但必須先經驗
 ## 10. Current Priority
 
 ```text
-Track B: Owner Deploys Cloud Worker + D1 + Cron
+Track B: Cloud Worker + D1 + Cron Running
         ↓
 Continue Multi-day Snapshot Collection
         ↓
@@ -184,7 +185,9 @@ Availability Baseline Only When Data Is Ready
 
 Track A: Preserve Existing Models and Dashboard
         ↓
-Complete Ablation + Error Analysis When Resumed
+Feature Ablation + Error Analysis Complete
+        ↓
+Write Consolidated Research Summary
 ```
 
 目前不要優先進行：Deep Learning、Optimization、重做 Streamlit，或把歷史 Dashboard 改稱 Live prediction。

@@ -66,6 +66,14 @@
 
 模型在 17:00–18:00 與高需求捷運站的誤差較高。這些指標不能外推至未列入的站點、其他年份或全體 YouBike 旅次。
 
+## Feature-group ablation 與情境誤差
+
+Stage 12 以固定 `deeper` HGB 參數逐一移除資訊群，沒有使用 test 調參。12 月 MAE 退化最大的是 calendar（+10.44%），其次為 daily history（+3.25%）、station identity（+2.80%）與 immediate history（+2.22%）；weather（+1.69%）與 weekly history（+0.70%）提供較小增量。
+
+行政院人事行政總處 2023 政府機關放假日 flag 在 validation MAE 小幅改善 0.24%，但 test MAE 惡化 0.43%，而且 12 月沒有特殊 weekday holidays，因此不加入主模型。
+
+完整情境分析顯示 evening peak MAE 2.631、morning peak 2.267、off peak 1.204；high-demand station tier MAE 2.255，低需求 tier 為 1.065。Actual demand ≥10 的 rows MAE 4.231 且整體偏向低估。這些結果描述誤差集中處，不表示任何 feature 或情境具有因果效果。
+
 ## XGBoost challenger 比較
 
 Stage 10 以相同 Track A target、100 站、feature schema 與時間切分建立 XGBoost challenger。其 12 月 holdout MAE 為 1.597、RMSE 2.580、R² 0.789；三段 rolling-origin 平均 MAE 為 1.647。兩組評估都略遜於本 HGB，因此沒有替換目前主模型。這項結論只表示在目前受控實驗中 HGB 較佳，不代表 HGB 在所有資料或參數設定下一定優於 XGBoost。

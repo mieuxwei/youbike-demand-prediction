@@ -285,6 +285,23 @@ requires the OpenMP runtime (`brew install libomp`). See the executed
 [XGBoost notebook](notebooks/09_xgboost_comparison.ipynb) and
 [Stage 10 guide](docs/STAGE_10_XGBOOST_COMPARISON.md).
 
+## Feature-group Ablation and Error Analysis
+
+Run the fixed-parameter HGB ablation and complete Track A error analysis:
+
+```bash
+python src/run_track_a_analysis.py
+```
+
+Removing calendar features causes the largest December MAE increase (+10.44%),
+followed by daily history (+3.25%), station identity (+2.80%), and immediate
+history (+2.22%). Weather and weekly history provide smaller but consistent
+incremental value. An official DGPA government-office day-off flag improves
+validation MAE slightly but worsens test MAE, so it is not added to the primary
+model. The error report confirms that evening peak, morning peak, high-demand
+stations, and actual demand of 10 or more remain the hardest segments. See the
+[Stage 12 analysis](docs/STAGE_12_FEATURE_ABLATION_ERROR_ANALYSIS.md).
+
 ## Prediction Interface
 
 Generate a ranked prediction for one target hour:
@@ -325,13 +342,13 @@ redistribution recommendation. See the
 
 🚧 **In development**
 
-Milestones 1 and 2 plus Stage 3 through 11 source implementation are complete. The repository now
+Milestones 1 and 2 plus Stage 3 through 12 are complete. The repository now
 includes reproducible API samples, validated collection and cleaning pipelines,
 leakage-aware time-series feature engineering, automated tests, quality reports,
 official full-year 2023 transfer-demand and weather analysis, a chronological
-hourly Ridge baseline, rolling-origin validated HGB and XGBoost comparisons, and
+hourly Ridge baseline, rolling-origin validated HGB and XGBoost comparisons,
+feature-group ablation, complete contextual error analysis, and
 an integrity-checked prediction interface with nine executed notebooks and an
-interactive historical dashboard, and a tested Cloudflare Worker + Cron + D1
-collector design with protected CSV export. The cloud collector still requires
-owner deployment, and multi-day live snapshot coverage, Track B modeling, deep
+interactive historical dashboard, and a deployed Cloudflare Worker + Cron + D1
+collector with protected CSV export. Multi-day live snapshot coverage, Track B modeling, deep
 learning, and optimization remain incomplete.
