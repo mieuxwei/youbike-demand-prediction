@@ -133,8 +133,8 @@ The cloud source is under `cloudflare/track-b-collector/`. The production Worker
 is running at `https://youbike-track-b-collector.mieuxander.workers.dev`, with a
 `*/5 * * * *` Cron Trigger and D1 storage. The first scheduled run on 2026-08-21
 wrote 1,794 station rows successfully. Multi-day accumulation is still in
-progress, and the repository owner must still configure `EXPORT_TOKEN` before
-using the protected CSV export. See the
+progress. `EXPORT_TOKEN` is configured and unauthorized export requests are
+rejected; the token itself is never stored in Git. See the
 [Stage 11 deployment record](docs/STAGE_11_TRACK_B_CLOUD_COLLECTION.md).
 
 After deployment, export a date range for Python with:

@@ -4,7 +4,7 @@
 
 本階段只建立 Track B 的雲端資料蒐集、儲存、品質控管、查詢與匯出基礎，不訓練新模型，也不修改 Track A 的 HGB／XGBoost 或歷史 Dashboard。
 
-程式碼與 D1 schema 已完成並通過本機測試；正式 Cloudflare Worker、D1 與 Cron 已於 2026-08-21 部署。第一輪排程在 15:50:02（Asia/Taipei）成功寫入 1,794 個站點。資料仍在累積，`EXPORT_TOKEN` 尚待 repository owner 設定；仍不可宣稱 30／60 分鐘 availability prediction、shortage prediction 或 optimization 已完成。
+程式碼與 D1 schema 已完成並通過本機測試；正式 Cloudflare Worker、D1 與 Cron 已於 2026-08-21 部署。15:50、15:55、16:00（Asia/Taipei）三輪排程均成功，累積 3 snapshots、5,382 rows。`EXPORT_TOKEN` 已設定且未授權 export 會回傳 HTTP 401；資料仍在累積，仍不可宣稱 30／60 分鐘 availability prediction、shortage prediction 或 optimization 已完成。
 
 ## 2. D1 與 R2 評估
 
@@ -169,7 +169,7 @@ python src/export_track_b.py \
 
 ## 11. 正式部署紀錄與剩餘使用者操作
 
-已由 repository owner 完成登入與 OAuth 授權；D1 Database ID、migration、Worker 與 Cron 已正式設定。沒有自行產生或保存任何 secret。
+已由 repository owner 完成登入與 OAuth 授權；D1 Database ID、migration、Worker、Cron 與 `EXPORT_TOKEN` 已正式設定。Secret 值沒有被讀回、寫入文件或保存於 Git。
 
 已完成：
 
@@ -178,11 +178,12 @@ python src/export_track_b.py \
 3. Cron 已建立為 `*/5 * * * *`。
 4. `/health` 已驗證第一輪排程成功：scheduled time `2026-08-21T07:50:02.000Z`、1,794 stations、1,794 inserted rows、1 attempt、無錯誤。
 
-仍需 owner 完成：
+已完成的 export security check：
 
-1. 產生一個長且隨機的 export token，執行 `pnpm exec wrangler secret put EXPORT_TOKEN`，依提示貼入；不要把 token 寫進檔案、對話或 Git。
-2. 設定後執行一次受保護 `/export.csv` smoke test。
-3. 持續查看 `/health`、Worker Logs 與 D1 Console：
+1. `EXPORT_TOKEN` 已以 Cloudflare secret text 保存。
+2. 未帶 Bearer token 的 `/export.csv` 已驗證回傳 HTTP 401；不再是 secret 未生效時的 HTTP 503。
+3. 因 Cloudflare secret 無法讀回，授權下載 smoke test 留待 owner 在本機安全提供 `TRACK_B_EXPORT_TOKEN` 時執行，不得把 token 貼入對話或 Git。
+4. 持續查看 `/health`、Worker Logs 與 D1 Console：
 
 ```sql
 SELECT * FROM collection_runs ORDER BY scheduled_time DESC LIMIT 10;

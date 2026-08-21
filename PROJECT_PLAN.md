@@ -5,7 +5,7 @@
 本文件以目前 repository 的實際成果為基準，取代把專案描述成「準備建立 Baseline」的舊計畫。專案分為兩條目標、資料與評估方式不同的研究線；兩者不可共用 target，也不可把其中一條的輸出直接解讀成另一條的成果。
 
 - **Track A：歷史轉乘需求預測** — 已完成可重現的主要研究與展示鏈。
-- **Track B：Cloud Live Data Collection／即時可用車研究** — Cloudflare Worker + Cron + D1 已正式部署並自 2026-08-21 持續蒐集；目前仍需累積足夠的連續即時資料，匯出用 `EXPORT_TOKEN` 尚待 owner 設定。
+- **Track B：Cloud Live Data Collection／即時可用車研究** — Cloudflare Worker + Cron + D1 已正式部署並自 2026-08-21 持續蒐集；目前仍需累積足夠的連續即時資料，匯出用 `EXPORT_TOKEN` 已設定。
 
 ## 2. 核心研究定義
 
@@ -45,7 +45,7 @@
 - Repository 內固定樣本為 2 個快照、3,580 rows，主要用於重現清理與特徵流程。
 - 固定樣本的 30／60 分鐘 future target coverage 均為 0%。
 - 曾完成 12 份、約一小時的本機蒐集測試；這仍不足以涵蓋平日、週末與多種需求情境，也不是可用於正式建模的多日資料集。
-- 雲端 collector 已於 2026-08-21 部署；第一輪排程在 15:50:02（Asia/Taipei）成功寫入 1,794 rows。資料仍在累積，`EXPORT_TOKEN` 尚待 owner 設定。
+- 雲端 collector 已於 2026-08-21 部署；15:50、15:55、16:00 三輪排程均成功，累積 3 snapshots、5,382 rows。`EXPORT_TOKEN` 已設定，未授權 export 會正確回傳 HTTP 401。
 - 正式建模前至少要有連續 7 天且包含平日與週末的資料；14–28 天會更有利於涵蓋週間差異。這是資料規劃門檻，不是模型有效性的保證。
 
 ## 4. Track A 目前成果
@@ -106,7 +106,7 @@
 | Error Analysis | 部分完成 | 已有 station／hour errors 與尖峰觀察；極端天氣、假日、worst cases 等完整情境分析尚未完成 |
 | Deep Learning | 未開始 | 須待 Track A 傳統模型研究鏈完整後再評估必要性 |
 | Track B availability model | 未開始訓練 | 等待多日連續快照與 target coverage |
-| Track B Cloud Live Collector | 已部署／資料累積中 | Worker + `*/5` Cron + D1 + validation／retry／logging；第一輪成功寫入 1,794 rows，CSV export token 待設定 |
+| Track B Cloud Live Collector | 已部署／資料累積中 | Worker + `*/5` Cron + D1 + validation／retry／logging；連續三輪成功、5,382 rows，CSV export secret 已生效 |
 | Optimization | 未開始 | 必須建立在 Track B 的有效狀態／風險預測與明確營運限制上 |
 | Interactive Web Demo | 已完成 | React 19 + Vinext + Cloudflare／Sites；歷史回測展示 |
 
@@ -115,7 +115,7 @@
 ### Priority 1 — 監控 Track B Cloud Live Data Collection
 
 1. Worker、D1 migration 與 `*/5 * * * *` Cron 已啟用；持續檢查 Worker logs、`collection_runs` 與 `/health`。
-2. 由 owner 設定 `EXPORT_TOKEN` 後，完成一次受保護 CSV export smoke test。
+2. `EXPORT_TOKEN` 與未授權拒絕已驗證；未來匯出時由 owner 在本機安全輸入 token，完成授權下載 smoke test。
 3. 30／60 分鐘 target coverage 足夠以前，不開始 availability／risk model，也不宣稱 live prediction 完成。
 
 ### Priority 2 — 完成 Track A 的 Ablation 與 Error Analysis

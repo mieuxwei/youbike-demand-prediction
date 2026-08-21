@@ -4,7 +4,7 @@
 
 **Current Stage:** Stage 11 — Track B Cloud Live Data Collection Infrastructure
 
-**Deployment status:** Cloudflare D1／Worker／Cron production deployment active; first scheduled snapshot succeeded. Protected CSV export awaits owner-provided `EXPORT_TOKEN`.
+**Deployment status:** Cloudflare D1／Worker／Cron production deployment active; consecutive scheduled snapshots succeeded. `EXPORT_TOKEN` is configured and unauthorized export protection is verified.
 
 ## 1. 交接摘要
 
@@ -74,7 +74,7 @@
 | 固定樣本 30 分鐘 future target | 0% coverage |
 | 固定樣本 60 分鐘 future target | 0% coverage |
 | 本機蒐集測試 | 12 份、約一小時；不足以作為正式訓練資料 |
-| Cloud live dataset | 2026-08-21 15:50:02（Asia/Taipei）起；首輪 1 snapshot、1,794 rows |
+| Cloud live dataset | 2026-08-21 15:50:02（Asia/Taipei）起；已驗證連續 3 snapshots、5,382 rows |
 | Cloud collector | 已部署；`*/5 * * * *` 排程執行中 |
 | 多日 coverage | 尚未完成 |
 
@@ -134,13 +134,13 @@ Rolling-origin HGB folds 的 MAE 為 1.636、1.592、1.606；XGBoost folds 為 1
 | Track | 狀態 | 下一個有效成果 |
 |---|---|---|
 | Track A：歷史轉乘需求 | Naive／Ridge／HGB／XGBoost 與展示已完成 | 完整 ablation／error analysis + research summary |
-| Track B：即時 availability／risk | 雲端 collector 已部署；資料累積中、仍不足以建模 | 持續累積並做 coverage／gap audit；設定 export token |
+| Track B：即時 availability／risk | 雲端 collector 已部署；資料累積中、仍不足以建模 | 持續累積並做 coverage／gap audit；需要時做授權 export smoke test |
 | Deep Learning | 未開始 | Track A 研究鏈完成後再決定是否執行 |
 | Optimization | 未開始 | Track B 有效預測與營運限制定義完成後才設計 |
 
 ## 8. 下一步優先順序
 
-1. **Track B：完成 export secret。** Owner 設定 `EXPORT_TOKEN`，再完成一次受保護 CSV export smoke test。
+1. **Track B：持續監控。** `EXPORT_TOKEN` 已生效；需要匯出時由 owner 在本機安全輸入 token，完成授權 CSV export smoke test。
 2. **Track B：持續蒐集 snapshots。** 7 天做初步可行性、14 天比較平假日、28 天作為第一版正式模型建議最低目標；記錄中斷與資料缺口。
 3. **Track B：重新做 coverage audit。** 只有 30／60 分鐘 targets 足夠後，才定義 baseline 與 time split。
 4. **Track A：完成 ablation／error analysis／research summary。** 恢復 Track A 時沿用現有 HGB／XGBoost 結果，不重做已完成模型。
@@ -177,7 +177,7 @@ Track A 未重訓、未修改模型 target、artifact 或 metrics。HGB holdout 
 
 - 本機真實資料：12 snapshots、2026-08-20 20:20:14～21:15:23（Asia/Taipei）、約 55 分鐘、每份約 1,790 站。
 - 2026-08-21 單次 schema check：官方 API 回傳 1,794 站，必要欄位全數存在；這只是 schema 驗證，不是正式雲端資料集。
-- 雲端資料：第一輪於 2026-08-21 15:50:02（Asia/Taipei）成功；1 snapshot、1,794 rows、1 attempt、無錯誤，後續由 `*/5 * * * *` Cron 持續累積。
+- 雲端資料：2026-08-21 15:50:02、15:55:02、16:00:02（Asia/Taipei）連續成功；3 snapshots、5,382 rows，每輪皆 1 attempt、無錯誤，後續由 `*/5 * * * *` Cron 持續累積。
 - 30／60 分鐘 future target coverage 仍不足，沒有 Track B 模型 metrics。
 
 ### Cloud architecture
@@ -222,7 +222,7 @@ Track A 未重訓、未修改模型 target、artifact 或 metrics。HGB holdout 
 
 ### Deployment status and user actions required
 
-Cloudflare D1 migration、Worker 與 `*/5 * * * *` Cron 已正式啟用。Production URL 為 `https://youbike-track-b-collector.mieuxander.workers.dev`；`/health` 已驗證第一輪成功。唯一尚未完成的 credential boundary 是 owner 自行產生並設定 `EXPORT_TOKEN`，之後再做受保護 CSV export smoke test。逐步操作見 `docs/STAGE_11_TRACK_B_CLOUD_COLLECTION.md` 第 11 節。
+Cloudflare D1 migration、Worker 與 `*/5 * * * *` Cron 已正式啟用。Production URL 為 `https://youbike-track-b-collector.mieuxander.workers.dev`；`/health` 已驗證連續三輪成功。`EXPORT_TOKEN` 已以 secret text 設定，未授權 export 已驗證回傳 HTTP 401；授權下載測試需由 owner 在本機安全輸入 token。逐步紀錄見 `docs/STAGE_11_TRACK_B_CLOUD_COLLECTION.md` 第 11 節。
 
 ### Known limitations
 
@@ -236,7 +236,7 @@ Cloudflare D1 migration、Worker 與 `*/5 * * * *` Cron 已正式啟用。Produc
 
 ### Next recommended step
 
-Owner 設定 `EXPORT_TOKEN` 並完成一次受保護 CSV export smoke test；collector 持續執行。7 天後做第一輪 coverage／gap audit，但 collector 不停止；14／28 天再逐步進入 Track B 資料研究。不要自動開始新模型 Stage。
+Collector 持續執行；需要匯出時由 owner 在本機安全輸入 token 完成授權 smoke test。7 天後做第一輪 coverage／gap audit，但 collector 不停止；14／28 天再逐步進入 Track B 資料研究。不要自動開始新模型 Stage。
 
 ## 11. 交接時應更新的欄位
 
