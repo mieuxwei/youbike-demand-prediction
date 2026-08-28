@@ -21,6 +21,13 @@ targets:
   accumulation is in progress. No Track B prediction
   model or optimization result is claimed yet.
 
+The authorized seven-day export completed with 3,739,789 rows and no duplicate
+station-time keys or schedule gaps. Active station-row target coverage is
+97.946% at 30 minutes and 97.662% at 60 minutes. A preliminary current-state
+persistence baseline reached test MAE 2.154/3.140 for 30/60 minutes. This is a
+reference baseline, not a learned live model or shortage-risk result; cloud
+collection continues toward the 14/28-day milestones.
+
 Track A hourly demand is not interchangeable with Track B future station
 inventory and must not be used directly as a shortage or redistribution label.
 
@@ -141,7 +148,8 @@ After deployment, export a date range for Python with:
 
 ```bash
 export TRACK_B_EXPORT_URL="https://youbike-track-b-collector.mieuxander.workers.dev/export.csv"
-export TRACK_B_EXPORT_TOKEN="<secret>"
+export TRACK_B_EXPORT_TOKEN="$(security find-generic-password \
+  -a "$USER" -s youbike-track-b-export -w)"
 python src/export_track_b.py \
   --start 2026-08-21 \
   --end 2026-08-27 \
@@ -151,6 +159,28 @@ python src/export_track_b.py \
 Add `--station-id <station_id>` for a single station. Exported timestamps are
 UTC ISO-8601 and must be converted explicitly to `Asia/Taipei` before creating
 calendar features.
+
+After exporting a complete date range, run the station-row coverage audit:
+
+```bash
+python src/audit_track_b.py \
+  --input data/processed/track_b_week_1.csv
+```
+
+This checks duplicate station-time rows, schedule gaps, rows per snapshot, and
+30/60-minute active-station future-target coverage. See the
+[Stage 14 Track B coverage audit](docs/STAGE_14_TRACK_B_FIRST_COVERAGE_AUDIT.md).
+
+Once the audit passes, reproduce the preliminary persistence baseline with:
+
+```bash
+python src/track_b_baseline.py \
+  --input data/processed/track_b_week_1.csv
+```
+
+The baseline uses a chronological five-day train block, one-day validation
+block, and remaining test block, with future labels purged at boundaries. See
+the [Stage 15 baseline record](docs/STAGE_15_TRACK_B_PRELIMINARY_BASELINE.md).
 
 ### Local fallback collector
 
@@ -204,8 +234,8 @@ python src/build_features.py
 
 The pipeline prevents predictor features from looking forward in time and
 writes a coverage audit to `results/feature_coverage.csv`. Current fixed samples
-do not yet contain 30/60-minute targets, so short-term station-availability model
-training has intentionally not started. See the
+do not contain 30/60-minute targets; the separate cloud export now supports the
+preliminary persistence baseline described above. See the
 [Stage 3 history and feature guide](docs/STAGE_3_HISTORY_AND_FEATURES.md).
 
 ## Full-year Historical Demand and Weather
@@ -358,7 +388,7 @@ redistribution recommendation. See the
 
 🚧 **In development**
 
-Milestones 1 and 2 plus Stage 3 through 12 are complete. The repository now
+Milestones 1 and 2 plus Stage 3 through 15 are complete. The repository now
 includes reproducible API samples, validated collection and cleaning pipelines,
 leakage-aware time-series feature engineering, automated tests, quality reports,
 official full-year 2023 transfer-demand and weather analysis, a chronological
@@ -366,5 +396,6 @@ hourly Ridge baseline, rolling-origin validated HGB and XGBoost comparisons,
 feature-group ablation, complete contextual error analysis, and
 an integrity-checked prediction interface with nine executed notebooks and an
 interactive historical dashboard, and a deployed Cloudflare Worker + Cron + D1
-collector with protected CSV export. Multi-day live snapshot coverage, Track B modeling, deep
-learning, and optimization remain incomplete.
+collector with protected CSV export and a seven-day Track B persistence
+baseline. Track B learned modeling, risk classification, deep learning, and
+optimization remain incomplete.

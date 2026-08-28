@@ -1,10 +1,10 @@
 # HANDOFF — YouBike Demand Prediction & Optimization
 
-**Date:** 2026-08-21
+**Date:** 2026-08-28
 
-**Current Stage:** Stage 13 — Track A Consolidated Research Summary Complete
+**Current Stage:** Stage 15 — Track B Seven-Day Audit and Preliminary Persistence Baseline Complete
 
-**Deployment status:** Cloudflare D1／Worker／Cron production deployment active; consecutive scheduled snapshots succeeded. `EXPORT_TOKEN` is configured and unauthorized export protection is verified.
+**Deployment status:** Cloudflare D1／Worker／Cron production deployment active. Seven-day authorized export and station-row audit passed; collector continues toward 14／28 days. `EXPORT_TOKEN` is configured and its matching value is stored in macOS Keychain service `youbike-track-b-export`, not in Git.
 
 ## 1. 交接摘要
 
@@ -352,3 +352,99 @@ Track B collector 繼續累積；滿 7 天時執行第一輪 coverage／gap audi
 - Tests 或 build checks 的實際結果。
 - Known limitations、未完成工作與下一個最小可執行步驟。
 - 需要使用者決定的事項。
+
+## 14. Stage 14 最新交接紀錄
+
+### Track B cloud status（follow-up as of 2026-08-28 21:40 Asia/Taipei）
+
+- Cloud Worker + `*/5 * * * *` Cron + D1 持續執行；不是本機背景程序。
+- 21:35 audit checkpoint 有 2,074 個成功 runs／snapshots、3,721,765 station rows、1,798 distinct stations。
+- 每個 snapshot 有 1,794–1,798 rows，平均 1,794.31。
+- 0 個 failed runs；1 個 run 曾 retry。
+- D1 21:35 查詢 metadata size 為 784,097,280 bytes（約 747.8 MiB）。
+- 只有部署第一天一段 65 分鐘 gap，估計缺少 12 個五分鐘排程；之後沒有大於 5.5 分鐘的 gap。
+- 21:40 的 30／60 分鐘 snapshot-time coverage 為 99.422%／98.892%。這不是模型 metric，也不是完整 active station-row coverage。
+- 部署初期 gap 後的連續資料已有 7.16 天、2,063 snapshots、3,702,031 rows；期間沒有新增 gap，最大間隔 321 秒。
+
+### New files
+
+- `src/audit_track_b.py`
+- `tests/test_audit_track_b.py`
+- `cloudflare/track-b-collector/queries/track_b_coverage_audit.sql`
+- `docs/STAGE_14_TRACK_B_FIRST_COVERAGE_AUDIT.md`
+
+### Modified files
+
+- `src/features.py`（以 `eq(True)` 處理 unmatched active state，消除 pandas downcast warning；target 定義不變）
+- `PROJECT_PLAN.md`
+- `README.md`
+- `HANDOFF.md`
+
+### Validation and remaining owner action
+
+- Remote `/health` 與 D1 read-only queries 已實際執行。
+- 新增 audit tests 驗證 gap／missing-slot、duplicate、required columns 及 30／60 分鐘 active future target alignment。
+- 完整 Python repository tests：51 passed；Track B collector Node tests：9 passed。
+- `track_b_coverage_audit.sql` 已對 production D1 成功執行：5 queries、rows written 0。
+- `EXPORT_TOKEN` 不在目前本機環境中，未讀取或重設 Cloudflare secret；因此全量授權 CSV smoke test 與完整 station-row audit 尚未執行。
+- Owner 應在本機設定 `TRACK_B_EXPORT_TOKEN` 後，執行 `src/export_track_b.py` 與 `src/audit_track_b.py`。Token 不可貼入對話或 commit。
+
+### Decision and next step
+
+目前不開始 Track B baseline。連續 7 天 cloud audit 已通過；下一步是完成授權全量 CSV audit。只有 station-row target coverage 與 chronological split 通過後，才建立 30／60 分鐘 preliminary baseline。Collector 在所有後續研究期間持續運作。
+
+## 15. Stage 15 最新交接紀錄
+
+### Authorized export and audit
+
+- Owner 已明確授權重設 `EXPORT_TOKEN`；secret 值未顯示或寫入 Git。Stage 15 完成後依 owner 要求再次旋轉，Cloudflare authorization 已驗證，matching token 保存於 macOS Keychain service `youbike-track-b-export`。
+- 真實 smoke test 發現長範圍 deep cursor 會造成 HTTP 500；client 新增 page-level transient retry 與預設六小時 bounded windows。
+- 最終成功匯出 3,739,789 rows、377 pages、約 526 MiB；本機 CSV 位於 Git-ignored `data/processed/track_b_week_1.csv`。
+- Dataset 涵蓋 2026-08-21 09:45:02Z 至 2026-08-28 15:20:23Z，2,084 snapshots、1,798 stations、7.233 天。
+- 0 duplicate station-time rows、0 gaps over 5.5 minutes；最大 interval 5.35 分鐘。
+- Active station-row target coverage：30m 97.946%、60m 97.662%。
+
+### Preliminary persistence baseline
+
+- 定義：`prediction(t+h) = available_bikes(t)`；不是 learned model。
+- Chronological blocks：五天 train、一天 validation、其餘約 1.23 天 test。
+- Future target time 必須留在自己的 split；validation→test boundary labels 會 purge。
+- 30m validation：MAE 2.035、RMSE 3.523、R² 0.865。
+- 30m test：MAE 2.154、RMSE 3.626、R² 0.852。
+- 60m validation：MAE 2.947、RMSE 4.856、R² 0.744。
+- 60m test：MAE 3.140、RMSE 5.064、R² 0.712。
+- 沒有 shortage／full classifier、threshold、optimization 或 live Dashboard claim。
+
+### New files
+
+- `src/track_b_baseline.py`
+- `tests/test_track_b_baseline.py`
+- `docs/STAGE_15_TRACK_B_PRELIMINARY_BASELINE.md`
+- `results/track_b_live_audit.json`
+- `results/track_b_live_gaps.csv`
+- `results/track_b_target_coverage.csv`
+- `results/track_b_split_summary.csv`
+- `results/track_b_persistence_metrics.csv`
+- `results/track_b_baseline_summary.json`
+
+### Modified files
+
+- `src/export_track_b.py`
+- `tests/test_export_track_b.py`
+- `PROJECT_PLAN.md`
+- `README.md`
+- `HANDOFF.md`
+- `cloudflare/track-b-collector/README.md`
+- `docs/STAGE_14_TRACK_B_FIRST_COVERAGE_AUDIT.md`
+
+### Next recommended step
+
+Collector 不停止。14 天時從 macOS Keychain 載入 token 後重新匯出，做平日／週末 coverage、分布及 persistence stability comparison；28 天再建立 Track B 第一版 learned regression。新模型必須用 past-only features、validation-only decision，並在同一 test scope 超越 persistence。Risk classification 必須先另行定義 label／threshold。
+
+### Validation
+
+- 完整 Python repository tests：58 passed。
+- Track B collector Node tests：9 passed。
+- Production authorized export：3,739,789 rows／377 pages，成功。
+- Audit 與 baseline runner 均在完整 CSV 上執行成功。
+- 最終 `/health`（2026-08-28 23:40 Asia/Taipei）：success、1,798 stations、2,098 cumulative snapshots、3,764,917 cumulative rows。

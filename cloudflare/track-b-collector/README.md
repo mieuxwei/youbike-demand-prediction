@@ -76,12 +76,18 @@ Use the root Python client to combine all pages atomically:
 
 ```bash
 export TRACK_B_EXPORT_URL="https://<worker>.workers.dev/export.csv"
-export TRACK_B_EXPORT_TOKEN="<secret>"
+export TRACK_B_EXPORT_TOKEN="$(security find-generic-password \
+  -a "$USER" -s youbike-track-b-export -w)"
 python src/export_track_b.py \
   --start 2026-08-21 \
   --end 2026-08-27 \
   --output data/processed/track_b_week_1.csv
 ```
+
+The CLI defaults to bounded six-hour query windows and resets the cursor at
+each boundary. It retries transient network, HTTP 429, and 5xx page failures
+without duplicating already written pages. Authentication errors are not
+retried. Use `--window-hours` only when a different bounded range is justified.
 
 Add `--station-id 500101001` to export one station. Stored and exported times
 are UTC ISO-8601. Convert them to `Asia/Taipei` explicitly in the Python feature

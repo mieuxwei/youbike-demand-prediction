@@ -90,7 +90,7 @@ def _align_station_values(
 
         row_indexes = aligned["row_index"].astype(int)
         current_active = data.loc[row_indexes, "is_active"].fillna(False).to_numpy()
-        matched_active = aligned["matched_is_active"].fillna(False).to_numpy()
+        matched_active = aligned["matched_is_active"].eq(True).to_numpy()
         valid = current_active & matched_active & aligned["matched_time"].notna().to_numpy()
 
         matched_values = aligned["matched_available_bikes"].where(valid)

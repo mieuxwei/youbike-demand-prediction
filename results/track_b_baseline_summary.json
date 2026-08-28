@@ -1,0 +1,15 @@
+{
+  "status": "preliminary_7_day_baseline",
+  "target": "future available_bikes",
+  "model": "current_availability_persistence",
+  "timezone_storage": "UTC",
+  "train_days": 5,
+  "validation_days": 1,
+  "boundaries_utc": {
+    "start": "2026-08-21T09:45:02+00:00",
+    "train_end": "2026-08-26T09:45:02+00:00",
+    "validation_end": "2026-08-27T09:45:02+00:00",
+    "latest": "2026-08-28T15:20:23+00:00"
+  },
+  "boundary_rule": "Future target timestamps must remain inside their evaluation block."
+}

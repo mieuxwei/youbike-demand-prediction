@@ -138,6 +138,9 @@ ipython_config.py
 # Local pnpm content-addressable store
 .pnpm-store/
 
+# Wrangler local account/cache state
+.wrangler/
+
 # pixi
 #   Similar to Pipfile.lock, it is generally recommended to include pixi.lock in version control.
 # pixi.lock
