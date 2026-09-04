@@ -1,0 +1,13 @@
+{
+  "status": "fourteen_day_stability_analysis",
+  "analysis_window": "[start, end)",
+  "timezone_storage": "UTC",
+  "calendar_timezone": "Asia/Taipei",
+  "start_utc": "2026-08-21T09:45:02+00:00",
+  "midpoint_utc": "2026-08-28T09:45:02+00:00",
+  "end_utc_exclusive": "2026-09-04T09:45:02+00:00",
+  "model": "current_availability_persistence",
+  "model_training": false,
+  "boundary_rule": "Future targets must stay inside the same seven-day period.",
+  "interpretation": "Empty/full percentages are observed descriptive states, not risk labels or classifier results."
+}

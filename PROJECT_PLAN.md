@@ -5,7 +5,7 @@
 本文件以目前 repository 的實際成果為基準，取代把專案描述成「準備建立 Baseline」的舊計畫。專案分為兩條目標、資料與評估方式不同的研究線；兩者不可共用 target，也不可把其中一條的輸出直接解讀成另一條的成果。
 
 - **Track A：歷史轉乘需求預測** — 已完成可重現的主要研究與展示鏈。
-- **Track B：Cloud Live Data Collection／即時可用車研究** — Cloudflare Worker + Cron + D1 已正式部署並自 2026-08-21 持續蒐集；2026-08-28 已通過連續 7 天 cloud／station-row audit、授權 CSV smoke test及 30／60 分鐘 preliminary persistence baseline。Collector 繼續累積至 14／28 天，正式 learned model 尚未開始。
+- **Track B：Cloud Live Data Collection／即時可用車研究** — Cloudflare Worker + Cron + D1 已正式部署並自 2026-08-21 持續蒐集；2026-09-05 已完成固定 14 天、7,240,919 rows 的 gap／target audit、平日週末分布與兩週 persistence stability comparison。Collector 繼續累積至 28 天，正式 learned model 尚未開始。
 
 ## 2. 核心研究定義
 
@@ -26,7 +26,7 @@
 
 - Target：`target_available_bikes_30m`、`target_available_bikes_60m`，或後續明確定義的缺車／滿站標籤。
 - 可能輸入：目前可借車數、可還車位、站點容量、時間特徵、只向過去對齊的 lag／rolling 特徵，以及經驗證可取得的外部資訊。
-- 現況：本機蒐集器、清理流程、15／30／60 分鐘 lag／rolling、future target、雲端 Worker／Cron／D1 與 CSV export 已完成；連續七天資料已通過 audit，preliminary persistence baseline 已建立，正式 learned model 仍等待 14／28 天資料。
+- 現況：本機蒐集器、清理流程、15／30／60 分鐘 lag／rolling、future target、雲端 Worker／Cron／D1 與 CSV export 已完成；固定十四天 audit 與 persistence stability comparison 已完成，正式 learned model 仍等待 28 天資料。
 - 注意：快照間的車輛數變化可能同時包含租借、還車、調度與資料修正，不能直接當作租借需求。
 
 ## 3. 已驗證資料狀態
@@ -51,6 +51,8 @@
 - 21:40 的 cloud-only 30／60 分鐘 snapshot-time coverage 分別為 99.422%／98.892%；完整 active station-row coverage 隨後已由授權 CSV 計算如下。
 - 授權匯出最終完成 3,739,789 rows；完整 active station-row 30／60 分鐘 target coverage 為 97.946%／97.662%，0 duplicates、0 gaps。
 - Preliminary current-availability persistence test：30m MAE 2.154、RMSE 3.626、R² 0.852；60m MAE 3.140、RMSE 5.064、R² 0.712。這只是 baseline，不是 shortage／full risk 結果。
+- 2026-09-05 固定十四天匯出：7,240,919 rows、4,031 snapshots、1,800 stations、0 duplicates；Week 2 有一個 10 分鐘 gap，估計少 1 個 snapshot。兩週 active-row target coverage：30m 99.701%／99.354%，60m 99.402%／98.757%。
+- 同一 persistence 定義的 Week 1／Week 2 MAE：30m 1.704／1.030、60m 2.544／1.564；共同 1,798 站 cohort 結果幾乎相同。週間差異顯示 baseline 情境敏感，不能宣稱 learned live prediction 已完成。
 - 正式建模前至少要有連續 7 天且包含平日與週末的資料；14–28 天會更有利於涵蓋週間差異。這是資料規劃門檻，不是模型有效性的保證。
 
 ## 4. Track A 目前成果
@@ -113,8 +115,8 @@
 | Error Analysis | 已完成 | 已涵蓋 worst cases、hour／weekday、尖離峰、站點需求層級、天氣、政府機關放假類型與 daily errors |
 | Consolidated Research Summary | 已完成 | 已整合資料範圍、模型比較、rolling-origin、ablation、error analysis、限制與決策 |
 | Deep Learning | 未開始／非優先 | Track A 傳統模型研究鏈已完整；只有在新增研究價值明確時才評估 |
-| Track B availability model | Preliminary baseline 完成 | 七天 persistence baseline 已完成；learned model 等待 14／28 天資料與相同時序 scope 比較 |
-| Track B Cloud Live Collector | 已部署／七天完整 audit 通過 | 授權匯出 3,739,789 rows；0 duplicate／gap，30／60m active target coverage 97.946%／97.662% |
+| Track B availability model | 十四天 stability baseline 完成 | 未訓練新模型；28 天再用相同時序 scope 建立 learned regression 並比較 persistence |
+| Track B Cloud Live Collector | 已部署／十四天 audit 完成 | 固定匯出 7,240,919 rows；0 duplicates、1 missing slot，兩週 30／60m active target coverage 均至少 99.35%／98.76% |
 | Optimization | 未開始 | 必須建立在 Track B 的有效狀態／風險預測與明確營運限制上 |
 | Interactive Web Demo | 已完成 | React 19 + Vinext + Cloudflare／Sites；歷史回測展示 |
 
@@ -123,9 +125,9 @@
 ### Priority 1 — 監控 Track B Cloud Live Data Collection
 
 1. Worker、D1 migration 與 `*/5 * * * *` Cron 已啟用；2026-08-28 第一輪 read-only D1 audit 已完成，collector 繼續運作。
-2. 部署第一天有 65 分鐘 gap；缺口後的連續區段已通過 7 天門檻，之後沒有新增大於 5.5 分鐘的 gap。
+2. 部署第一天有 65 分鐘 gap；固定十四天視窗另在 2026-08-28 23:25 Asia/Taipei 缺一輪、形成 10 分鐘 gap。其餘十四天 snapshots 連續。
 3. `EXPORT_TOKEN` 授權下載與 station-row coverage 已驗證；matching value 已保存於 macOS Keychain service `youbike-track-b-export`，export client 已加入 transient retry 與 bounded time windows。
-4. 七天 preliminary persistence baseline 已完成；collector 繼續累積，14 天做週間穩定性檢查，28 天再建立正式 learned model。
+4. 七天 preliminary persistence baseline 與十四天週間穩定性檢查均已完成；collector 繼續累積，28 天再建立正式 learned model。
 5. Shortage／full risk label 與 threshold 尚未定義，不宣稱 live risk prediction 完成。
 
 ### Priority 2 — Track A Research Summary 已完成
@@ -137,10 +139,10 @@
 
 ### Priority 3 — 平行累積 Track B 資料
 
-1. 穩定蒐集至少 7 天、同時包含平日與週末的 5 分鐘左右快照；若可行，以 14–28 天為較佳範圍。
-2. 記錄資料缺口、時間間隔、站點 coverage 與 API／設備中斷。
-3. 重建 feature coverage，確認 30／60 分鐘 target 有足夠非空資料後，才設計時間切分與 baseline。
-4. 明確定義 shortage／full-station label、預測 horizon 與評估指標後，才開始 Track B 模型。
+1. 持續蒐集至固定 28 天門檻（2026-09-18 17:45:02 Asia/Taipei），Cron 不停止。
+2. 28 天匯出後先重做 gap、duplicate、station 與 target coverage audit，再固定 learned-model chronological split。
+3. 第一版 regression 使用 past-only features，所有 model／feature 決策只使用 train／validation，test scope 與 persistence 完全相同。
+4. 明確定義 shortage／full-station label、threshold 與評估指標後，才另開 classification stage。
 
 ### Priority 4 — 延後研究
 
@@ -188,9 +190,9 @@ Track B: Cloud Worker + D1 + Cron Running
         ↓
 Continue Multi-day Snapshot Collection
         ↓
-Coverage / Gap Audit
+14-Day Stability Audit Complete
         ↓
-Availability Baseline Only When Data Is Ready
+28-Day Audit + First Learned Availability Regression
 
 Track A: Preserve Existing Models and Dashboard
         ↓

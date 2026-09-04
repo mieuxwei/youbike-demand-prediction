@@ -1,17 +1,17 @@
 # HANDOFF — YouBike Demand Prediction & Optimization
 
-**Date:** 2026-08-28
+**Date:** 2026-09-05
 
-**Current Stage:** Stage 15 — Track B Seven-Day Audit and Preliminary Persistence Baseline Complete
+**Current Stage:** Stage 16 — Track B Fourteen-Day Stability Analysis Complete
 
-**Deployment status:** Cloudflare D1／Worker／Cron production deployment active. Seven-day authorized export and station-row audit passed; collector continues toward 14／28 days. `EXPORT_TOKEN` is configured and its matching value is stored in macOS Keychain service `youbike-track-b-export`, not in Git.
+**Deployment status:** Cloudflare D1／Worker／Cron production deployment active. Fixed fourteen-day authorized export, station-row audit, weekday／weekend distribution and two-week persistence stability comparison completed; collector continues toward 28 days. `EXPORT_TOKEN` remains in macOS Keychain service `youbike-track-b-export`, not in Git.
 
 ## 1. 交接摘要
 
 目前專案已有一條成熟的歷史需求研究線與一條仍在累積資料的即時 availability 研究線。接手者必須保持兩者的 target、資料、評估與對外說法分離。
 
 - **Track A：歷史轉乘需求預測** — 已完成 2023 全年資料、天氣、Naive／Ridge／HGB／XGBoost、rolling-origin validation、feature-group ablation、完整 error analysis、consolidated research summary、預測介面與 Interactive Web Demo；目前進入維護狀態。
-- **Track B：即時可用車／缺車風險** — 已完成本機 pipeline 並正式部署 Cloudflare Worker + Cron + D1；正在累積多日資料，尚未開始正式建模。
+- **Track B：即時可用車／缺車風險** — 已完成本機 pipeline、Cloudflare Worker + Cron + D1 部署及十四天 stability analysis；正在累積至 28 天，尚未開始正式 learned modeling。
 - **Deep Learning 與 Optimization** — 尚未開始；Optimization 不能使用 Track A demand 直接當 shortage。
 
 ## 2. 已完成成果
@@ -75,9 +75,9 @@
 | 固定樣本 30 分鐘 future target | 0% coverage |
 | 固定樣本 60 分鐘 future target | 0% coverage |
 | 本機蒐集測試 | 12 份、約一小時；不足以作為正式訓練資料 |
-| Cloud live dataset | 2026-08-21 15:50:02（Asia/Taipei）起；已驗證連續 3 snapshots、5,382 rows |
+| Cloud live dataset | 固定十四天分析：7,240,919 rows、4,031 snapshots、1,800 stations |
 | Cloud collector | 已部署；`*/5 * * * *` 排程執行中 |
-| 多日 coverage | 尚未完成 |
+| 多日 coverage | 十四天完成；0 duplicates、1 missing slot；兩週 active target coverage 30m ≥99.35%、60m ≥98.76% |
 
 快照間車輛數變化混合租借、還車、調度與資料修正，不能直接視為實際租借量。
 
@@ -132,15 +132,15 @@ Rolling-origin HGB folds 的 MAE 為 1.636、1.592、1.606；XGBoost folds 為 1
 | Track | 狀態 | 下一個有效成果 |
 |---|---|---|
 | Track A：歷史轉乘需求 | Naive／Ridge／HGB／XGBoost、ablation、完整 error analysis、research summary 與展示已完成 | 維護；有新年度資料時做跨年度驗證 |
-| Track B：即時 availability／risk | 雲端 collector 已部署；資料累積中、仍不足以建模 | 持續累積並做 coverage／gap audit；需要時做授權 export smoke test |
+| Track B：即時 availability／risk | 十四天 audit／stability complete；正式 learned model 未開始 | 持續至固定 28 天，先 audit 再建 30／60m regression |
 | Deep Learning | 未開始／非優先 | 只有新增研究價值明確時才重新評估 |
 | Optimization | 未開始 | Track B 有效預測與營運限制定義完成後才設計 |
 
 ## 8. 下一步優先順序
 
-1. **Track B：持續監控。** `EXPORT_TOKEN` 已生效；需要匯出時由 owner 在本機安全輸入 token，完成授權 CSV export smoke test。
-2. **Track B：持續蒐集 snapshots。** 7 天做初步可行性、14 天比較平假日、28 天作為第一版正式模型建議最低目標；記錄中斷與資料缺口。
-3. **Track B：重新做 coverage audit。** 只有 30／60 分鐘 targets 足夠後，才定義 baseline 與 time split。
+1. **Track B：持續監控。** Worker／Cron／D1 與 protected export 已驗證；collector 持續在雲端執行，不需本機程序。
+2. **Track B：累積至固定 28 天。** 十四天分析已完成；2026-09-18 17:45:02 Asia/Taipei 後再做完整匯出與 audit。
+3. **Track B：28 天 learned regression。** 先固定 chronological split，再以 past-only features 訓練 30／60m regression，所有決策只用 train／validation，test 與 persistence 使用相同 scope。
 4. **Track A：維護既有成果。** Research summary 已完成；沿用現有 HGB／XGBoost／ablation／error results，不重做已完成模型。
 5. **Deep Learning 非優先。** Track A 研究鏈已完整；只有新增研究價值明確時才重新評估。
 6. **延後 Optimization。** 不得以 Track A hourly demand 直接推導缺車或調度。
@@ -448,3 +448,82 @@ Collector 不停止。14 天時從 macOS Keychain 載入 token 後重新匯出�
 - Production authorized export：3,739,789 rows／377 pages，成功。
 - Audit 與 baseline runner 均在完整 CSV 上執行成功。
 - 最終 `/health`（2026-08-28 23:40 Asia/Taipei）：success、1,798 stations、2,098 cumulative snapshots、3,764,917 cumulative rows。
+
+## 16. Stage 16 最新交接紀錄
+
+### Date and Current Stage
+
+- Date：2026-09-05。
+- Current Stage：Track B Fourteen-Day Stability Analysis Complete。
+- 本階段沒有訓練新模型、修改 Track A 或重新部署 collector。
+
+### Track A Status
+
+維持 maintenance：2023 全年資料、Naive／Ridge／HGB／XGBoost、rolling-origin、ablation、error analysis、research summary 與 React/Vinext historical dashboard 均未變。HGB holdout 仍為 MAE 1.575、RMSE 2.549、R² 0.794。
+
+### Track B Status and cloud architecture
+
+- Production：Cloudflare Worker + `*/5 * * * *` UTC Cron + D1，持續在雲端執行；不是本機背景程序。
+- 2026-09-05 `/health` checkpoint：latest run success、1,800 stations；累積 4,141 snapshots、7,438,853 rows，最近 snapshot 為 2026-09-04 17:55:21 UTC（2026-09-05 01:55:21 Asia/Taipei）。
+- 固定分析視窗：2026-08-21 09:45:02 UTC 至 2026-09-04 09:45:02 UTC，end exclusive，恰好十四天。
+- 授權 export：7,240,919 rows、728 pages；本機 CSV 約 1.0 GiB，位於 Git-ignored `data/processed/track_b_14_days.csv`。
+- D1 schema、Worker source、Cron、`EXPORT_TOKEN` 與部署設定均未變更。
+
+### Data audit and target coverage
+
+- 4,031 snapshots、1,800 stations、每輪 1,794–1,800 rows、0 duplicate station-time keys。
+- Week 1：2,016／2,016 snapshots；Week 2：2,015／2,016。
+- 唯一缺口：2026-08-28 15:20:23–15:30:23 UTC，10 分鐘、估計少一輪。D1 在缺少的 15:25 UTC 沒有 `collection_runs` record，前後兩輪皆 success。
+- 全十四天、全部 rows 分母：30m target 97.916%、60m 97.622%。
+- 同週 active-row 且 purge 邊界：Week 1 30m／60m 99.701%／99.402%；Week 2 99.354%／98.757%。
+- Week 1 的 1,798 stations 全數保留到 Week 2；Week 2 另增 2 stations。
+
+### Persistence stability
+
+- 定義未變：`prediction(t+h) = available_bikes(t)`，沒有 fitting。
+- Week 1 30m：MAE 1.704、RMSE 3.086、R² 0.907。
+- Week 2 30m：MAE 1.030、RMSE 2.516、R² 0.925。
+- Week 1 60m：MAE 2.544、RMSE 4.337、R² 0.817。
+- Week 2 60m：MAE 1.564、RMSE 3.544、R² 0.850。
+- Week-1-defined 1,798 common-station cohort 的 Week 2 MAE 同為約 1.030／1.564，排除新增 2 站造成主要差異。
+- Week 2 MAE 顯著較低只能解讀為兩週 dynamics 不同；不能宣稱 persistence 進步或 learned live prediction 完成。
+
+### Weekday／weekend observations
+
+- Week 1 mean bikes：weekday 11.387、weekend 12.643；observed empty 3.352%／2.047%。
+- Week 2 mean bikes：weekday 10.818、weekend 10.581；observed empty 3.662%／3.974%。
+- 方向未跨週一致；只有兩組週末，不做因果或穩定季節性宣稱。
+- Empty／no-return-space 只代表 observed current state，不是 future risk label。
+
+### New files
+
+- `src/track_b_stability.py`
+- `tests/test_track_b_stability.py`
+- `docs/STAGE_16_TRACK_B_14_DAY_STABILITY.md`
+- `results/track_b_14d_*.csv`
+- `results/track_b_14d_*.json`
+
+### Modified files
+
+- `src/features.py`（groupby 明確使用 `observed=True`，避免 categorical future warning；alignment 定義不變）
+- `PROJECT_PLAN.md`
+- `README.md`
+- `HANDOFF.md`
+
+### Database schema and deployment status
+
+Schema 仍是 `station_snapshots` 的 `(station_id, snapshot_time)` primary key、time index，以及 `collection_runs` structured logs。UTC 儲存策略、Cron、Worker、D1 binding 與 protected export 均未修改；沒有 deployment 或 owner action required。
+
+### Test and validation status
+
+- Production authorized export、完整十四天 audit、兩週 persistence runner 與 D1 gap log 查詢均實際成功。
+- Stage 16 tests涵蓋 timezone boundary、Asia/Taipei weekday/weekend、跨週 target purge、duplicate／naive timestamp rejection與 stability comparison。
+- 完整 Python repository tests：62 passed；Cloudflare collector Node tests：9 passed。
+
+### Known limitations and next recommended step
+
+1. 十四天只有兩組週末，persistence 表現跨週變動明顯，尚不足以宣稱穩定 learned model。
+2. 有一輪 Cron 沒有 snapshot 或 run log；不能由現有證據判定根因。
+3. 沒有 shortage／full threshold、classifier、optimization 或 live Dashboard。
+4. 快照差值仍混合借車、還車、調度與修正，不是純需求。
+5. 下一步等待固定 28 天門檻（2026-09-18 17:45:02 Asia/Taipei）；先 audit，再用 past-only features 建 30／60m regression，validation-only decision，與 persistence 在相同 test scope 比較。

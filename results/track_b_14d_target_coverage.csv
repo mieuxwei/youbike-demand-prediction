@@ -1,0 +1,9 @@
+cohort,period,horizon_minutes,active_current_rows,usable_target_rows,coverage_percent
+all_stations,week_1,30,3553525,3542893,99.70080413110925
+all_stations,week_1,60,3553525,3532261,99.4016082622185
+all_stations,week_2,30,3559550,3536538,99.35351378685507
+all_stations,week_2,60,3559550,3515293,98.75666868002978
+week_1_common_stations,week_1,30,3553525,3542893,99.70080413110925
+week_1_common_stations,week_1,60,3553525,3532261,99.4016082622185
+week_1_common_stations,week_2,30,3559126,3536126,99.35377393213952
+week_1_common_stations,week_2,60,3559126,3514893,98.75719488436206

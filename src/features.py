@@ -61,7 +61,7 @@ def _align_station_values(
     horizon = pd.Timedelta(minutes=horizon_minutes)
     tolerance = pd.Timedelta(minutes=tolerance_minutes)
 
-    for _, station in data.groupby("station_id", sort=False):
+    for _, station in data.groupby("station_id", sort=False, observed=True):
         station = station.sort_values("snapshot_time")
         left = station[["snapshot_time"]].copy()
         left["row_index"] = station.index
@@ -147,7 +147,7 @@ def add_rolling_features(
         featured[mean_column] = np.nan
         featured[count_column] = 0
 
-        for _, station in featured.groupby("station_id", sort=False):
+        for _, station in featured.groupby("station_id", sort=False, observed=True):
             active_values = station["available_bikes"].where(station["is_active"])
             time_series = pd.Series(
                 active_values.to_numpy(), index=station["snapshot_time"]

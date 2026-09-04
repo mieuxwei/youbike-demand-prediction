@@ -1,0 +1,3 @@
+horizon_minutes,total_rows,usable_target_rows,coverage_percent,min_actual_minutes,max_actual_minutes
+30,7240919,7090027,97.916,30.0,30.35
+60,7240919,7068746,97.622,60.0,60.35

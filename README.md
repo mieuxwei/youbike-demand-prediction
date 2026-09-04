@@ -6,6 +6,10 @@ This project studies short-term YouBike station demand using historical usage
 data, weather information, and time-based features. The long-term goal is to
 combine demand forecasting with a bike redistribution strategy.
 
+For a reviewer-friendly Traditional Chinese overview of the research tracks,
+current status, architecture, technologies, limitations, and roadmap, see the
+[project overview, status, and technology guide](docs/PROJECT_OVERVIEW_STATUS_AND_TECHNOLOGY.md).
+
 ## Track A vs Track B
 
 The repository contains two separate research tracks with different data and
@@ -21,12 +25,15 @@ targets:
   accumulation is in progress. No Track B prediction
   model or optimization result is claimed yet.
 
-The authorized seven-day export completed with 3,739,789 rows and no duplicate
-station-time keys or schedule gaps. Active station-row target coverage is
-97.946% at 30 minutes and 97.662% at 60 minutes. A preliminary current-state
-persistence baseline reached test MAE 2.154/3.140 for 30/60 minutes. This is a
-reference baseline, not a learned live model or shortage-risk result; cloud
-collection continues toward the 14/28-day milestones.
+The fixed fourteen-day authorized export completed with 7,240,919 rows, 4,031
+snapshots, 1,800 stations, no duplicate station-time keys, and one missing
+five-minute slot. Week-by-week active-row target coverage remains at least
+99.35%/98.76% for 30/60 minutes. The unchanged current-state persistence
+baseline produced different errors in the two weeks (30-minute MAE
+1.704 vs 1.030; 60-minute MAE 2.544 vs 1.564), demonstrating that a single
+week is not a stable performance claim. This is not a learned live model or
+shortage-risk result; cloud collection continues toward the 28-day milestone.
+See the [Stage 16 stability analysis](docs/STAGE_16_TRACK_B_14_DAY_STABILITY.md).
 
 Track A hourly demand is not interchangeable with Track B future station
 inventory and must not be used directly as a shortage or redistribution label.
@@ -177,6 +184,20 @@ Once the audit passes, reproduce the preliminary persistence baseline with:
 python src/track_b_baseline.py \
   --input data/processed/track_b_week_1.csv
 ```
+
+At the fourteen-day milestone, reproduce the equal-week stability and
+Asia/Taipei weekday/weekend analysis with:
+
+```bash
+python src/track_b_stability.py \
+  --input data/processed/track_b_14_days.csv \
+  --start 2026-08-21T09:45:02Z \
+  --end 2026-09-04T09:45:02Z \
+  --output-dir results
+```
+
+The command purges future targets that cross either seven-day boundary and
+reports both all-station and fixed common-station-cohort results.
 
 The baseline uses a chronological five-day train block, one-day validation
 block, and remaining test block, with future labels purged at boundaries. See
