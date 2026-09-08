@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title description">
+  <title id="title">Track A December 2023 holdout MAE by model</title>
+  <desc id="description">Horizontal bar chart comparing seven models over 74,282 station-hour rows. Histogram Gradient Boosting with weather has the lowest MAE at 1.575.</desc>
+  <rect width="1200" height="720" rx="28" fill="#071512"/>
+  <text x="64" y="72" fill="#f4f0df" font-family="Arial, sans-serif" font-size="34" font-weight="700">Track A · December 2023 holdout MAE</text>
+  <text x="64" y="108" fill="#b9cdbf" font-family="Arial, sans-serif" font-size="19">74,282 station-hour rows · training-defined top-100 stations · lower is better</text>
+
+  <g font-family="Arial, sans-serif" font-size="18" fill="#dce8df">
+    <text x="64" y="174">Previous hour</text>
+    <text x="64" y="244">Previous week</text>
+    <text x="64" y="314">Ridge · no weather</text>
+    <text x="64" y="384">Ridge · weather</text>
+    <text x="64" y="454">HGB · no weather</text>
+    <text x="64" y="524" fill="#efff19" font-weight="700">HGB · weather</text>
+    <text x="64" y="594">XGBoost · weather</text>
+  </g>
+
+  <g fill="#18352e">
+    <rect x="300" y="148" width="780" height="36" rx="8"/>
+    <rect x="300" y="218" width="780" height="36" rx="8"/>
+    <rect x="300" y="288" width="780" height="36" rx="8"/>
+    <rect x="300" y="358" width="780" height="36" rx="8"/>
+    <rect x="300" y="428" width="780" height="36" rx="8"/>
+    <rect x="300" y="498" width="780" height="36" rx="8"/>
+    <rect x="300" y="568" width="780" height="36" rx="8"/>
+  </g>
+
+  <g fill="#a8c8b4">
+    <rect x="300" y="148" width="732" height="36" rx="8"/>
+    <rect x="300" y="218" width="653" height="36" rx="8"/>
+    <rect x="300" y="288" width="543" height="36" rx="8"/>
+    <rect x="300" y="358" width="538" height="36" rx="8"/>
+    <rect x="300" y="428" width="480" height="36" rx="8"/>
+    <rect x="300" y="568" width="479" height="36" rx="8"/>
+  </g>
+  <rect x="300" y="498" width="472" height="36" rx="8" fill="#efff19"/>
+
+  <g font-family="Arial, sans-serif" font-size="19" font-weight="700">
+    <text x="1044" y="174" fill="#f4f0df">2.441</text>
+    <text x="965" y="244" fill="#f4f0df">2.176</text>
+    <text x="855" y="314" fill="#f4f0df">1.810</text>
+    <text x="850" y="384" fill="#f4f0df">1.793</text>
+    <text x="792" y="454" fill="#f4f0df">1.601</text>
+    <text x="784" y="524" fill="#efff19">1.575</text>
+    <text x="791" y="594" fill="#f4f0df">1.597</text>
+  </g>
+
+  <line x1="300" y1="636" x2="1080" y2="636" stroke="#54766a" stroke-width="2"/>
+  <g font-family="Arial, sans-serif" font-size="15" fill="#91aa9e" text-anchor="middle">
+    <text x="300" y="665">0</text>
+    <text x="450" y="665">0.5</text>
+    <text x="600" y="665">1.0</text>
+    <text x="750" y="665">1.5</text>
+    <text x="900" y="665">2.0</text>
+    <text x="1050" y="665">2.5</text>
+  </g>
+  <text x="1080" y="696" text-anchor="end" fill="#78988b" font-family="Arial, sans-serif" font-size="14">Source: results/model_comparison_metrics.csv</text>
+</svg>

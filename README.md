@@ -1,422 +1,211 @@
-# YouBike Demand Prediction & Optimization
+# YouBike Demand Prediction
 
-## Project Overview
+> Historical transfer-demand forecasting and ongoing station-availability research
 
-This project studies short-term YouBike station demand using historical usage
-data, weather information, and time-based features. The long-term goal is to
-combine demand forecasting with a bike redistribution strategy.
+**Independent Time-Series Research Project · In Progress**
 
-For a reviewer-friendly Traditional Chinese overview of the research tracks,
-current status, architecture, technologies, limitations, and roadmap, see the
-[project overview, status, and technology guide](docs/PROJECT_OVERVIEW_STATUS_AND_TECHNOLOGY.md).
+This repository contains two separate time-series studies built around Taipei YouBike data. Track A forecasts historical hourly transfer-related borrowing demand and has completed its main evaluation and dashboard. Track B collects live station inventory in the cloud and has completed a fixed fourteen-day data audit and persistence-stability analysis; its first learned availability model has not started.
 
-## Track A vs Track B
+本專案包含兩條不可混用目標的研究線：Track A 已完成歷史轉乘需求預測的主要研究與回測展示；Track B 正在累積即時站點庫存資料，已完成固定十四天稽核，但尚未建立正式 learned model。缺車／滿站風險與調度最佳化仍是後續研究。
 
-The repository contains two separate research tracks with different data and
-targets:
+## Quick links
 
-- **Track A — historical transfer-demand forecasting:** predicts hourly
-  transfer-related borrowing demand for 100 high-demand stations from the 2023
-  official trip dataset. HGB remains the best evaluated model. The React/Vinext
-  dashboard is a historical holdout demonstration of this track.
-- **Track B — live bike-availability forecasting:** will predict available
-  bikes 30 or 60 minutes ahead and later study shortage/full-station risk. Its
-  cloud data-collection infrastructure is deployed and multi-day data
-  accumulation is in progress. No Track B prediction
-  model or optimization result is claimed yet.
+| Entry | What it contains |
+|---|---|
+| [Historical Dashboard / 歷史回測展示](dashboard/README.md) | Local launch instructions and the scope of the 10-timepoint historical holdout demo |
+| [中文總覽](docs/PROJECT_OVERVIEW_STATUS_AND_TECHNOLOGY.md) | Complete Traditional Chinese project overview, architecture, evidence, and current status |
+| [Track A research summary](docs/STAGE_13_TRACK_A_RESEARCH_SUMMARY.md) | Experiment design, model comparison, rolling-origin validation, ablation, and error analysis |
+| [Reproducibility guide](docs/REPRODUCIBILITY.md) | Data, training, inference, dashboard, Track B export, and verification commands |
+| [Track B fourteen-day analysis](docs/STAGE_16_TRACK_B_14_DAY_STABILITY.md) | Fixed-window audit, weekday/weekend description, and persistence stability |
 
-The fixed fourteen-day authorized export completed with 7,240,919 rows, 4,031
-snapshots, 1,800 stations, no duplicate station-time keys, and one missing
-five-minute slot. Week-by-week active-row target coverage remains at least
-99.35%/98.76% for 30/60 minutes. The unchanged current-state persistence
-baseline produced different errors in the two weeks (30-minute MAE
-1.704 vs 1.030; 60-minute MAE 2.544 vs 1.564), demonstrating that a single
-week is not a stable performance claim. This is not a learned live model or
-shortage-risk result; cloud collection continues toward the 28-day milestone.
-See the [Stage 16 stability analysis](docs/STAGE_16_TRACK_B_14_DAY_STABILITY.md).
+The existing hosted dashboard deployment was verified on 2026-09-09 but remains owner-restricted. No inaccessible URL is presented here as a public demo; the repository provides its source, static bundle, share artwork, and local entry point.
 
-Track A hourly demand is not interchangeable with Track B future station
-inventory and must not be used directly as a shortage or redistribution label.
+## Current status
 
-## Objectives
+| Workstream | Status | Evidence-backed scope |
+|---|---|---|
+| **Track A — historical transfer demand** | Main research and evaluation complete; maintenance | 2023 transfer-related trips, training-defined top-100 stations, chronological holdout, historical dashboard |
+| **Track B — station availability** | Data research in progress | Cloud collection active; fixed 14-day audit and persistence stability complete; learned model not started |
+| **Shortage/full risk and redistribution** | Not implemented | Requires a validated availability forecast, explicit risk costs, and operational constraints |
 
-- Explore spatial and temporal YouBike usage patterns.
-- Build reproducible data-cleaning and feature-engineering pipelines.
-- Train and compare baseline machine-learning models for demand prediction.
-- Evaluate models with appropriate forecasting metrics.
-- Explore redistribution optimization after a reliable forecasting baseline is
-  available.
+The repository as a whole is not marked completed, frozen, or production-ready.
 
-## Planned Workflow
+## Results at a glance
 
-1. Collect and document official YouBike and weather data.
-2. Inspect data quality, missing values, and station coverage.
-3. Clean and transform the raw data.
-4. Create time, weather, and station-level features.
-5. Establish a simple baseline model.
-6. Train and compare machine-learning models.
-7. Evaluate errors by station and time period.
-8. Use validated forecasts to explore redistribution optimization.
+### Track A — historical hourly transfer-demand forecasting
 
-## Dataset
+- **7,388,479** official 2023 transfer-related trips.
+- **100** high-demand stations selected using the training period only.
+- Chronological split: January–September training, October–November validation, December holdout.
+- Holdout scope: **74,282 station-hour rows**.
+- Primary model: HGB with weather — **MAE 1.575, RMSE 2.549, R² 0.794**.
+- Rolling-origin HGB MAE: **1.636, 1.592, 1.606**.
+- XGBoost was evaluated on the same scope and did not outperform HGB.
 
-The real-time samples come from the official
-[Taipei City YouBike 2.0 real-time dataset](https://data.taipei/dataset/detail?id=c6bc8aed-557d-41d5-bfb1-8da24f78f2fb).
-The source is public, free to use, provided as JSON, and updated every minute.
+繁中摘要：Track A 以 74,282 筆十二月 holdout station-hour rows 評估，HGB with weather 為目前主模型；這些數值只代表定義內的歷史轉乘相關借車需求。
 
-The repository contains two reproducible snapshots of station availability. Their fields
-include station ID and name, district, capacity, available bikes, return spaces,
-location, operating status, and update times.
+| Model | Holdout MAE | RMSE | R² |
+|---|---:|---:|---:|
+| Previous hour | 2.441 | 4.129 | 0.460 |
+| Previous week, same hour | 2.176 | 3.701 | 0.566 |
+| Ridge without weather | 1.810 | 2.911 | 0.731 |
+| Ridge with weather | 1.793 | 2.889 | 0.736 |
+| HGB without weather | 1.601 | 2.567 | 0.791 |
+| **HGB with weather** | **1.575** | **2.549** | **0.794** |
+| XGBoost with weather | 1.597 | 2.580 | 0.789 |
 
-> Bike-count changes between snapshots are not direct rental counts. They may
-> include rentals, returns, redistribution, and data corrections. More history
-> is required before short-term demand can be modeled reliably.
+![Track A model comparison: December 2023 holdout MAE across seven models](docs/assets/track-a-model-comparison.svg)
 
-The project also uses all 12 monthly files from the official
-[2023 transfer-related YouBike trip dataset](https://data.gov.tw/dataset/169174)
-for historical hourly demand analysis. This source covers trips associated with
-bus or MRT transfers, not all YouBike trips, and its timestamps are aggregated
-to the hour. It complements rather than replaces the real-time snapshots.
+*December 2023 holdout, 74,282 rows, training-defined top-100 stations. Lower MAE is better. Source: [`results/model_comparison_metrics.csv`](results/model_comparison_metrics.csv). R² is not an accuracy percentage.*
 
-Hourly weather comes from the
-[Open-Meteo Historical Weather API](https://open-meteo.com/en/docs/historical-weather-api).
-The current integration uses one Taipei reference point and historical
-reanalysis values, not a separate observed weather station at every YouBike
-location.
+### Track B — fixed fourteen-day station-availability analysis
 
-## Tech Stack
-
-- Python
-- Jupyter Notebook
-- pandas
-- NumPy
-- Matplotlib
-- scikit-learn
-- XGBoost
-- Requests
-- Cloudflare Workers, Cron Triggers, and D1
-
-Additional libraries will be added only when the project reaches the stage that
-requires them.
-
-## Project Structure
+Completed analysis window:
 
 ```text
-youbike-demand-prediction/
-├── data/
-│   ├── raw/          # Original, unmodified source data
-│   └── processed/    # Cleaned and feature-ready data
-├── notebooks/        # Exploration and experiment notebooks
-├── src/              # Reusable data and modeling code
-├── tests/            # Automated pipeline tests
-├── docs/             # Stage explanations and project documentation
-├── config/           # Reproducible official data-source registry
-├── models/           # Saved model artifacts
-├── results/          # Metrics, tables, and experiment outputs
-├── images/           # Figures and images used in reports
-├── cloudflare/        # Track B cloud collector, D1 migration, and tests
-├── .gitignore
-├── LICENSE
-├── PROJECT_PLAN.md
-├── README.md
-└── requirements.txt
+[2026-08-21 09:45:02 UTC, 2026-09-04 09:45:02 UTC)
 ```
 
-## Getting Started
+| Data-quality measure | Result |
+|---|---:|
+| Station rows | 7,240,919 |
+| Snapshots | 4,031 |
+| Distinct stations | 1,800 |
+| Duplicate station-time keys | 0 |
+| Estimated missing five-minute slots | 1 |
 
-Create and activate a virtual environment, then install the current
-dependencies:
+The unchanged persistence rule is `prediction(t + horizon) = available_bikes(t)`. It is a non-learned reference baseline.
+
+| Horizon | Week 1 MAE | Week 2 MAE |
+|---|---:|---:|
+| 30 minutes | 1.704 | 1.030 |
+| 60 minutes | 2.544 | 1.564 |
+
+The two weeks differ materially. Because persistence does not train or update, the lower Week 2 errors describe a different data context—not continuous model learning or improvement. Track B results use a different target, unit, and evaluation scope from Track A and do not belong in the Track A model ranking.
+
+繁中摘要：固定十四天資料有 0 筆重複鍵、估計缺一個五分鐘時槽；兩週 MAE 差異是情境變動，不是模型持續學習，正式 learned model 尚未開始。
+
+## Research tracks
+
+### Track A: problem, data, method, and findings
+
+**Question.** Can station identity, calendar patterns, past demand, and weather predict a station's transfer-related borrowing count for a specified hour?
+
+**Data.** The study uses the official twelve-month 2023 transfer-related YouBike trip dataset and 8,760 hourly Open-Meteo reanalysis observations from one Taipei reference point. It does not cover all YouBike trips.
+
+**Method.** Station selection is training-only. Lag and rolling features look backward. Model choices use validation data, while December remains the final holdout. Compared methods include previous-hour and previous-week baselines, Ridge, Histogram Gradient Boosting, and XGBoost, followed by rolling-origin validation, permutation importance, feature-group ablation, and contextual error analysis.
+
+**Findings.** HGB with weather is the strongest evaluated Track A model. Calendar, recent history, station identity, and daily history carry the most useful signal; weather adds a smaller incremental gain. Errors remain larger during commuting peaks, at high-demand stations, and for high-demand hours. Full evidence is in the [Track A research summary](docs/STAGE_13_TRACK_A_RESEARCH_SUMMARY.md).
+
+### Track B: problem, data infrastructure, and current evidence
+
+**Question.** After enough continuous observations are available, can station inventory be forecast 30 or 60 minutes ahead?
+
+**Data infrastructure.** A Cloudflare Worker validates the official live schema, retries bounded API failures, and writes five-minute station snapshots to D1. A database primary key prevents duplicate station-time rows; structured run logs and a protected, paginated CSV export support audit and Python analysis. Local collectors remain testing and fallback tools, not the formal long-running solution.
+
+**Current evidence.** The fixed fourteen-day window has passed duplicate, coverage, station-change, timestamp, and future-target checks, with one estimated missing slot. The persistence comparison shows that baseline difficulty changes across weeks. This is sufficient for a data-readiness checkpoint, not for a learned availability or shortage-risk claim.
+
+### Conditional future research
+
+1. Accumulate a fixed 28-day dataset and pass coverage, missingness, duplicate, and station-change audits.
+2. Freeze a chronological split and compare learned 30/60-minute regression with persistence on the same test scope.
+3. Only after a useful forecast exists, define shortage/full-station labels and the costs of false alarms and missed events.
+4. Evaluate redistribution methods only after operational constraints and decision objectives are explicit.
+
+The planned 28-day check is **after 2026-09-18 17:45:02 Asia/Taipei**. Reaching that date does not mean the data passed audit or that a model is complete. Deep learning and reinforcement learning are not assumed requirements.
+
+## Architecture and technology
+
+```mermaid
+flowchart LR
+  subgraph A[Track A · completed research chain]
+    A1[2023 transfer trips] --> A2[Station-hour demand]
+    A3[Hourly weather reanalysis] --> A4[Past-only features]
+    A2 --> A4 --> A5[Naive · Ridge · HGB · XGBoost]
+    A5 --> A6[Chronological evaluation]
+    A6 --> A7[Historical Dashboard]
+  end
+
+  subgraph B[Track B · data research in progress]
+    B1[Official live station API] --> B2[Worker validation + retry]
+    B2 --> B3[5-minute Cron]
+    B3 --> B4[(Cloudflare D1)]
+    B4 --> B5[Protected CSV export]
+    B5 --> B6[Audit + persistence stability]
+    B6 -. after 28-day audit .-> B7[Learned availability regression]
+    B7 -. only after validation .-> B8[Risk definition + operations research]
+  end
+```
+
+| Technology | Purpose in this project |
+|---|---|
+| Python, pandas, NumPy | Data validation, station-hour aggregation, time alignment, feature engineering, and analysis |
+| scikit-learn | Ridge and Histogram Gradient Boosting pipelines and evaluation |
+| XGBoost | Controlled tree-model comparison on the Track A scope |
+| Jupyter, Matplotlib | Executed research notebooks and evidence visualization |
+| Cloudflare Worker, Cron, D1 | Long-running Track B collection, validation, logging, deduplication, and storage |
+| React 19, Vinext, TypeScript, Vite | Interactive historical holdout dashboard |
+| Python `unittest`, Node test runner | Data, feature, model, export, and collector checks |
+
+## Minimal local start and verification
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
-jupyter notebook
-```
-
-## Collecting Snapshots
-
-### Cloud collection for Track B
-
-The production design uses a standalone Cloudflare Worker, a five-minute Cron
-Trigger, and D1. It validates the confirmed official API schema, stores UTC
-station-time rows with database-level duplicate prevention, retries bounded API
-failures, logs every run, and exposes a protected paginated CSV export.
-
-The cloud source is under `cloudflare/track-b-collector/`. The production Worker
-is running at `https://youbike-track-b-collector.mieuxander.workers.dev`, with a
-`*/5 * * * *` Cron Trigger and D1 storage. The first scheduled run on 2026-08-21
-wrote 1,794 station rows successfully. Multi-day accumulation is still in
-progress. `EXPORT_TOKEN` is configured and unauthorized export requests are
-rejected; the token itself is never stored in Git. See the
-[Stage 11 deployment record](docs/STAGE_11_TRACK_B_CLOUD_COLLECTION.md).
-
-After deployment, export a date range for Python with:
-
-```bash
-export TRACK_B_EXPORT_URL="https://youbike-track-b-collector.mieuxander.workers.dev/export.csv"
-export TRACK_B_EXPORT_TOKEN="$(security find-generic-password \
-  -a "$USER" -s youbike-track-b-export -w)"
-python src/export_track_b.py \
-  --start 2026-08-21 \
-  --end 2026-08-27 \
-  --output data/processed/track_b_week_1.csv
-```
-
-Add `--station-id <station_id>` for a single station. Exported timestamps are
-UTC ISO-8601 and must be converted explicitly to `Asia/Taipei` before creating
-calendar features.
-
-After exporting a complete date range, run the station-row coverage audit:
-
-```bash
-python src/audit_track_b.py \
-  --input data/processed/track_b_week_1.csv
-```
-
-This checks duplicate station-time rows, schedule gaps, rows per snapshot, and
-30/60-minute active-station future-target coverage. See the
-[Stage 14 Track B coverage audit](docs/STAGE_14_TRACK_B_FIRST_COVERAGE_AUDIT.md).
-
-Once the audit passes, reproduce the preliminary persistence baseline with:
-
-```bash
-python src/track_b_baseline.py \
-  --input data/processed/track_b_week_1.csv
-```
-
-At the fourteen-day milestone, reproduce the equal-week stability and
-Asia/Taipei weekday/weekend analysis with:
-
-```bash
-python src/track_b_stability.py \
-  --input data/processed/track_b_14_days.csv \
-  --start 2026-08-21T09:45:02Z \
-  --end 2026-09-04T09:45:02Z \
-  --output-dir results
-```
-
-The command purges future targets that cross either seven-day boundary and
-reports both all-station and fixed common-station-cohort results.
-
-The baseline uses a chronological five-day train block, one-day validation
-block, and remaining test block, with future labels purged at boundaries. See
-the [Stage 15 baseline record](docs/STAGE_15_TRACK_B_PRELIMINARY_BASELINE.md).
-
-### Local fallback collector
-
-Run the collector once to save a timestamped snapshot from the official API:
-
-```bash
-python src/collect_youbike.py
-```
-
-Snapshots are saved under `data/raw/snapshots/`. The JSON files in that folder
-are intentionally ignored by Git because repeated collection will create a
-large local dataset.
-
-Collect multiple snapshots at a fixed interval (12 snapshots at five-minute
-intervals is approximately one hour):
-
-```bash
-python src/collect_history.py --count 12 --interval-minutes 5
-```
-
-The computer, network connection, and process must remain active while this
-command runs. These local scripts remain useful for testing and debugging, but
-they are not the formal long-running Track B collection solution.
-
-## Preparing Data
-
-Validate and combine every raw snapshot into a clean analysis table:
-
-```bash
-python src/prepare_data.py
-```
-
-The command generates `data/processed/youbike_snapshots.csv` plus compact
-quality reports under `results/`. Run the automated checks with:
-
-```bash
 python -m unittest discover -s tests -v
 ```
 
-For cleaning decisions, current quality results, limitations, and presentation
-notes, read the [Stage 2 data pipeline guide](docs/STAGE_2_DATA_PIPELINE.md).
-
-## Building Time-Series Features
-
-Build calendar, 15/30/60-minute lag, past-only rolling, and separate 30/60-minute
-future target columns:
+Run the Historical Dashboard locally:
 
 ```bash
-python src/build_features.py
+cd dashboard
+pnpm install
+pnpm run dev
 ```
 
-The pipeline prevents predictor features from looking forward in time and
-writes a coverage audit to `results/feature_coverage.csv`. Current fixed samples
-do not contain 30/60-minute targets; the separate cloud export now supports the
-preliminary persistence baseline described above. See the
-[Stage 3 history and feature guide](docs/STAGE_3_HISTORY_AND_FEATURES.md).
+Detailed data preparation, training, inference, Track B export, audit, and dashboard checks are centralized in the [reproducibility guide](docs/REPRODUCIBILITY.md).
 
-## Full-year Historical Demand and Weather
+## Evidence map
 
-Download and prepare every registered 2023 official month, then join hourly
-weather:
+| Evidence | Document or artifact |
+|---|---|
+| Track A consolidated design and findings | [Research summary](docs/STAGE_13_TRACK_A_RESEARCH_SUMMARY.md) |
+| Full holdout model table | [`model_comparison_metrics.csv`](results/model_comparison_metrics.csv) |
+| Rolling-origin stability | [HGB metrics](results/tree_rolling_origin_metrics.csv) · [XGBoost metrics](results/xgboost_rolling_origin_metrics.csv) |
+| Feature-group ablation and contextual errors | [Analysis report](docs/STAGE_12_FEATURE_ABLATION_ERROR_ANALYSIS.md) |
+| Model scope and artifact integrity | [Model card](docs/MODEL_CARD.md) |
+| Historical prediction interface | [Prediction guide](docs/STAGE_8_PREDICTION_INTERFACE.md) |
+| Historical Dashboard | [Dashboard guide](docs/STAGE_9_HISTORICAL_DASHBOARD.md) |
+| Track B cloud architecture | [Collection and deployment record](docs/STAGE_11_TRACK_B_CLOUD_COLLECTION.md) |
+| Track B seven-day historical checkpoint | [Audit](docs/STAGE_14_TRACK_B_FIRST_COVERAGE_AUDIT.md) · [Preliminary baseline](docs/STAGE_15_TRACK_B_PRELIMINARY_BASELINE.md) |
+| Track B current completed checkpoint | [Fourteen-day stability analysis](docs/STAGE_16_TRACK_B_14_DAY_STABILITY.md) |
 
-```bash
-python src/download_historical.py --month all
-python src/prepare_historical_collection.py
-python src/download_weather.py
-python src/prepare_weather.py
-```
+## Scope and limitations
 
-The large raw and processed files are intentionally ignored by Git. The pipeline
-processes one month at a time, builds full-year hourly station demand, joins
-8,760 weather hours, and saves compact reproducible reports. See the executed
-[weather integration notebook](notebooks/05_weather_integration.ipynb) and the
-[Stage 5 full-year weather guide](docs/STAGE_5_FULL_YEAR_WEATHER.md).
+- Track A predicts **hourly transfer-related borrowing demand**, not all YouBike trips or current station inventory.
+- The Track A scope is limited to 100 stations selected from training-period activity.
+- Historical weather is reanalysis from one Taipei reference point. Future deployment requires weather information available at prediction time.
+- Peak hours, high-demand stations, and high-demand events retain larger errors.
+- The Dashboard shows 10 representative December holdout times, not the full 74,282-row test set or live station inventory.
+- R² is not converted to an “accuracy” percentage, and demand rankings are not redistribution recommendations.
+- Track B snapshot changes mix rentals, returns, operational redistribution, and data corrections.
+- Fourteen days include only two weekend periods and do not establish seasonal or long-term stability.
+- No shortage/full-station classifier, operational optimizer, or production-ready live prediction is claimed.
 
-## Baseline Model and Evaluation
+繁中限制摘要：Track A 不是全部旅次或即時庫存，Dashboard 也只是十個歷史回測時段；Track B 尚未完成正式模型、缺車／滿站分類或調度最佳化。
 
-Train chronological hourly baselines for the 100 highest-demand training-period
-stations:
+## Data sources and licensing
 
-```bash
-python src/train_baseline.py
-```
+- [2023 transfer-related YouBike trip dataset](https://data.gov.tw/dataset/169174) — Government Data Open License, Taiwan, version 1.0; source-specific details are recorded in [`config/historical_sources.json`](config/historical_sources.json).
+- [Taipei City YouBike 2.0 real-time dataset](https://data.taipei/dataset/detail?id=c6bc8aed-557d-41d5-bfb1-8da24f78f2fb) — official live station source; consult the source page for current terms.
+- [Open-Meteo Historical Weather API](https://open-meteo.com/en/docs/historical-weather-api) — one Taipei reanalysis grid point; consult the provider documentation for current attribution and licensing requirements.
+- Repository code and original documentation are released under the [MIT License](LICENSE). Upstream datasets retain their own terms and are not relicensed by this repository.
 
-The experiment uses January–September for training, October–November for
-validation, and December for a final holdout test. The best current baseline is
-Ridge regression with station, calendar, lag, rolling, and weather features:
+## Project state
 
-| Model | Test MAE | Test RMSE | Test R² |
-|---|---:|---:|---:|
-| Previous hour | 2.441 | 4.129 | 0.460 |
-| Previous week, same hour | 2.176 | 3.701 | 0.566 |
-| Ridge without weather | 1.810 | 2.911 | 0.731 |
-| Ridge with weather | **1.793** | **2.889** | **0.736** |
+- **Documentation updated:** 2026-09-09
+- **Completed analysis window:** `[2026-08-21 09:45:02 UTC, 2026-09-04 09:45:02 UTC)`
+- **Last verified cloud checkpoint:** 2026-09-05 01:55:21 Asia/Taipei — 4,141 cumulative snapshots and 7,438,853 cumulative station rows
 
-These metrics apply only to hourly transfer-related borrowing demand in the
-defined 100-station experiment. See the executed
-[baseline notebook](notebooks/06_baseline_model.ipynb) and the
-[Stage 6 baseline guide](docs/STAGE_6_BASELINE_MODEL.md) for leakage controls,
-limitations, and error analysis.
-
-## Tree Model Comparison
-
-Train and evaluate the histogram gradient-boosting models:
-
-```bash
-python src/train_tree_models.py
-```
-
-The weather-enabled HGB model improves the December holdout MAE from 1.793 for
-weather Ridge to 1.575, with RMSE 2.549 and R² 0.794. Three expanding-window
-validation folds produce MAE values from 1.592 to 1.636. Permutation analysis
-shows that time-of-day, previous-hour demand, station identity, and previous-week
-demand are the strongest signals; weather provides a smaller incremental gain.
-See the executed [tree comparison notebook](notebooks/07_tree_model_comparison.ipynb)
-and [Stage 7 guide](docs/STAGE_7_TREE_MODEL_COMPARISON.md).
-
-## XGBoost Comparison
-
-Run the bounded XGBoost comparison on the same Track A target, top-100 stations,
-features, and chronological splits:
-
-```bash
-python src/train_xgboost.py
-```
-
-The validation-selected XGBoost model reaches December holdout MAE 1.597, RMSE
-2.580, and R² 0.789. It improves MAE by about 10.9% over weather Ridge but does
-not beat weather HGB at MAE 1.575. Three rolling-origin folds confirm the same
-ordering, so HGB remains the primary Track A model. On macOS, XGBoost also
-requires the OpenMP runtime (`brew install libomp`). See the executed
-[XGBoost notebook](notebooks/09_xgboost_comparison.ipynb) and
-[Stage 10 guide](docs/STAGE_10_XGBOOST_COMPARISON.md).
-
-## Feature-group Ablation and Error Analysis
-
-Run the fixed-parameter HGB ablation and complete Track A error analysis:
-
-```bash
-python src/run_track_a_analysis.py
-```
-
-Removing calendar features causes the largest December MAE increase (+10.44%),
-followed by daily history (+3.25%), station identity (+2.80%), and immediate
-history (+2.22%). Weather and weekly history provide smaller but consistent
-incremental value. An official DGPA government-office day-off flag improves
-validation MAE slightly but worsens test MAE, so it is not added to the primary
-model. The error report confirms that evening peak, morning peak, high-demand
-stations, and actual demand of 10 or more remain the hardest segments. See the
-[Stage 12 analysis](docs/STAGE_12_FEATURE_ABLATION_ERROR_ANALYSIS.md).
-
-## Consolidated Track A Research Summary
-
-Track A's planned traditional-model research chain is complete. The consolidated
-summary brings the data scope, chronological evaluation design, Naive／Ridge／HGB／
-XGBoost comparison, rolling-origin evidence, feature ablation, context errors,
-research conclusions, and validity limits into one reviewable document.
-
-HGB with weather remains the primary model: December holdout MAE 1.575, RMSE
-2.549, and R² 0.794. Its three rolling-origin MAEs are 1.636, 1.592, and 1.606.
-The main unresolved errors occur during commuting peaks, at high-demand stations,
-and when actual hourly demand reaches 10 or more. These findings support historical
-demand research and backtesting only; they are not live bike-availability or
-redistribution results.
-
-Read the [Stage 13 consolidated Track A research summary](docs/STAGE_13_TRACK_A_RESEARCH_SUMMARY.md).
-
-## Prediction Interface
-
-Generate a ranked prediction for one target hour:
-
-```bash
-python src/predict_hourly.py \
-  --target-time 2023-12-31T18:00:00+08:00 \
-  --include-actual \
-  --output results/example_hourly_predictions.csv
-```
-
-The command verifies the model SHA-256, feature schema, 168-hour demand-history
-coverage, station scope, and target-hour weather before predicting. Remove
-`--include-actual` for a non-backtest prediction. Future use requires updated
-transfer-demand history and weather forecasts with the same schemas; the bundled
-2023 files alone cannot produce a current prediction. See the
-[Model Card](docs/MODEL_CARD.md),
-[Stage 8 guide](docs/STAGE_8_PREDICTION_INTERFACE.md), and executed
-[prediction demo notebook](notebooks/08_prediction_demo.ipynb).
-
-## Interactive Historical Dashboard
-
-Stage 9 adds a responsive Vinext/React dashboard for exploring 10 representative
-December holdout hours. It shows all 100 station predictions, post-prediction
-actuals, absolute errors, model comparisons, rolling-origin results, and feature
-importance. Rebuild its compact data bundle with:
-
-```bash
-python src/build_dashboard_data.py
-```
-
-Then run the local interface from `dashboard/`. The display remains explicitly
-historical: it does not claim current bike availability, shortage risk, or a
-redistribution recommendation. See the
-[Stage 9 historical dashboard guide](docs/STAGE_9_HISTORICAL_DASHBOARD.md).
-
-## Project Status
-
-🚧 **In development**
-
-Milestones 1 and 2 plus Stage 3 through 15 are complete. The repository now
-includes reproducible API samples, validated collection and cleaning pipelines,
-leakage-aware time-series feature engineering, automated tests, quality reports,
-official full-year 2023 transfer-demand and weather analysis, a chronological
-hourly Ridge baseline, rolling-origin validated HGB and XGBoost comparisons,
-feature-group ablation, complete contextual error analysis, and
-an integrity-checked prediction interface with nine executed notebooks and an
-interactive historical dashboard, and a deployed Cloudflare Worker + Cron + D1
-collector with protected CSV export and a seven-day Track B persistence
-baseline. Track B learned modeling, risk classification, deep learning, and
-optimization remain incomplete.
+The cloud checkpoint is a dated observation, not today's live total. This GitHub presentation update changes documentation and one derived figure only; source data, models, metrics, the Dashboard bundle, collector, and deployment are unchanged.

@@ -1,9 +1,10 @@
-# YouBike Demand Prediction & Optimization
+# YouBike Demand Prediction
 
 ## 專案介紹、技術架構與目前狀態
 
-**文件日期：** 2026-09-05  
-**專案狀態：** Track A 主要研究鏈已完成；Track B 十四天 audit、平日週末分布與 persistence stability comparison 已完成，雲端資料持續累積至二十八天門檻  
+- **文件更新日期：** 2026-09-09
+- **作品性質：** Independent Time-Series Research Project · In Progress
+- **專案狀態：** Track A 主要研究鏈已完成並進入維護；Track B 十四天 audit、平日週末分布與 persistence stability comparison 已完成，雲端資料持續累積至二十八天門檻
 **Repository：** `youbike-demand-prediction`
 
 ---
@@ -114,25 +115,24 @@ Python gap／duplicate／target coverage audit
 
 ### 4.2 Track B：即時站點快照
 
-七天固定匯出與 audit 結果：
+固定十四天分析結果：
 
 | 項目 | 結果 |
 |---|---:|
-| Export rows | 3,739,789 |
-| Snapshots | 2,084 |
-| Distinct stations | 1,798 |
-| 連續期間 | 7.233 天 |
+| 分析期間 | `[2026-08-21 09:45:02 UTC, 2026-09-04 09:45:02 UTC)` |
+| Export rows | 7,240,919 |
+| Snapshots | 4,031 |
+| Distinct stations | 1,800 |
 | Duplicate station-time rows | 0 |
-| Gaps over 5.5 minutes | 0 |
-| 最大 snapshot interval | 5.35 分鐘 |
-| 30m active target coverage | 97.946% |
-| 60m active target coverage | 97.662% |
+| 估計缺少的五分鐘時槽 | 1 |
+| Week 1／Week 2 30m persistence MAE | 1.704／1.030 |
+| Week 1／Week 2 60m persistence MAE | 2.544／1.564 |
 
-2026-09-05 最新雲端狀態：
+最後一次雲端查核（與固定分析期間不同）：
 
 | 項目 | 最新狀態 |
 |---|---:|
-| 查詢時間 | 2026-09-05 |
+| 查核日期 | 2026-09-05 |
 | 最新 snapshot | 2026-09-05 01:55:21 Asia/Taipei |
 | 累積 snapshots | 4,141 |
 | 累積 station rows | 7,438,853 |
@@ -140,7 +140,7 @@ Python gap／duplicate／target coverage audit
 | 最新一輪狀態 | Success，1 attempt |
 | Collector 執行位置 | Cloudflare 雲端 |
 
-固定十四天分析已完成：7,240,919 rows、4,031 snapshots、1,800 stations、0 duplicates，並發現一個 10 分鐘 gap（估計少一輪）。Week 1／Week 2 persistence MAE 分別為 30m 1.704／1.030、60m 2.544／1.564；跨週變動顯示目前仍不可宣稱正式 learned live model 完成。
+上述累積數字是有日期的查核紀錄，不是 2026-09-09 的即時總量。十四天兩週 persistence 誤差的變動反映資料情境不同；persistence 不會訓練或更新，因此不可描述成模型持續學習或改善，也不可宣稱正式 learned live model 完成。
 
 快照間的可用車變化可能同時包含租借、還車、人工調度與資料修正，不能直接稱為實際租借需求。
 
@@ -168,7 +168,7 @@ Python gap／duplicate／target coverage audit
 | **HGB with weather** | **1.575** | **2.549** | **0.794** |
 | XGBoost with weather | 1.597 | 2.580 | 0.789 |
 
-HGB with weather 是目前 Track A 的主要模型。這些指標只適用於 2023 年 12 月、training-defined top-100 stations 與 hourly transfer-related borrowing demand，不能當作 Track B availability metrics。
+HGB with weather 是目前 Track A 的主要模型。上述 holdout 指標皆來自 2023 年 12 月、training-defined top-100 stations 的 74,282 station-hour rows，只適用 hourly transfer-related borrowing demand，不能當作 Track B availability metrics。
 
 ### 5.3 已完成的研究分析
 
@@ -191,7 +191,7 @@ HGB with weather 是目前 Track A 的主要模型。這些指標只適用於 20
 
 ---
 
-## 6. Track B 七天 Preliminary Baseline
+## 6. Track B 已完成檢查點
 
 ### 6.1 Target
 
@@ -210,7 +210,7 @@ prediction(t + horizon) = available_bikes(t)
 
 這不是 learned model，而是後續模型必須超越的必要基準。
 
-### 6.3 Chronological split
+### 6.3 七天 preliminary baseline（歷史證據）
 
 | Split | Snapshots | Rows | 用途 |
 |---|---:|---:|---|
@@ -220,7 +220,9 @@ prediction(t + horizon) = available_bikes(t)
 
 跨越 validation／test 邊界的 future label 會被 purge，避免資料洩漏。
 
-### 6.4 Preliminary 結果
+七天資料曾使用五天 train block、一天 validation 與其餘 test，並 purge 跨界 future labels。這是 2026-08-28 的 preliminary checkpoint，不是目前資料總量。
+
+### 6.4 七天 preliminary 結果
 
 | Horizon | Split | MAE | RMSE | R² |
 |---|---|---:|---:|---:|
@@ -230,6 +232,17 @@ prediction(t + horizon) = available_bikes(t)
 | 60m | Test | **3.140** | **5.064** | **0.712** |
 
 30 分鐘比 60 分鐘容易，反映短期庫存具有較強狀態延續性。高 R² 主要代表 availability 的短期自相關，不代表已完成缺車預警或營運改善。
+
+### 6.5 固定十四天 stability analysis（目前已完成檢查點）
+
+固定期間為 `[2026-08-21 09:45:02 UTC, 2026-09-04 09:45:02 UTC)`。7,240,919 station rows 包含 4,031 snapshots、1,800 stations、0 duplicate station-time keys，估計缺少一個五分鐘時槽。
+
+| Horizon | Week 1 MAE | Week 2 MAE |
+|---|---:|---:|
+| 30m | 1.704 | 1.030 |
+| 60m | 2.544 | 1.564 |
+
+Week 2 誤差較低不代表模型變好：persistence 定義在兩週完全相同，也沒有 fitting。差異表示 station-state dynamics 會跨週變動，因此正式 learned regression 必須等待固定 28 天 audit 後，以同一 test scope 與 persistence 比較。
 
 ---
 
@@ -326,7 +339,7 @@ D1 的核心資料表：
 - Node test runner：Worker transformation、validation、timestamp、retry、logging 與 export range。
 - 固定 config、model metadata 與 SHA-256 artifact validation。
 - 大型 raw／processed dataset 不放入 Git；Git 保存 source、schema、config、tests、metrics 與文件。
-- 最後一次 Stage 15 完整驗證：Python 58 tests passed、collector 9 tests passed。
+- 最後一次 Stage 16 完整驗證：Python 62 tests passed、collector 9 tests passed。
 
 ---
 
@@ -397,14 +410,17 @@ youbike-demand-prediction/
 - 已比較 weekday／weekend availability 分布與兩週 persistence stability。
 - Collector 持續執行，沒有因分析停止或重新啟動。
 
-### 2026-09-18 約 17:45：連續二十八天門檻
+### 2026-09-18 17:45:02 Asia/Taipei 之後：固定二十八天檢查
 
-- 建立 Track B 第一版 learned regression。
+- 先確認固定二十八天資料通過 coverage、缺值、重複及站點變化 audit。
+- Audit 通過後才建立 Track B 第一版 learned regression。
 - 使用 current bikes、capacity、calendar、past-only lag／rolling features。
 - 設計正式 chronological train／validation／test split。
 - 只用 validation 做模型選擇。
 - 在相同 test scope 與 persistence baseline 比較 MAE、RMSE、R²。
 - 進行 station、hour、weekday／weekend error analysis。
+
+日期到達不等於資料通過，也不等於模型完成。
 
 ### 後續研究
 
@@ -426,6 +442,9 @@ Track B 已從短時間本機測試進展為正式雲端即時資料系統。Clo
 
 ## 13. 延伸文件
 
+- [GitHub project page](../README.md)
+- [Reproducibility guide](REPRODUCIBILITY.md)
+- [Historical Dashboard／歷史回測展示](../dashboard/README.md)
 - [Current-state project plan](../PROJECT_PLAN.md)
 - [Stage 16 Track B fourteen-day stability analysis](STAGE_16_TRACK_B_14_DAY_STABILITY.md)
 - [Project handoff](../HANDOFF.md)

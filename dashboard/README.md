@@ -1,6 +1,12 @@
-# YouBike 歷史需求觀測站
+# Historical Dashboard／歷史回測展示
 
-Stage 9 的互動式歷史預測展示。網站讀取由專案既有模型產生的靜態資料包，讓使用者切換 2023 年 12 月代表性時段，查看 100 個站點的預測、實際值與誤差。
+This React 19 + Vinext interface explores 10 representative timepoints from the December 2023 Track A holdout. It reads the checked-in static prediction bundle and shows predictions, post-inference actual values, errors, model comparisons, rolling-origin results, and feature importance for the training-defined top-100 stations.
+
+這是 Stage 9 的互動式歷史回測展示，不是即時站點庫存、缺車預警或補車建議。網站讀取由既有模型產生的靜態資料包，讓使用者切換 2023 年 12 月代表性時段，查看 100 個站點的預測、實際值與誤差。
+
+![YouBike historical demand observatory artwork](public/og.png)
+
+The existing hosted deployment was checked on 2026-09-09 and remains owner-restricted. Public visitors should use the local instructions below; no public deployment URL is claimed.
 
 ## 更新儀表板資料
 
