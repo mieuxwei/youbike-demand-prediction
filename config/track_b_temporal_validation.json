@@ -1,0 +1,46 @@
+{
+  "format_version": 1,
+  "status": "pre_registered_before_independent_export",
+  "history_start": "2026-09-18T17:30:00Z",
+  "evaluation_start": "2026-09-18T18:30:00Z",
+  "evaluation_end_exclusive": "2026-09-25T18:30:00Z",
+  "expected_interval_minutes": 5,
+  "gap_threshold_minutes": 5.5,
+  "minimum_snapshot_coverage_percent": 99.0,
+  "minimum_usable_target_coverage_percent": 95.0,
+  "minimum_station_improvement_percent": 50.0,
+  "minimum_mae_improvement_percent": 0.0,
+  "minimum_rmse_improvement_percent": 0.0,
+  "training_config_path": "config/track_b_regression.json",
+  "training_config_sha256": "6a1fb0ace9044086973ba8bd5aad44b42df9dbfd208b79e8026f185d3ae7289f",
+  "models": [
+    {
+      "horizon_minutes": 30,
+      "artifact_path": "models/track_b_30m_regression.joblib",
+      "artifact_sha256": "47f37095e1ee8e2d208fa8e0136a75e20005aecfd81afda6ffe33f8685bd202b",
+      "metadata_path": "models/track_b_30m_regression.metadata.json",
+      "metadata_sha256": "1d6d0d72be3510c55adef1d552f76142e1e92ce128c7fffa59045de7866f9a41",
+      "stage_17_holdout": {
+        "learned_mae": 2.0566721849490963,
+        "persistence_mae": 2.04286174285813,
+        "learned_rmse": 3.4544435900033723,
+        "persistence_rmse": 3.702379077691145,
+        "primary_mae_gate_passed": false
+      }
+    },
+    {
+      "horizon_minutes": 60,
+      "artifact_path": "models/track_b_60m_regression.joblib",
+      "artifact_sha256": "d4bc2df1c815a7c722e900891b668d3b2a7124f66966913081cb957b5ec7e6f6",
+      "metadata_path": "models/track_b_60m_regression.metadata.json",
+      "metadata_sha256": "b583107f9416cf161e3d937c3b09f1b20e433f6579c62651c5e2cf09068cf356",
+      "stage_17_holdout": {
+        "learned_mae": 2.922088209016867,
+        "persistence_mae": 3.0119511237198284,
+        "learned_rmse": 4.644551813222179,
+        "persistence_rmse": 5.189885448989986,
+        "primary_mae_gate_passed": true
+      }
+    }
+  ]
+}

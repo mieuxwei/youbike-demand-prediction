@@ -1,0 +1,61 @@
+{
+  "format_version": 1,
+  "model_name": "hgb_regularized",
+  "artifact_filename": "track_b_30m_regression.joblib",
+  "artifact_sha256": "47f37095e1ee8e2d208fa8e0136a75e20005aecfd81afda6ffe33f8685bd202b",
+  "target": "target_available_bikes_30m",
+  "target_scope": "future station available bikes",
+  "horizon_minutes": 30,
+  "feature_columns": [
+    "available_bikes",
+    "available_return_bikes",
+    "capacity",
+    "availability_fraction",
+    "return_space_fraction",
+    "latitude",
+    "longitude",
+    "hour_sin",
+    "hour_cos",
+    "day_of_week_sin",
+    "day_of_week_cos",
+    "is_weekend",
+    "is_rush_hour",
+    "available_bikes_lag_15m",
+    "available_bikes_delta_15m",
+    "available_bikes_lag_30m",
+    "available_bikes_delta_30m",
+    "available_bikes_lag_60m",
+    "available_bikes_delta_60m",
+    "available_bikes_mean_past_30m",
+    "observations_past_30m",
+    "available_bikes_mean_past_60m",
+    "observations_past_60m"
+  ],
+  "calendar_timezone": "Asia/Taipei",
+  "storage_timezone": "UTC",
+  "capacity_clipping": true,
+  "training_snapshot_stride": 6,
+  "trained_through": "2026-09-13T09:45:02+00:00",
+  "test_start": "2026-09-13T09:45:02+00:00",
+  "test_end_exclusive": "2026-09-18T09:45:02+00:00",
+  "test_metrics": {
+    "mae": 2.0566721849490963,
+    "rmse": 3.4544435900033723,
+    "r2": 0.8655624304168896,
+    "mean_error_prediction_minus_actual": 0.07264747362320928
+  },
+  "candidate": {
+    "name": "hgb_regularized",
+    "model_type": "hist_gradient_boosting",
+    "learning_rate": 0.08,
+    "max_iter": 120,
+    "max_leaf_nodes": 31,
+    "min_samples_leaf": 200,
+    "l2_regularization": 1.0
+  },
+  "library_versions": {
+    "scikit_learn": "1.6.1",
+    "pandas": "2.3.3",
+    "numpy": "2.0.2"
+  }
+}

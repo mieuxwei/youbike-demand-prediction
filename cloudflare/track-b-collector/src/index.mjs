@@ -2,7 +2,9 @@ const DEFAULT_API_URL =
   "https://tcgbusfs.blob.core.windows.net/dotapp/youbike/v2/youbike_immediate.json";
 const DEFAULT_TIMEOUT_MS = 15_000;
 const MAX_RETRIES = 3;
-const RETRY_DELAYS_MS = [250, 1_000];
+// Keep retries far enough apart to cross a transient upstream blob-replacement
+// window. The scheduled snapshot timestamp remains fixed across all attempts.
+const RETRY_DELAYS_MS = [2_000, 10_000];
 const MAX_EXPORT_PAGE_SIZE = 25_000;
 
 export const REQUIRED_API_FIELDS = [
@@ -193,6 +195,7 @@ export async function fetchSnapshot({
   try {
     response = await fetchImpl(url, {
       headers: { accept: "application/json" },
+      cache: "no-store",
       signal: AbortSignal.timeout(timeoutMs),
     });
   } catch (error) {
@@ -207,13 +210,36 @@ export async function fetchSnapshot({
       `YouBike API returned HTTP ${response.status}`,
     );
   }
-  let payload;
+  let responseText;
   try {
-    payload = await response.json();
+    responseText = await response.text();
   } catch (error) {
-    throw new CollectorError("malformed_response", "YouBike API returned invalid JSON", {
+    throw new CollectorError("malformed_response", "YouBike API response body could not be read", {
       cause: error,
     });
+  }
+
+  const normalizedText = responseText.replace(/^\uFEFF/, "").trim();
+  if (normalizedText === "") {
+    throw new CollectorError("empty_response", "YouBike API returned an empty response body");
+  }
+
+  let payload;
+  try {
+    payload = JSON.parse(normalizedText);
+  } catch (error) {
+    const contentType = response.headers.get("content-type") ?? "unknown";
+    const contentLength = response.headers.get("content-length") ?? "unknown";
+    const lastModified = response.headers.get("last-modified") ?? "unknown";
+    const etag = response.headers.get("etag") ?? "unknown";
+    const firstCharacter = JSON.stringify(normalizedText.slice(0, 1));
+    throw new CollectorError(
+      "malformed_response",
+      `YouBike API returned invalid JSON (content-type=${contentType}; ` +
+        `received-chars=${responseText.length}; content-length=${contentLength}; ` +
+        `first-char=${firstCharacter}; last-modified=${lastModified}; etag=${etag})`,
+      { cause: error },
+    );
   }
   return transformApiPayload(payload, snapshotTime);
 }

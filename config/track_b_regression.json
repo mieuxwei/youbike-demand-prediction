@@ -1,0 +1,32 @@
+{
+  "window_start": "2026-08-21T09:45:02Z",
+  "train_end": "2026-09-08T09:45:02Z",
+  "validation_end": "2026-09-13T09:45:02Z",
+  "test_end": "2026-09-18T09:45:02Z",
+  "horizons_minutes": [30, 60],
+  "lag_minutes": [15, 30, 60],
+  "rolling_windows_minutes": [30, 60],
+  "target_tolerance_minutes": 2,
+  "training_snapshot_stride": 6,
+  "random_state": 42,
+  "candidates": [
+    {
+      "name": "hgb_shallow",
+      "model_type": "hist_gradient_boosting",
+      "learning_rate": 0.08,
+      "max_iter": 80,
+      "max_leaf_nodes": 15,
+      "min_samples_leaf": 300,
+      "l2_regularization": 2.0
+    },
+    {
+      "name": "hgb_regularized",
+      "model_type": "hist_gradient_boosting",
+      "learning_rate": 0.08,
+      "max_iter": 120,
+      "max_leaf_nodes": 31,
+      "min_samples_leaf": 200,
+      "l2_regularization": 1.0
+    }
+  ]
+}

@@ -9,7 +9,7 @@ training.
 
 ```text
 Cloudflare Cron (*/5 * * * *)
-        -> Worker validation and retry
+        -> uncached Worker fetch, validation, and retry
         -> D1 station_snapshots + collection_runs
         -> protected /export.csv endpoint
         -> src/export_track_b.py
@@ -19,6 +19,13 @@ Cloudflare Cron (*/5 * * * *)
 D1 is the primary store because Track B needs indexed station-and-time queries.
 R2 is not enabled in this stage. A raw JSON archive can be added later only if a
 retention or audit requirement justifies the extra storage and synchronization.
+
+The upstream request uses `cache: "no-store"`. Transient HTTP, network,
+malformed-body, empty-body, and schema failures are retried up to three times
+over a twelve-second backoff window. Every retry keeps the same scheduled
+`snapshot_time`, so the D1 primary key still prevents duplicate station-time
+rows. Malformed JSON logs include only response metadata (content type, lengths,
+first character, last-modified, and ETag), never the full response body.
 
 ## Local checks
 

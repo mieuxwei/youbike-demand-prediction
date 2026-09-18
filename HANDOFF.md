@@ -1,17 +1,17 @@
 # HANDOFF — YouBike Demand Prediction & Optimization
 
-**Date:** 2026-09-05
+**Date:** 2026-09-19
 
-**Current Stage:** Stage 16 — Track B Fourteen-Day Stability Analysis Complete
+**Current Stage:** Stage 19-A — Track B Independent Temporal Validation Pre-Registered; Execution Pending 2026-09-26
 
-**Deployment status:** Cloudflare D1／Worker／Cron production deployment active. Fixed fourteen-day authorized export, station-row audit, weekday／weekend distribution and two-week persistence stability comparison completed; collector continues toward 28 days. `EXPORT_TOKEN` remains in macOS Keychain service `youbike-track-b-export`, not in Git.
+**Deployment status:** Cloudflare Worker version `30e22fe9-9d56-48d1-9cb3-c84c551112d2` was deployed on 2026-09-19 with uncached upstream fetches, safer malformed-response diagnostics, and a longer retry window. D1 schema, stored rows, Cron schedule, export secret, Track A, and Stage 17 model artifacts were not changed. The first nine post-deployment Cron runs all succeeded on attempt 1 with 1,803 station rows each; the 02:00:03 Asia/Taipei checkpoint contained 8,158 snapshots and 14,670,350 rows. `EXPORT_TOKEN` remains in macOS Keychain service `youbike-track-b-export`, not in Git.
 
 ## 1. 交接摘要
 
 目前專案已有一條成熟的歷史需求研究線與一條仍在累積資料的即時 availability 研究線。接手者必須保持兩者的 target、資料、評估與對外說法分離。
 
 - **Track A：歷史轉乘需求預測** — 已完成 2023 全年資料、天氣、Naive／Ridge／HGB／XGBoost、rolling-origin validation、feature-group ablation、完整 error analysis、consolidated research summary、預測介面與 Interactive Web Demo；目前進入維護狀態。
-- **Track B：即時可用車／缺車風險** — 已完成本機 pipeline、Cloudflare Worker + Cron + D1 部署及十四天 stability analysis；正在累積至 28 天，尚未開始正式 learned modeling。
+- **Track B：即時可用車／缺車風險** — 已完成 Cloudflare Worker + Cron + D1、固定 28 天 audit 與第一版 learned 30／60 分鐘 regression；collector 修復後持續累積。Stage 19-A 已在獨立資料匯出前凍結未來七天 window、模型 hashes 與決策 gates；9/26 執行。30m MAE 尚未超越 persistence，60m MAE 小幅改善 2.98%，尚未建立 shortage／full classifier。
 - **Deep Learning 與 Optimization** — 尚未開始；Optimization 不能使用 Track A demand 直接當 shortage。
 
 ## 2. 已完成成果
@@ -75,9 +75,9 @@
 | 固定樣本 30 分鐘 future target | 0% coverage |
 | 固定樣本 60 分鐘 future target | 0% coverage |
 | 本機蒐集測試 | 12 份、約一小時；不足以作為正式訓練資料 |
-| Cloud live dataset | 固定十四天分析：7,240,919 rows、4,031 snapshots、1,800 stations |
+| Cloud live dataset | 固定 28 天分析：14,490,149 rows、8,058 snapshots、1,803 stations |
 | Cloud collector | 已部署；`*/5 * * * *` 排程執行中 |
-| 多日 coverage | 十四天完成；0 duplicates、1 missing slot；兩週 active target coverage 30m ≥99.35%、60m ≥98.76% |
+| 多日 coverage | 28 天完成；0 duplicates、7 missing slots；30／60m target coverage 97.971%／97.750% |
 
 快照間車輛數變化混合租借、還車、調度與資料修正，不能直接視為實際租借量。
 
@@ -122,7 +122,7 @@ Rolling-origin HGB folds 的 MAE 為 1.636、1.592、1.606；XGBoost folds 為 1
 4. Track A 使用的歷史天氣是事後再分析資料；真正未來預測要改用當時可取得的 forecast。
 5. Dashboard 是 2023 年 12 月歷史 holdout 回測，不是 live availability dashboard。
 6. Track A demand ranking 不能直接轉成 shortage、surplus 或 redistribution quantity。
-7. Track B 尚無足夠多日連續快照；正式 availability／risk model 未開始。
+7. Track B 第一版 learned regression 已完成，但 30m MAE 未超越 persistence，60m 改善仍小；尚非 production live prediction。
 8. 快照車輛數差異不是純租借事件。
 9. HGB 雖是現有最佳模型，仍有尖峰時段與高需求站誤差。
 10. XGBoost 已完成但未超越 HGB；Random Forest 僅為選配，Deep Learning 與 Optimization 未開始。
@@ -132,15 +132,15 @@ Rolling-origin HGB folds 的 MAE 為 1.636、1.592、1.606；XGBoost folds 為 1
 | Track | 狀態 | 下一個有效成果 |
 |---|---|---|
 | Track A：歷史轉乘需求 | Naive／Ridge／HGB／XGBoost、ablation、完整 error analysis、research summary 與展示已完成 | 維護；有新年度資料時做跨年度驗證 |
-| Track B：即時 availability／risk | 十四天 audit／stability complete；正式 learned model 未開始 | 持續至固定 28 天，先 audit 再建 30／60m regression |
+| Track B：即時 availability／risk | 固定 28 天 audit 與第一版 30／60m learned regression 完成；collector 持續累積 | 保留 Stage 17 split；做獨立時間窗驗證並定義 risk target |
 | Deep Learning | 未開始／非優先 | 只有新增研究價值明確時才重新評估 |
 | Optimization | 未開始 | Track B 有效預測與營運限制定義完成後才設計 |
 
 ## 8. 下一步優先順序
 
-1. **Track B：持續監控。** Worker／Cron／D1 與 protected export 已驗證；collector 持續在雲端執行，不需本機程序。
-2. **Track B：累積至固定 28 天。** 十四天分析已完成；2026-09-18 17:45:02 Asia/Taipei 後再做完整匯出與 audit。
-3. **Track B：28 天 learned regression。** 先固定 chronological split，再以 past-only features 訓練 30／60m regression，所有決策只用 train／validation，test 與 persistence 使用相同 scope。
+1. **Track B：持續監控。** Worker／Cron／D1 與 protected export 已驗證；2026-09-19 resilience repair 部署後已連續兩輪成功蒐集，仍需觀察長期 scheduled-run 穩定性。
+2. **Track B：保留 Stage 17 基準。** 固定 28 天 audit、chronological split 與第一版 30／60m regression 已完成；不得用既有 holdout 反覆選模。
+3. **Track B：下一個研究關卡。** 先做獨立時間窗驗證與 risk target／cost 定義，再決定是否開始 classification。
 4. **Track A：維護既有成果。** Research summary 已完成；沿用現有 HGB／XGBoost／ablation／error results，不重做已完成模型。
 5. **Deep Learning 非優先。** Track A 研究鏈已完整；只有新增研究價值明確時才重新評估。
 6. **延後 Optimization。** 不得以 Track A hourly demand 直接推導缺車或調度。
@@ -439,7 +439,7 @@ Track B collector 繼續累積；滿 7 天時執行第一輪 coverage／gap audi
 
 ### Next recommended step
 
-Collector 不停止。14 天時從 macOS Keychain 載入 token 後重新匯出，做平日／週末 coverage、分布及 persistence stability comparison；28 天再建立 Track B 第一版 learned regression。新模型必須用 past-only features、validation-only decision，並在同一 test scope 超越 persistence。Risk classification 必須先另行定義 label／threshold。
+當時建議為持續蒐集至 14／28 天後再建立 learned regression；此項已由 Stage 16／17 完成。Risk classification 仍必須先另行定義 label／threshold。
 
 ### Validation
 
@@ -526,4 +526,160 @@ Schema 仍是 `station_snapshots` 的 `(station_id, snapshot_time)` primary key�
 2. 有一輪 Cron 沒有 snapshot 或 run log；不能由現有證據判定根因。
 3. 沒有 shortage／full threshold、classifier、optimization 或 live Dashboard。
 4. 快照差值仍混合借車、還車、調度與修正，不是純需求。
-5. 下一步等待固定 28 天門檻（2026-09-18 17:45:02 Asia/Taipei）；先 audit，再用 past-only features 建 30／60m regression，validation-only decision，與 persistence 在相同 test scope 比較。
+5. 當時的下一步為固定 28 天 audit 與 learned regression；此項已由 Stage 17 完成。
+
+## 17. Stage 17 最新交接紀錄
+
+### Date and Current Stage
+
+- Date：2026-09-19。
+- Current Stage：Track B 28-Day Audit and First Learned Regression Complete。
+- Track A model、metrics、data 與 Dashboard 均未修改。
+
+### Fixed dataset and audit
+
+- 分析視窗：`[2026-08-21 09:45:02 UTC, 2026-09-18 09:45:02 UTC)`。
+- 14,490,149 station rows、8,058 snapshots、1,803 stations。
+- 0 duplicate station-time keys；7 個 isolated 10-minute gaps，估計缺 7 個五分鐘時槽。
+- 30／60m future-target coverage：97.971%／97.750%。
+- 原始合併 CSV 約 2.0 GiB，位於 Git-ignored `data/processed/track_b_28_days.csv`。
+- Days 1–14 SHA-256：`8f4d4939977c4c5be5639e712048f82aab75410ac05787526a55aba2cabe6c43`。
+- Days 15–28 SHA-256：`c5ecfe933acd009fca7e191b4388fbe356dfec40c15138187853d4eed0e2bae0`。
+
+### Split and feature rules
+
+- Train：18 日；9,312,719 raw rows、5,182 snapshots。
+- Validation：5 日；2,588,400 raw rows、1,438 snapshots。
+- Test：5 日；2,589,030 raw rows、1,438 snapshots。
+- Future target crossing train／validation／test end is purged。
+- Predictors：current bikes、return spaces、capacity、fractions、location、Asia/Taipei cyclical calendar、15／30／60m past-only lag／delta、30／60m past-only rolling statistics。
+- Training 使用每第六個 snapshot 的完整站點橫切面以控制成本；validation／test 使用完整 eligible rows。
+- HGB shallow 與 HGB regularized 只以 validation MAE 比較；兩個 horizon 均選出 regularized candidate。
+
+### Holdout metrics
+
+| Horizon | Model | Rows | MAE | RMSE | R² |
+|---:|---|---:|---:|---:|---:|
+| 30m | Persistence | 2,518,633 | **2.043** | 3.702 | 0.846 |
+| 30m | HGB regularized | 2,518,633 | 2.057 | **3.454** | **0.866** |
+| 60m | Persistence | 2,507,965 | 3.012 | 5.190 | 0.697 |
+| 60m | HGB regularized | 2,507,965 | **2.922** | **4.645** | **0.757** |
+
+- 30m：HGB RMSE 改善 6.70%，但 MAE 惡化 0.68%，不可宣稱全面優於 persistence。
+- 60m：HGB MAE 改善 2.98%，RMSE 改善 10.51%；屬 modest first result。
+- Test 完整 scope 有 1,777 stations；30m 有 716 站改善 MAE，60m 有 1,138 站改善。
+- 尖峰時段仍是高誤差情境；local hour 07 learned MAE 為 30m 3.580、60m 5.024。
+
+### New files
+
+- `config/track_b_regression.json`
+- `src/train_track_b_regression.py`
+- `tests/test_track_b_regression.py`
+- `docs/STAGE_17_TRACK_B_28_DAY_REGRESSION.md`
+- `models/track_b_30m_regression.joblib`
+- `models/track_b_60m_regression.joblib`
+- `models/track_b_30m_regression.metadata.json`
+- `models/track_b_60m_regression.metadata.json`
+- `results/track_b_28d_*.csv`
+- `results/track_b_28d_*.json`
+
+### Model artifacts
+
+- 30m SHA-256：`47f37095e1ee8e2d208fa8e0136a75e20005aecfd81afda6ffe33f8685bd202b`。
+- 60m SHA-256：`d4bc2df1c815a7c722e900891b668d3b2a7124f66966913081cb957b5ec7e6f6`。
+- Metadata records feature order、target、horizon、split、candidate、library versions、capacity clipping 與 holdout metrics。
+
+### Deployment and collector checkpoint
+
+- Worker source、D1 schema、Cron、secret 與 deployment 均未修改。
+- 2026-09-19 01:12:02 Asia/Taipei read-only `/health`：累積 8,149 snapshots、14,654,123 rows；最近成功 snapshot 為 2026-09-19 00:50:35 Asia/Taipei。
+- 01:10:35 scheduled run after the fixed analysis window failed after three attempts because the Worker received malformed JSON。官方 endpoint 在本機唯讀檢查時已回傳合法 JSON，但 Worker 至最後查核尚未恢復。Stage 17 沒有自行重啟或部署 collector。
+
+### Known limitations and next recommended step
+
+1. 30m HGB 未在 MAE 超越 persistence；60m 改善幅度仍小。
+2. 二十八天仍不足以涵蓋季節、長期站點變化與特殊事件。
+3. Snapshot changes 混合租借、還車、調度與資料修正。
+4. 尚未定義 shortage／full threshold、class cost、classifier 或 optimization。
+5. 下一步先處理 station／hour error analysis 的研究假設，並定義 risk target；不得用 holdout 反覆調參。
+6. Collector 繼續累積，供未來獨立時間窗驗證。
+7. 先監控／診斷 Worker 端 malformed JSON；恢復前不可宣稱雲端資料仍連續累積。
+
+### Validation
+
+- 完整 Python repository tests：66 passed。
+- Cloudflare collector Node tests：9 passed。
+- 28 天 authorized export、audit、feature construction、candidate tuning、holdout evaluation 與 error aggregation 均實際完成。
+- Artifact SHA-256 與 metadata 一致；Markdown local links 與 `git diff --check` 通過。
+
+## 18. Stage 18 最新交接紀錄
+
+### Incident and scope
+
+- Date：2026-09-19。
+- Stage 17 固定資料、split、模型、metrics 與 artifact 均未變。
+- 事件：部署前多輪 scheduled collection 在三次嘗試後仍收到 malformed JSON；同時本機直接讀取官方 endpoint 可取得合法 JSON，因此只判定為 transient upstream／cache-path 問題的合理假設，不宣稱已證明唯一 root cause。
+
+### Collector repair
+
+- 上游 Worker `fetch()` 新增 `cache: "no-store"`。
+- 回應改為先讀文字、移除 optional UTF-8 BOM、明確拒絕空 body，再做 `JSON.parse()`。
+- malformed 診斷只保存 content type、長度、首字元、last-modified 與 ETag，不保存完整 response body。
+- Retry backoff 從 250 ms + 1,000 ms 延長為 2,000 ms + 10,000 ms；所有 attempts 維持同一 scheduled snapshot key，D1 primary key 去重規則未變。
+- D1 schema、既有 rows、Cron `*/5 * * * *`、`EXPORT_TOKEN` 與 Track A 未修改。
+
+### Deployment and health evidence
+
+- Worker version：`30e22fe9-9d56-48d1-9cb3-c84c551112d2`。
+- 第一輪 post-deployment Cron：`2026-09-18T17:20:35Z` scheduled，`17:21:15.945Z` finished，attempt 1 success，寫入 1,803 rows。
+- 第二輪：`2026-09-18T17:25:01Z` scheduled，`17:25:03.962Z` finished，attempt 1 success，再寫入 1,803 rows。
+- 第二輪 checkpoint 累積 8,151 snapshots、14,657,729 rows，最新 snapshot 為 2026-09-19 01:25:01 Asia/Taipei。
+- 連續兩輪成功證明 collector 已恢復寫入，但不等於長期穩定；後續仍由正常五分鐘 Cron 持續監控。
+
+### Validation
+
+- Cloudflare collector Node tests：11 passed。
+- Wrangler dry-run：19.55 KiB，gzip 5.50 KiB；D1 與 vars bindings 解析成功。
+- Production deployment、trigger deployment 與 post-deployment `/health` 查核成功。
+- 詳細紀錄：[Stage 18 collector resilience repair](docs/STAGE_18_TRACK_B_COLLECTOR_RESILIENCE.md)。
+
+## 19. Stage 19-A 最新交接紀錄
+
+### Pre-registered window and freeze
+
+- Date：2026-09-19；獨立資料尚未匯出前完成。
+- History warm-up：`[2026-09-18T17:30:00Z, 2026-09-18T18:30:00Z)`，只供 lag／rolling feature 使用。
+- Evaluation：`[2026-09-18T18:30:00Z, 2026-09-25T18:30:00Z)`，即 Asia/Taipei 2026-09-19 02:30 至 2026-09-26 02:30。
+- 30m／60m model、metadata、training config SHA 均已寫入 freeze manifest；runner 會在 joblib load 前驗證。
+- 不重新訓練、不修改 features、不用 independent window 調參。
+
+### Pre-registered gates
+
+- Snapshot coverage 至少 99.0%，預期七天 2,016 個五分鐘 snapshots。
+- 0 duplicate station-time keys。
+- 各 horizon usable active-row target coverage 至少 95.0%。
+- Learned model 必須同時改善 MAE、RMSE，且至少 50% evaluated stations 的 MAE 優於 persistence，才通過 independent temporal gate。
+- 最終 learned model 確認還必須與 Stage 17 primary MAE gate 一致；30m 即使新 window 勝出，也因 Stage 17 MAE 未勝而只能判為 mixed evidence。
+
+### New files and command
+
+- `config/track_b_temporal_validation.json`
+- `src/validate_track_b_temporal.py`
+- `tests/test_track_b_temporal_validation.py`
+- `docs/STAGE_19_TRACK_B_INDEPENDENT_VALIDATION.md`
+- `docs/REPRODUCIBILITY.md` 已加入 9/26 export 與單一執行流程。
+
+Stage 19-B 在 2026-09-26 02:30 Asia/Taipei 後執行。Raw CSV 維持 Git-ignored；只提交 compact metrics、coverage、gaps、station/hour errors 與 decision summary。
+
+### Current boundary
+
+- Stage 19-A 只完成工具、凍結與 protocol，尚無 independent metrics。
+- 不可把 planned Stage 19-B 結果寫成 completed。
+- Shortage／full classifier、live prediction service 與 optimization 仍未開始。
+
+### Validation
+
+- 完整 Python repository tests：72 passed。
+- Cloudflare collector Node tests：11 passed。
+- Temporal validation CLI `--help` smoke test：passed。
+- Freeze manifest 已對真實 30m／60m artifacts、metadata 與 training config 做 checksum integration test。

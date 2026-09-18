@@ -1,11 +1,11 @@
-# YouBike Demand Prediction & Optimization — Current-State v3
+# YouBike Demand Prediction — Current-State v4
 
 ## 1. 文件目的
 
 本文件以目前 repository 的實際成果為基準，取代把專案描述成「準備建立 Baseline」的舊計畫。專案分為兩條目標、資料與評估方式不同的研究線；兩者不可共用 target，也不可把其中一條的輸出直接解讀成另一條的成果。
 
 - **Track A：歷史轉乘需求預測** — 已完成可重現的主要研究與展示鏈。
-- **Track B：Cloud Live Data Collection／即時可用車研究** — Cloudflare Worker + Cron + D1 已正式部署並自 2026-08-21 持續蒐集；2026-09-05 已完成固定 14 天、7,240,919 rows 的 gap／target audit、平日週末分布與兩週 persistence stability comparison。Collector 繼續累積至 28 天，正式 learned model 尚未開始。
+- **Track B：Cloud Live Data Collection／即時可用車研究** — Cloudflare Worker + Cron + D1 已正式部署並自 2026-08-21 蒐集；2026-09-19 已完成固定 28 天、14,490,149 rows 的 audit，以及第一版 30／60 分鐘 learned HGB regression。30m MAE 未超越 persistence；60m MAE 小幅改善 2.98%。Stage 19 的未來七天獨立驗證窗、artifacts 與通過規則已在資料匯出前凍結。
 
 ## 2. 核心研究定義
 
@@ -26,7 +26,7 @@
 
 - Target：`target_available_bikes_30m`、`target_available_bikes_60m`，或後續明確定義的缺車／滿站標籤。
 - 可能輸入：目前可借車數、可還車位、站點容量、時間特徵、只向過去對齊的 lag／rolling 特徵，以及經驗證可取得的外部資訊。
-- 現況：本機蒐集器、清理流程、15／30／60 分鐘 lag／rolling、future target、雲端 Worker／Cron／D1 與 CSV export 已完成；固定十四天 audit 與 persistence stability comparison 已完成，正式 learned model 仍等待 28 天資料。
+- 現況：本機蒐集器、清理流程、15／30／60 分鐘 lag／rolling、future target、雲端 Worker／Cron／D1 與 CSV export 已完成；固定 28 天 audit 與第一版 30／60 分鐘 learned regression 已完成。Shortage／full risk 尚未定義。
 - 注意：快照間的車輛數變化可能同時包含租借、還車、調度與資料修正，不能直接當作租借需求。
 
 ## 3. 已驗證資料狀態
@@ -53,7 +53,9 @@
 - Preliminary current-availability persistence test：30m MAE 2.154、RMSE 3.626、R² 0.852；60m MAE 3.140、RMSE 5.064、R² 0.712。這只是 baseline，不是 shortage／full risk 結果。
 - 2026-09-05 固定十四天匯出：7,240,919 rows、4,031 snapshots、1,800 stations、0 duplicates；Week 2 有一個 10 分鐘 gap，估計少 1 個 snapshot。兩週 active-row target coverage：30m 99.701%／99.354%，60m 99.402%／98.757%。
 - 同一 persistence 定義的 Week 1／Week 2 MAE：30m 1.704／1.030、60m 2.544／1.564；共同 1,798 站 cohort 結果幾乎相同。週間差異顯示 baseline 情境敏感，不能宣稱 learned live prediction 已完成。
-- 正式建模前至少要有連續 7 天且包含平日與週末的資料；14–28 天會更有利於涵蓋週間差異。這是資料規劃門檻，不是模型有效性的保證。
+- 2026-09-19 固定 28 天匯出：14,490,149 rows、8,058 snapshots、1,803 stations、0 duplicates、7 個 isolated missing slots；30／60m target coverage 為 97.971%／97.750%。
+- 固定 18／5／5 日 chronological split 的 holdout：30m persistence／HGB MAE 為 2.043／2.057，HGB 未超越；60m persistence／HGB MAE 為 3.012／2.922，HGB 改善 2.98%。
+- 原訂 7／14／28 天資料門檻均已執行；資料量達標不等於模型有效，現有 30m 結果即未在 MAE 超越 persistence。
 
 ## 4. Track A 目前成果
 
@@ -115,8 +117,8 @@
 | Error Analysis | 已完成 | 已涵蓋 worst cases、hour／weekday、尖離峰、站點需求層級、天氣、政府機關放假類型與 daily errors |
 | Consolidated Research Summary | 已完成 | 已整合資料範圍、模型比較、rolling-origin、ablation、error analysis、限制與決策 |
 | Deep Learning | 未開始／非優先 | Track A 傳統模型研究鏈已完整；只有在新增研究價值明確時才評估 |
-| Track B availability model | 十四天 stability baseline 完成 | 未訓練新模型；28 天再用相同時序 scope 建立 learned regression 並比較 persistence |
-| Track B Cloud Live Collector | 已部署／十四天 audit 完成 | 固定匯出 7,240,919 rows；0 duplicates、1 missing slot，兩週 30／60m active target coverage 均至少 99.35%／98.76% |
+| Track B availability model | 第一版 learned regression 完成 | 固定 28 天、18／5／5 日切分；30m MAE 未超越 persistence，60m MAE 改善 2.98% |
+| Track B Cloud Live Collector | 已部署／28 天 audit 完成 | 固定匯出 14,490,149 rows；0 duplicates、7 missing slots，30／60m target coverage 97.971%／97.750% |
 | Optimization | 未開始 | 必須建立在 Track B 的有效狀態／風險預測與明確營運限制上 |
 | Interactive Web Demo | 已完成 | React 19 + Vinext + Cloudflare／Sites；歷史回測展示 |
 
@@ -124,11 +126,12 @@
 
 ### Priority 1 — 監控 Track B Cloud Live Data Collection
 
-1. Worker、D1 migration 與 `*/5 * * * *` Cron 已啟用；2026-08-28 第一輪 read-only D1 audit 已完成，collector 繼續運作。
-2. 部署第一天有 65 分鐘 gap；固定十四天視窗另在 2026-08-28 23:25 Asia/Taipei 缺一輪、形成 10 分鐘 gap。其餘十四天 snapshots 連續。
+1. Worker、D1 migration 與 `*/5 * * * *` Cron 已啟用；固定 28 天 audit 已完成。
+2. 2026-09-19 已部署 collector resilience repair：上游請求明確使用 `cache: "no-store"`、malformed response 記錄安全 metadata、retry backoff 從 1.25 秒延長為 12 秒。截至 02:00:01 Asia/Taipei，部署後九輪 Cron 均一次成功、各寫入 1,803 rows；仍需監控長期穩定性。
 3. `EXPORT_TOKEN` 授權下載與 station-row coverage 已驗證；matching value 已保存於 macOS Keychain service `youbike-track-b-export`，export client 已加入 transient retry 與 bounded time windows。
-4. 七天 preliminary persistence baseline 與十四天週間穩定性檢查均已完成；collector 繼續累積，28 天再建立正式 learned model。
+4. 七天 preliminary、十四天 stability 與固定 28 天 learned regression 均已完成；collector 持續累積，供未來 temporal validation。
 5. Shortage／full risk label 與 threshold 尚未定義，不宣稱 live risk prediction 完成。
+6. Stage 19-A 已完成：固定驗證窗為 `[2026-09-18 18:30 UTC, 2026-09-25 18:30 UTC)`，另保留前一小時 warm-up；Stage 19-B 在 2026-09-26 02:30 Asia/Taipei 後執行，不重訓或調參。
 
 ### Priority 2 — Track A Research Summary 已完成
 
@@ -137,12 +140,13 @@
 3. Track A 在目前計畫內進入維護狀態；未來有新年度資料時優先做跨年度驗證，而不是增加相近模型。
 4. Random Forest 不再是必要項；Deep Learning 只在研究問題與資源價值明確時重新評估。
 
-### Priority 3 — 平行累積 Track B 資料
+### Priority 3 — Track B 下一個研究關卡
 
-1. 持續蒐集至固定 28 天門檻（2026-09-18 17:45:02 Asia/Taipei），Cron 不停止。
-2. 28 天匯出後先重做 gap、duplicate、station 與 target coverage audit，再固定 learned-model chronological split。
-3. 第一版 regression 使用 past-only features，所有 model／feature 決策只使用 train／validation，test scope 與 persistence 完全相同。
-4. 明確定義 shortage／full-station label、threshold 與評估指標後，才另開 classification stage。
+1. 固定 28 天 audit 與第一版 regression 已完成，保留目前 split 與 holdout 作 Stage 17 基準。
+2. Stage 19 validation manifest 已凍結 artifacts、metadata、training config SHA、未來七天 window、data gates 與 model gates；9/26 只執行，不重新選模。
+3. 30m／60m learned model 必須在 MAE、RMSE 與多數站點同時通過 independent gate，且與 Stage 17 證據一致，才能確認跨時間窗改善。
+4. 明確定義 shortage／full-station label、threshold、class imbalance、false alarm 與 miss cost 後，才另開 classification stage。
+5. 目前不得把 HGB 包裝成 production live prediction。
 
 ### Priority 4 — 延後研究
 
@@ -186,13 +190,19 @@ Track A 可以作為長期需求背景訊號或候選特徵，但必須先經驗
 ## 10. Current Priority
 
 ```text
-Track B: Cloud Worker + D1 + Cron Running
+Track B: Cron Trigger Active / Resilience Repair Deployed
         ↓
 Continue Multi-day Snapshot Collection
         ↓
 14-Day Stability Audit Complete
         ↓
-28-Day Audit + First Learned Availability Regression
+28-Day Audit + First Learned Availability Regression Complete
+        ↓
+Independent Temporal Validation Pre-Registered / Execute 2026-09-26
+        ↓
+Freeze Final 30m / 60m Research Decision
+        ↓
+Define Risk Target Only If Evidence Supports It
 
 Track A: Preserve Existing Models and Dashboard
         ↓

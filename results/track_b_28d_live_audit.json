@@ -1,0 +1,16 @@
+{
+  "row_count": 14490149,
+  "snapshot_count": 8058,
+  "station_count": 1803,
+  "first_snapshot_utc": "2026-08-21T09:45:02+00:00",
+  "latest_snapshot_utc": "2026-09-18T09:40:35+00:00",
+  "coverage_hours": 671.926,
+  "coverage_days": 27.997,
+  "duplicate_station_snapshot_rows": 0,
+  "min_rows_per_snapshot": 1794,
+  "max_rows_per_snapshot": 1803,
+  "mean_rows_per_snapshot": 1798.231,
+  "gaps_over_threshold": 7,
+  "estimated_missing_slots": 7,
+  "max_gap_minutes": 10.0
+}

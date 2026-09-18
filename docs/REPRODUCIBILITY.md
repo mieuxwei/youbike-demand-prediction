@@ -128,7 +128,73 @@ python src/track_b_stability.py \
   --output-dir results
 ```
 
-The seven-day audit and preliminary baseline remain historical evidence. The current completed checkpoint is the fixed fourteen-day stability analysis. See the [first cloud audit](STAGE_14_TRACK_B_FIRST_COVERAGE_AUDIT.md), [seven-day preliminary baseline](STAGE_15_TRACK_B_PRELIMINARY_BASELINE.md), and [fourteen-day stability analysis](STAGE_16_TRACK_B_14_DAY_STABILITY.md).
+The seven-day audit and preliminary baseline plus fourteen-day stability analysis remain historical evidence. See the [first cloud audit](STAGE_14_TRACK_B_FIRST_COVERAGE_AUDIT.md), [seven-day preliminary baseline](STAGE_15_TRACK_B_PRELIMINARY_BASELINE.md), and [fourteen-day stability analysis](STAGE_16_TRACK_B_14_DAY_STABILITY.md).
+
+### Fixed 28-day audit and first learned regression
+
+Export the exact half-open analysis interval. The output is approximately 2 GiB and remains Git-ignored:
+
+```bash
+export TRACK_B_EXPORT_URL="https://youbike-track-b-collector.mieuxander.workers.dev/export.csv"
+export TRACK_B_EXPORT_TOKEN="$(security find-generic-password \
+  -a "$USER" -s youbike-track-b-export -w)"
+python src/export_track_b.py \
+  --start 2026-08-21T09:45:02Z \
+  --end 2026-09-18T09:45:02Z \
+  --output data/processed/track_b_28_days.csv
+unset TRACK_B_EXPORT_TOKEN
+```
+
+Audit the exact file without overwriting earlier checkpoint results:
+
+```bash
+python src/audit_track_b.py \
+  --input data/processed/track_b_28_days.csv \
+  --summary-output results/track_b_28d_live_audit.json \
+  --gaps-output results/track_b_28d_live_gaps.csv \
+  --targets-output results/track_b_28d_target_coverage.csv
+```
+
+Train the two candidate HGB regressions per horizon and compare the validation-selected model with persistence on the fixed holdout:
+
+```bash
+python src/train_track_b_regression.py \
+  --input data/processed/track_b_28_days.csv
+```
+
+The command uses the committed boundaries in `config/track_b_regression.json`, purges targets crossing a split boundary, and stores only compact metrics, error summaries, model artifacts, and metadata in Git. See the [Stage 17 report](STAGE_17_TRACK_B_28_DAY_REGRESSION.md).
+
+### Pre-registered independent temporal validation
+
+Stage 19 uses frozen Stage 17 artifacts. Do not retrain or edit the validation config after inspecting the independent data. After `2026-09-26 02:30 Asia/Taipei`, export the committed warm-up and evaluation range:
+
+Verify the frozen configuration without needing the future CSV:
+
+```bash
+python src/validate_track_b_temporal.py --check-only
+```
+
+```bash
+export TRACK_B_EXPORT_URL="https://youbike-track-b-collector.mieuxander.workers.dev/export.csv"
+export TRACK_B_EXPORT_TOKEN="$(security find-generic-password \
+  -a "$USER" -s youbike-track-b-export -w)"
+python src/export_track_b.py \
+  --start 2026-09-18T17:30:00Z \
+  --end 2026-09-25T18:30:00Z \
+  --output data/processed/track_b_independent_7d.csv
+unset TRACK_B_EXPORT_TOKEN
+```
+
+Run the frozen comparison:
+
+```bash
+python src/validate_track_b_temporal.py \
+  --input data/processed/track_b_independent_7d.csv \
+  --config config/track_b_temporal_validation.json \
+  --output-dir results
+```
+
+The tool verifies model, metadata, and training-config hashes before loading, evaluates HGB and persistence on identical rows, applies the pre-registered data/model gates, and writes compact coverage, metric, station, hour, and decision outputs. See the [Stage 19 protocol](STAGE_19_TRACK_B_INDEPENDENT_VALIDATION.md).
 
 ## Cloud collector checks
 

@@ -118,16 +118,51 @@ test("retries HTTP failures without changing the scheduled snapshot time", async
 
   assert.equal(result.attempts, 3);
   assert.equal(result.rows[0].snapshot_time, "2026-08-20T13:15:00.000Z");
-  assert.deepEqual(sleeps, [250, 1000]);
+  assert.deepEqual(sleeps, [2000, 10000]);
 });
 
-test("reports malformed and empty API responses", async () => {
+test("bypasses caches and accepts a UTF-8 BOM before valid JSON", async () => {
+  let requestOptions;
+  const rows = await fetchSnapshot({
+    snapshotTime: "2026-08-20T13:15:00Z",
+    fetchImpl: async (_url, options) => {
+      requestOptions = options;
+      return new Response(`\uFEFF${JSON.stringify([validRecord()])}`);
+    },
+  });
+
+  assert.equal(requestOptions.cache, "no-store");
+  assert.equal(requestOptions.headers.accept, "application/json");
+  assert.equal(rows[0].station_id, "500101001");
+});
+
+test("reports safe diagnostics for malformed and empty API responses", async () => {
   await assert.rejects(
     fetchSnapshot({
       snapshotTime: "2026-08-20T13:15:00Z",
-      fetchImpl: async () => new Response("not-json"),
+      fetchImpl: async () =>
+        new Response("not-json", {
+          headers: {
+            "content-type": "text/plain",
+            etag: '"example-etag"',
+          },
+        }),
     }),
-    (error) => error instanceof CollectorError && error.category === "malformed_response",
+    (error) =>
+      error instanceof CollectorError &&
+      error.category === "malformed_response" &&
+      error.message.includes("content-type=text/plain") &&
+      error.message.includes("received-chars=8") &&
+      error.message.includes('first-char="n"') &&
+      error.message.includes('etag="example-etag"') &&
+      !error.message.includes("not-json"),
+  );
+  await assert.rejects(
+    fetchSnapshot({
+      snapshotTime: "2026-08-20T13:15:00Z",
+      fetchImpl: async () => new Response("  \n"),
+    }),
+    (error) => error instanceof CollectorError && error.category === "empty_response",
   );
   await assert.rejects(
     fetchSnapshot({
@@ -136,6 +171,24 @@ test("reports malformed and empty API responses", async () => {
     }),
     (error) => error instanceof CollectorError && error.category === "empty_response",
   );
+});
+
+test("retries a transient malformed response and keeps one snapshot key", async () => {
+  let attempts = 0;
+  const sleeps = [];
+  const result = await fetchSnapshotWithRetry({
+    snapshotTime: "2026-08-20T13:15:00Z",
+    attempts: 2,
+    sleep: async (milliseconds) => sleeps.push(milliseconds),
+    fetchImpl: async () => {
+      attempts += 1;
+      return attempts === 1 ? new Response("[") : Response.json([validRecord()]);
+    },
+  });
+
+  assert.equal(result.attempts, 2);
+  assert.equal(result.rows[0].snapshot_time, "2026-08-20T13:15:00.000Z");
+  assert.deepEqual(sleeps, [2000]);
 });
 
 test("interprets date-only export ranges in Asia Taipei", () => {
