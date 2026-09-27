@@ -2,6 +2,8 @@
 
 Existing React 19 + Vinext website, extended without rebuilding research bundles or fitting models. Track A, Track B and Phase 4 use different targets/models; they are not one direct prediction pipeline.
 
+**Research and demonstration delivered; implementation frozen on 2026-09-27.** Ongoing cloud collection is separate infrastructure, not an automatic next research stage.
+
 **[Open the public demonstration](https://youbike-demand-observatory.rwhqgqfdk2.chatgpt.site/#live)** — no login, token or local setup. Sites version 3; public access and deployed desktop/mobile viewport checks are recorded below.
 
 - `#live`: fixed 12-station current observations, explicit 30m persistence and original Stage 17 / independently validated Stage 19 60m HGB.

@@ -79,7 +79,7 @@ def main():
             "authorized_v6_presentation_changes": sorted(PRESENTATION),
             "site_url": "https://youbike-demand-observatory.rwhqgqfdk2.chatgpt.site",
             "site_source_commit": "930ef06b094ffde278b93201150f1e9e40c17b54",
-            "site_version": "appgver_e5d6fb29f48881919a9229df858c06b8",
+            "site_version": "appgprj_6a87dd803dd48191b841e9d24dea3366~appgver_e5d6fb29f48881919a9229df858c06b8",
             "site_deployment": "appgdep_6ab8cdcfd9648191b6f76878881b25e7",
             "worker_version": "069e3f5a-5966-4efa-aafc-0ab2697dfa62",
             "acceptance_record": "docs/LIVE_DEMO_DELIVERY.md",

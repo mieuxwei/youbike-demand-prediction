@@ -3,8 +3,8 @@
 ## 專案介紹、技術架構與目前狀態
 
 - **文件更新日期：** 2026-09-27
-- **作品性質：** Independent Time-Series Research Project · 研究 frozen／展示交付驗收中
-- **專案狀態：** 原本機研究版已驗證並保存於 `159f059`；v7 只重開 live demo 工程與公開部署，不重訓或重寫成績。新增固定 12 站目前觀測、30m persistence、原 Stage 17／19 的 60m HGB；不是正式營運服務。實際發佈、非擁有者存取與再次 freeze 見 [v7 交付紀錄](LIVE_DEMO_DELIVERY.md)
+- **作品性質：** Independent Time-Series Research Project · 研究與展示交付完成，實作 frozen
+- **專案狀態：** 原本機研究版已驗證並保存於 `159f059`；v7 live 實作已於 `f3e27e0` 提交並推送，不重訓或重寫成績。固定 12 站目前觀測、30m persistence、原 Stage 17／19 的 60m HGB 已公開部署並通過必要驗收；不是正式營運服務。實際版本、匿名存取與再次 freeze 見 [v7 交付紀錄](LIVE_DEMO_DELIVERY.md)
 - **Repository：** `youbike-demand-prediction`
 - **公開展示：** [開啟即時車況、歷史需求及調度模擬](https://youbike-demand-observatory.rwhqgqfdk2.chatgpt.site/#live)；Sites version 3，免登入。匿名 HTTP 200 與部署後桌面／手機 viewport 已驗證；不是實體手機或全瀏覽器認證。
 
@@ -440,7 +440,7 @@ youbike-demand-prediction/
 | Track B 28 天 learned regression | 已完成第一版；30m 未超越 persistence，60m 小幅改善 |
 | Track B 獨立七天驗證 | 已完成；30m 保留 persistence，60m 通過事前門檻，研究結論已固定 |
 | v7 公開 live 研究展示 | 固定 12 站目前觀測、30m persistence 與原 60m HGB 已部署；資料不合格即停止預測，非營運保證 |
-| Shortage／full-station classification | 尚未開始，label／threshold 尚未定義 |
+| Shortage／full-station classification | 本版不含；label／threshold 未定義，不列為自動續做事項 |
 | Optimization | 靜態 MILP 模擬已執行，216 組方案通過限制檢查；非營運系統 |
 | Deep Learning | 60m 單層 LSTM、兩設定、三種子比較已執行；未超越 HGB，不採用 |
 
@@ -499,7 +499,7 @@ youbike-demand-prediction/
 
 ### 本版停止規則
 
-v6 本機 freeze 保留於 [原紀錄](RESEARCH_FREEZE.md)，v7 依後續明確授權只重開展示工程、版本保存與公開部署。網站／文件／非擁有者桌面手機／實際端點與故障驗收完成後，才再次標記「研究與展示交付完成，實作 frozen」。不新增模型、資料窗、功能、提醒或自動續做。既有 collector 繼續運作，但不代表研究仍未完成；token、schema、排程不變。實際版本與狀態以 [v7 紀錄](LIVE_DEMO_DELIVERY.md) 為準。
+v6 本機 freeze 保留於 [原紀錄](RESEARCH_FREEZE.md)，v7 只重開展示工程、版本保存與公開部署，必要驗收現已完成並再次標記「研究與展示交付完成，實作 frozen」。匿名存取、桌面／手機 viewport、正常預測與故障狀態均已驗證；實體手機、Safari private 與全專案 lint 沒有宣稱通過。不新增模型、資料窗、功能、提醒或自動續做。既有 collector 繼續運作，但不代表研究仍未完成；token、schema、排程不變。實際版本與限制以 [v7 紀錄](LIVE_DEMO_DELIVERY.md) 為準。
 
 ---
 

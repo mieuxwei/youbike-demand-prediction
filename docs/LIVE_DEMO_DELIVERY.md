@@ -1,6 +1,16 @@
 # Live demonstration delivery — v7
 
-Date: 2026-09-27, Asia/Taipei. **Research remains frozen; final demonstration acceptance in progress.** This record supplements, never rewrites, the [v6 research freeze](RESEARCH_FREEZE.md).
+Date: 2026-09-27, Asia/Taipei. **研究與展示交付完成，實作 frozen — Research and demonstration delivered; implementation frozen.** This record supplements, never rewrites, the [v6 research freeze](RESEARCH_FREEZE.md).
+
+## 中文交付速讀
+
+作品主題是「YouBike 站點需求分析、短期可用車預測與調度模擬」。不是把一個模型包裝成所有任務：Track A 研究 2023 轉乘相關小時借車量；Track B 預測 2026 站點庫存；Phase 4 比較固定假設下的搬運方案。Track A 不直接輸入後兩者，庫存差值不等於租借事件。
+
+- **既有研究成果：** Track A HGB 在 74,282 筆十二月 holdout 上 MAE 1.575、RMSE 2.549、R² 0.794。Track B 獨立七天驗證，30m persistence MAE 1.950；60m 原 HGB 2.813，對照 persistence 2.862，只改善 1.71%。
+- **補充研究：** 64 站回溯 LSTM MAE 3.326271，未優於相同範圍 HGB 3.249886，不採用。12 站靜態模擬中 greedy／MILP 基本平均目標都為 76.8478，不調度 92.1952；16.65% 是假設目標下降，不是真實營運收益。
+- **此次工程差異：** v6 只有本機研究面板；v7 增加免登入公開網站、完整固定 12 站的車況／資料年齡、30m 基準與原 60m HGB 伺服端推論、安全失效提示。未重訓、未改資料窗或歷史成績，也未重建原 Dashboard bundle。
+- **使用方式：** 直接開啟下方公開連結。約五分鐘依序看：兩 Track 的問題 → 即時觀測與兩種估計 → Track A 歷史時段 → LSTM 負面結果 → 無調度／greedy／MILP 與零資源情境。完整時間分配見下方。
+- **限制：** 這是研究展示，不是缺車機率、到站保證或派車建議。歷史天氣是再分析值；模型跨季節及實際調度效益未驗證；資料過舊或不完整時刻意不提供估計。Collector 持續蒐集與本研究交付的停止邊界分開。
 
 ## Scope and version boundary
 
@@ -24,15 +34,20 @@ Model SHA-256: `d4bc2df1c815a7c722e900891b668d3b2a7124f66966913081cb957b5ec7e6f6
 
 | Deployment identity | Actual value |
 |---|---|
+| GitHub research preservation commit | `159f059d0e9ff4afcdbf9ad206d1b426aa1339aa` |
+| GitHub live implementation commit | `f3e27e055195818c3c4ddc4e53d92bd18c1c1cdf`, pushed to `main` and fetched back successfully |
 | Sites project | `appgprj_6a87dd803dd48191b841e9d24dea3366` |
 | Website source commit (separate Sites repository) | `930ef06b094ffde278b93201150f1e9e40c17b54` |
-| Saved version | 3, `appgver_e5d6fb29f48881919a9229df858c06b8` |
-| Deployment | `appgdep_6ab8cdcfd9648191b6f76878881b25e7` — succeeded at `2026-09-27T08:03:41.802067Z` |
+| Saved version | 3, `appgprj_6a87dd803dd48191b841e9d24dea3366~appgver_e5d6fb29f48881919a9229df858c06b8` |
+| Deployment | `appgdep_6ab8cdcfd9648191b6f76878881b25e7` — succeeded; latest deployment record updated at `2026-09-27T08:04:28.632738Z` |
 | Version archive content hash | `sha256:f9563d48497b4a6b59a5309eb34a3b958e62cdf91fb008a60d5bca4ac4153842` |
 | Access | `public`, revision 2, set at `2026-09-27T08:04:03.254248Z` |
 | Anonymous HTTP acceptance | HTTP 200 at `2026-09-27T08:04:12Z`; no cookies, authorization or bypass token sent; new live/A/Phase 3/4 HTML present, no sign-in page |
+| Anonymous asset acceptance | At `2026-09-27T08:50:18.830Z`, HTML and all six referenced JS/CSS resources returned 200 with expected content types, without a cookie jar or authorization |
 
 The old Sites source mirrored the whole research repository and lacked root hosting metadata. A metadata-only compatibility commit (`7f008a09286b4bc5bf87a6a6c3dbcd1c97674fb9`) allowed the standard workflow to open it. The subsequent website-only source commit preserves that repository's history; it does not remove anything from the GitHub research repository. GitHub and Sites have different commit identities. A missing version-controlled `dashboard/build/sites-vite-plugin.ts` was restored to tracking unchanged, fixing fresh-checkout build reproducibility.
+
+The deployed Sites checkout's `app/` and `public/` trees match the GitHub working source byte-for-byte. Later repository-only delivery notes and the local fault-test harness do not change the deployed runtime. GitHub HTTPS push lacked a terminal credential; the existing SSH login succeeded without changing permanent remote/configuration, exposing a token, or force-pushing.
 
 ## Executed acceptance
 
@@ -40,6 +55,7 @@ The old Sites source mirrored the whole research repository and lacked root host
 - Anonymous `/demo/live` returned 12/12 valid persistence and HGB results at `2026-09-27T07:49:15.653Z`, from scheduled snapshot `07:45:28Z`, source `07:44:52Z`, fetch start `07:45:47.310Z`, completion `07:45:48.966Z`.
 - Unauthorized export 401; arbitrary station query 400; POST to demo 405; direct `/src/live-model.json` access 404. All checked anonymously on the deployed Worker.
 - Following deployment, two different scheduled keys appeared at `07:50:28Z` and `07:50:32Z`. A bounded, read-only query confirmed the four-second interval (16 rows read, zero written). A schedule handover is the likely explanation, not a separately proven root cause. The conservative cadence guard correctly stopped HGB and displayed the history-gap reason; persistence remained available. No records deleted, no research data corrected, no gate relaxed. Availability resumes automatically only when the preceding history is valid again.
+- Recovery actually verified at `2026-09-27T08:56:09.146Z`: HTTP 200, all **12/12 persistence and 12/12 HGB** forecasts valid; scheduled origin `08:55:32Z`, source `08:54:52Z`, fetch start `08:55:32.830Z`, completion `08:55:36.923Z`. Public desktop and mobile both displayed the first fixed station's actual 4 bikes / 24 return spaces, 30m baseline 4, 60m HGB 4.9 (unrounded API 4.850597722947602); target times 17:25:32 / 17:55:32 Asia/Taipei. The guard recovered naturally, with no second deployment or restart. This is operational acceptance, not an accuracy metric.
 - 80 Python tests, 18 collector/server tests and 4 Dashboard contract/SSR/artifact tests passed. 72 historical parity cases: all 23 features and raw/clipped Python/JS outputs have maximum difference **0**. Parity is not performance evaluation.
 - A second parity check used the actual deployed response at `07:49:15.653Z` and its `07:45:28Z` origin: all 12 production HGB outputs exactly matched the original Python artifact (maximum difference 0). A bounded read-only D1 query returned 168 history rows (192 rows read, zero written); no new research dataset or metric was produced.
 - Website production build and strict changed-component TypeScript checks passed.
@@ -52,7 +68,7 @@ The old Sites source mirrored the whole research repository and lacked root host
 
 ### Unverified extras and interrupted check
 
-Native Safari/private-window automation hung and was interrupted. No Safari-private or physical-phone pass is claimed. Public access is supported by the connector's public sharing setting, a credential-free HTTP 200 response and actual deployed-page browser checks without a login step; there is no owner-bypass credential in the demo. Full-project ESLint and whole-project TypeScript were not rerun: scoped strict typing, build, tests and browser checks are the executed boundary. No long-term uptime, performance under load or all-browser guarantee is claimed.
+Native Safari/private-window automation hung and was interrupted. No Safari-private or physical-phone pass is claimed; the owner reported being unable to test on a phone at this time. Public access is supported by the connector's public sharing setting, a credential-free HTTP 200 response and actual deployed-page browser checks without a login step; there is no owner-bypass credential in the demo. Full-project ESLint and whole-project TypeScript were not rerun: scoped strict typing, build, tests and browser checks are the executed boundary. No long-term uptime, performance under load or all-browser guarantee is claimed.
 
 The existing LibreSSL/urllib3 and sandboxed physical-core-discovery warnings appeared in Python checks; all tests and model comparisons completed. Vinext reported an existing unknown static-route classification notice; build, server rendering and actual public deployment succeeded. No dependency or lockfile was changed to suppress warnings.
 
@@ -79,4 +95,6 @@ The final delivery manifest captures the accepted source/docs/config/model hashe
 
 This is a public research demo, not production operations, a shortage/full-risk classifier, truck routing or a promise of stock at arrival. Only 12 fixed stations are served; future estimates use scheduled snapshot origin, not page-load time. Source delays and deployment/schedule jitter can intentionally suppress predictions. Real dock usability, seasons, significance and causal operational gains remain unvalidated. Phase 4 stays static; no current-input optimization is added.
 
-No automatic next stage, reminder or research monitor is created. Existing cloud collection is ongoing infrastructure, separate from this frozen research/demonstration delivery. Final freeze is not asserted until publication and acceptance are recorded.
+Required website, document, public-access, serving-parity, normal/degraded UI and regression acceptance is complete. The final file boundary is recorded in `results/live_demo/freeze_manifest.json`; its containing Git commit is the final freeze record. The implementation/runtime version is `f3e27e0`, with later completion documentation and verifier metadata recorded separately. No tag or Release is created.
+
+No automatic next stage, reminder or research monitor is created. Existing cloud collection is ongoing infrastructure, separate from this frozen research/demonstration delivery; storage/cost lifecycle remains the owner's operational responsibility, not a new autonomous research task. The task-owned local test servers were stopped. No user authentication or token setup is required to view the public demo. **Stop this version's implementation now; reopen only on an explicit new request.**

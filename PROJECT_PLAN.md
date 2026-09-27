@@ -1,6 +1,6 @@
 # YouBike Demand Prediction — Research & Live Demonstration Plan v7
 
-更新日期：2026-09-27。**研究維持 frozen；展示工程重新開啟，最終公開驗收中。** 原本機研究版已保存於 `159f059`。原 [研究 freeze 紀錄](docs/RESEARCH_FREEZE.md) 保留不改寫；本輪展示的版本、部署、驗收與再次 freeze 另見 [live demo 交付紀錄](docs/LIVE_DEMO_DELIVERY.md)。
+更新日期：2026-09-27。**研究與展示交付完成，實作 frozen。** 原本機研究版已保存於 `159f059`，live 實作已保存並推送於 `f3e27e0`。原 [研究 freeze 紀錄](docs/RESEARCH_FREEZE.md) 保留不改寫；本輪展示的版本、部署、驗收與再次 freeze 另見 [live demo 交付紀錄](docs/LIVE_DEMO_DELIVERY.md)。
 
 ## 1. 本版定位與範圍決策
 
@@ -93,7 +93,7 @@ v7 同步 README、中文總覽、HANDOFF、Dashboard 說明及新的展示 free
 
 ## 8. v7 展示 freeze 與停止條件
 
-只有以下全部完成才標為 **研究與展示交付完成，實作 frozen**：
+以下必要條件均已完成，因此標為 **研究與展示交付完成，實作 frozen**（實體手機／Safari private 與全專案 lint 未驗證，不宣稱通過）：
 
 1. Phase 3 真實比較、跨種子／成本／誤差與採用結論完成。
 2. Phase 4 真實最佳化、基準與敏感度完成，守恆／容量／資源檢查通過。
@@ -103,6 +103,8 @@ v7 同步 README、中文總覽、HANDOFF、Dashboard 說明及新的展示 free
 6. 新 freeze 紀錄包含真實 Git／Sites／Worker 版本、分享權限、URL、部署後 E2E、桌面／手機、故障及未驗證項目。保留 v6 本機 freeze 的原始紀錄。
 
 達標後停止本版功能、模型、特徵、調參、訓練、新資料窗與自動研究；不建立提醒或背景任務。只有使用者另行明確要求才重開。
+
+最後部署後查核：`2026-09-27T08:56:09.146Z`，最新排程 `08:55:32Z`、來源 `08:54:52Z`、寫入完成 `08:55:36.923Z`；12 站的 30m／60m 均有效。桌面與手機 viewport 已看到正常 HGB 結果；先前短間隔歷史的保護也已自然恢復，沒有刪資料、改門檻或重啟 collector。
 
 本輪必要 commit、push、部署已獲明確授權；不建立 tag／Release 或自動續做。研究／展示交付與持續蒐集分開，collector 繼續執行不表示仍需研究開發。
 

@@ -1,6 +1,6 @@
 # Live demonstration engineering protocol — 2026-09-27
 
-Research remains frozen at preservation commit `159f059`. This explicitly authorized delivery reopens presentation/serving only. No fitting, evaluation-window changes, new data export or model search.
+Research remains frozen at preservation commit `159f059`. This explicitly authorized delivery reopens presentation/serving only. No fitting, evaluation-window changes, new research dataset export or model search. Bounded operational reads for live inference and serving parity are not new evaluation data windows.
 
 ## Fixed choices, before observing live performance
 

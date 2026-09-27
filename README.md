@@ -2,11 +2,11 @@
 
 > Station-demand analysis, short-term bike-availability forecasting, and redistribution simulation
 
-**Independent Time-Series Research Project · Research Frozen / Final Demo Acceptance in Progress**
+**Independent Time-Series Research Project · Research & Demonstration Complete · Implementation Frozen**
 
-This project studies YouBike station demand, short-term availability and assumed redistribution. Track A analyzes and forecasts 2023 transfer-related hourly borrowing demand. Track B predicts 2026 station inventory, with fixed-window research and independent validation. Phase 4 compares static redistribution under explicit assumptions. Their data, targets and models differ: Track A predictions do not directly feed Track B or redistribution. Research is frozen; v7 reopens only live demonstration engineering and publication, not training or evaluation.
+This project studies YouBike station demand, short-term availability and assumed redistribution. Track A analyzes and forecasts 2023 transfer-related hourly borrowing demand. Track B predicts 2026 station inventory, with fixed-window research and independent validation. Phase 4 compares static redistribution under explicit assumptions. Their data, targets and models differ: Track A predictions do not directly feed Track B or redistribution. Research and demonstration are now frozen; v7 added only live serving and publication, without reopening training or evaluation.
 
-本專案為「YouBike 站點需求分析、短期可用車預測與調度模擬」。保留原研究與負面結果；只重開展示工程，加入固定 12 站的目前觀測、30m persistence 基準及原 Stage 17／19 的 60m HGB。庫存變化不是實際借車量，模擬改善不是營運收益；不重訓或更改歷史成績。
+本專案為「YouBike 站點需求分析、短期可用車預測與調度模擬」。保留原研究與負面結果；本輪只補展示工程，加入固定 12 站的目前觀測、30m persistence 基準及原 Stage 17／19 的 60m HGB。庫存變化不是實際借車量，模擬改善不是營運收益；未重訓或更改歷史成績。研究與展示交付完成，實作 frozen；不是 production-ready 營運服務。
 
 ## Quick links
 
@@ -32,8 +32,8 @@ The earlier v6 was local-only and the previous site owner-restricted. v7 is publ
 |---|---|---|
 | **Track A — historical transfer demand** | Research complete; preserved unchanged | 2023 transfer-related trips, training-defined top-100 stations, chronological holdout, historical dashboard |
 | **Track B — station availability** | Original research plus bounded retrospective LSTM comparison executed | Original 30m persistence / 60m modest HGB gain retained; new 64-station comparison does not promote LSTM |
-| **Static redistribution simulation** | Research and local display acceptance complete | 12 stations × 12 predefined scenarios; no transfer / greedy / MILP; resources, cost and forecast-error sensitivity |
-| **Live research demonstration** | Final publication acceptance in progress | 12 fixed stations, constant-state 30m baseline and unchanged Stage 17 60m HGB; conservative failure gates |
+| **Static redistribution simulation** | Research complete; recorded panel publicly deployed | 12 stations × 12 predefined scenarios; no transfer / greedy / MILP; resources, cost and forecast-error sensitivity |
+| **Live research demonstration** | Publicly deployed and accepted; implementation frozen | 12 fixed stations, constant-state 30m baseline and unchanged Stage 17 60m HGB; conservative failure gates |
 | **Shortage/full classifier and operational service** | Not in this version | No calibrated risks, causal operational-benefit claim or truck routing |
 
 Original research acceptance is preserved in the [v6 freeze record](docs/RESEARCH_FREEZE.md), saved at commit `159f059`; v7 deployment and final acceptance are separate. Ongoing cloud collection is not continuing research development. Freeze does not mean production-ready.
@@ -147,7 +147,7 @@ Static MILP uses 12 preselected stations and 12 predetermined decision times. Wi
 
 ### Version boundary and stop rule
 
-v6 completed the bounded fixed-data Deep Learning/Optimization study and froze local research. The owner explicitly reopened only v7 live demonstration engineering, version preservation and publication. After verified shareable delivery, stop: no new models, windows, tuning, features, reminders or autonomous work. Risk classification, fleet routing, causal validation and seasonal generalization are limitations, not queued tasks.
+v6 completed the bounded fixed-data Deep Learning/Optimization study and froze local research. The owner explicitly reopened only v7 live demonstration engineering, version preservation and publication. Shareable delivery and required acceptance are complete; implementation stops here: no new models, windows, tuning, features, reminders or autonomous work. Risk classification, fleet routing, causal validation and seasonal generalization are limitations, not queued tasks.
 
 ## Architecture and technology
 
@@ -255,6 +255,6 @@ Detailed data preparation, training, inference, Track B export, audit, and dashb
 - **Documentation updated:** 2026-09-27
 - **Original 28-day analysis window:** `[2026-08-21 09:45:02 UTC, 2026-09-18 09:45:02 UTC)`
 - **Completed independent evaluation window:** `[2026-09-18 18:30 UTC, 2026-09-25 18:30 UTC)`
-- **Last verified cloud checkpoint:** observed September 27; latest snapshot 2026-09-27 01:00:28 Asia/Taipei, successful run completed at 01:00:48 with one attempt and 1,807 stations; 10,450 cumulative snapshots and 18,805,167 cumulative station rows
+- **Earlier cumulative-size checkpoint (v6):** observed September 27; then-latest snapshot 2026-09-27 01:00:28 Asia/Taipei, successful run completed at 01:00:48 with one attempt and 1,807 stations; 10,450 cumulative snapshots and 18,805,167 cumulative station rows
 
 This earlier cloud checkpoint is dated, not a continuously refreshed total or proof that every past attempt succeeded. v7 adds a read-only demo endpoint to the same collector without changing Cron/schema/export authorization. New deployment checkpoints are in the [delivery record](docs/LIVE_DEMO_DELIVERY.md). Original audits, Stage 17/19 models/results, Track A results and both static Dashboard bundles remain unchanged.
