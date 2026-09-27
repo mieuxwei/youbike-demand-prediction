@@ -1,260 +1,151 @@
 # YouBike Demand Prediction
 
-> Station-demand analysis, short-term bike-availability forecasting, and redistribution simulation
+Station-demand analysis, short-term bike-availability forecasting, and static redistribution simulation.
 
-**Independent Time-Series Research Project · Research & Demonstration Complete · Implementation Frozen**
+Independent Time-Series Research Project · Research & Demonstration Complete · Implementation Frozen
 
-This project studies YouBike station demand, short-term availability and assumed redistribution. Track A analyzes and forecasts 2023 transfer-related hourly borrowing demand. Track B predicts 2026 station inventory, with fixed-window research and independent validation. Phase 4 compares static redistribution under explicit assumptions. Their data, targets and models differ: Track A predictions do not directly feed Track B or redistribution. Research and demonstration are now frozen; v7 added only live serving and publication, without reopening training or evaluation.
+I study two related questions: how much transfer-related borrowing a station sees in an hour, and how many bikes it may have 30 or 60 minutes later. A separate simulation compares redistribution methods under fixed assumptions. The public website brings these results together without treating them as one model pipeline.
 
-本專案為「YouBike 站點需求分析、短期可用車預測與調度模擬」。保留原研究與負面結果；本輪只補展示工程，加入固定 12 站的目前觀測、30m persistence 基準及原 Stage 17／19 的 60m HGB。庫存變化不是實際借車量，模擬改善不是營運收益；未重訓或更改歷史成績。研究與展示交付完成，實作 frozen；不是 production-ready 營運服務。
+個人自主時間序列研究作品：歷史需求、短期可用車預測與靜態調度模擬。研究與展示已完成，實作凍結；保留未勝出的模型結果，不把模擬改善當作營運收益。
 
-## Quick links
+[Open the demo / 開啟展示](https://youbike-demand-observatory.rwhqgqfdk2.chatgpt.site/#live) ·
+[中文總覽](docs/PROJECT_OVERVIEW_STATUS_AND_TECHNOLOGY.md) ·
+[Core findings / 核心成果](#core-findings) ·
+[Reproduce / 重現方式](docs/REPRODUCIBILITY.md)
 
-| Entry | What it contains |
-|---|---|
-| [Open the demonstration / 開啟展示](https://youbike-demand-observatory.rwhqgqfdk2.chatgpt.site/#live) | Public, no login: live availability, historical demand and recorded simulation |
-| [Dashboard guide / 展示說明](dashboard/README.md) | Live observations/forecasts, Track A historical holdout, and fixed Phase 3/4 research panels |
-| [Live demo delivery / v7 交付紀錄](docs/LIVE_DEMO_DELIVERY.md) | Verified deployment/access, model parity, limitations and five-minute demonstration order |
-| [中文總覽](docs/PROJECT_OVERVIEW_STATUS_AND_TECHNOLOGY.md) | Complete Traditional Chinese project overview, architecture, evidence, and current status |
-| [Track A research summary](docs/STAGE_13_TRACK_A_RESEARCH_SUMMARY.md) | Experiment design, model comparison, rolling-origin validation, ablation, and error analysis |
-| [Reproducibility guide](docs/REPRODUCIBILITY.md) | Data, training, inference, dashboard, Track B export, and verification commands |
-| [Phase 3–4 results](docs/PHASE_3_4_OFFLINE_RESEARCH.md) | Executed LSTM comparison, static MILP, baselines, costs, sensitivity, and limitations |
-| [Freeze and local acceptance](docs/RESEARCH_FREEZE.md) | Scope, actual checks, working-directory manifest, and publication boundary |
-| [Track B 28-day learned regression](docs/STAGE_17_TRACK_B_28_DAY_REGRESSION.md) | Fixed-window audit, chronological evaluation, first learned models, and error analysis |
-| [Track B collector resilience repair](docs/STAGE_18_TRACK_B_COLLECTOR_RESILIENCE.md) | Production incident, bounded retry changes, deployment evidence, and current monitoring boundary |
-| [Track B independent validation and conclusion](docs/STAGE_19_TRACK_B_INDEPENDENT_VALIDATION.md) | Frozen protocol, seven-day results executed September 27, data gates, and cross-window decisions |
+## Core findings
 
-The earlier v6 was local-only and the previous site owner-restricted. v7 is publicly deployed as Sites version 3, with credential-free HTTP 200 and deployed desktop/mobile viewport checks. Actual versions and acceptance limitations are recorded in the delivery record, not inferred from a local build. Data-quality gates can intentionally make an individual forecast unavailable.
-
-## Current status
-
-| Workstream | Status | Evidence-backed scope |
+| Study | Result | Evaluation scope |
 |---|---|---|
-| **Track A — historical transfer demand** | Research complete; preserved unchanged | 2023 transfer-related trips, training-defined top-100 stations, chronological holdout, historical dashboard |
-| **Track B — station availability** | Original research plus bounded retrospective LSTM comparison executed | Original 30m persistence / 60m modest HGB gain retained; new 64-station comparison does not promote LSTM |
-| **Static redistribution simulation** | Research complete; recorded panel publicly deployed | 12 stations × 12 predefined scenarios; no transfer / greedy / MILP; resources, cost and forecast-error sensitivity |
-| **Live research demonstration** | Publicly deployed and accepted; implementation frozen | 12 fixed stations, constant-state 30m baseline and unchanged Stage 17 60m HGB; conservative failure gates |
-| **Shortage/full classifier and operational service** | Not in this version | No calibrated risks, causal operational-benefit claim or truck routing |
+| Historical demand — Track A | HGB with weather: holdout MAE **1.575** | 2023 transfer-related borrowing; 100 training-selected stations; 74,282 December station-hour rows |
+| Short-term availability — Track B | Retain persistence at 30m; 60m HGB lowers MAE by **1.71%** | Independent seven-day validation, September 18–25, 2026 UTC; 1,783 evaluated stations; identical eligible rows per horizon |
+| Deep-learning comparison | LSTM did not beat the aligned HGB and was not adopted | Separate retrospective 60m comparison: 64 stations, 89,600 common sequences, September 13–18, 2026 UTC |
+| Static redistribution | MILP ties greedy in all base cases; both reduce the assumed objective by **16.65%** versus no transfer | 12 fixed stations × 12 predefined historical scenarios; not measured operational benefit |
 
-Original research acceptance is preserved in the [v6 freeze record](docs/RESEARCH_FREEZE.md), saved at commit `159f059`; v7 deployment and final acceptance are separate. Ongoing cloud collection is not continuing research development. Freeze does not mean production-ready.
+Sources: [Track A metrics](results/model_comparison_metrics.csv), [independent Track B metrics](results/track_b_independent_metrics.csv), [LSTM comparison](results/offline_research/comparison.csv), and [simulation comparison](results/offline_research/optimization_comparison.csv). Exact periods and protocols are below; scores from different scopes are not a shared leaderboard.
 
-## Results at a glance
+### Current observations and future estimates
 
-### Track A — historical hourly transfer-demand forecasting
+![Public live section showing the first of 12 fixed stations, current bikes and docks, 30-minute persistence and 60-minute HGB, with source and target times](docs/assets/live-availability-20260927.png)
 
-- **7,388,479** official 2023 transfer-related trips.
-- **100** high-demand stations selected using the training period only.
-- Chronological split: January–September training, October–November validation, December holdout.
-- Holdout scope: **74,282 station-hour rows**.
-- Primary model: HGB with weather — **MAE 1.575, RMSE 2.549, R² 0.794**.
-- Rolling-origin HGB MAE: **1.636, 1.592, 1.606**.
-- XGBoost was evaluated on the same scope and did not outperform HGB.
+Actual published interface, captured September 27, 2026. The station selector covers all 12 preselected stations; this image shows the first, 捷運科技大樓站. The snapshot origin is 18:00:32 Asia/Taipei; forecast targets are 18:30:32 and 19:00:32. This is a dated screenshot, not a live feed or accuracy result. [Capture details](docs/assets/README.md).
 
-繁中摘要：Track A 以 74,282 筆十二月 holdout station-hour rows 評估，HGB with weather 為目前主模型；這些數值只代表定義內的歷史轉乘相關借車需求。
+### Recorded static simulation
 
-| Model | Holdout MAE | RMSE | R² |
-|---|---:|---:|---:|
-| Previous hour | 2.441 | 4.129 | 0.460 |
-| Previous week, same hour | 2.176 | 3.701 | 0.566 |
-| Ridge without weather | 1.810 | 2.911 | 0.731 |
-| Ridge with weather | 1.793 | 2.889 | 0.736 |
-| HGB without weather | 1.601 | 2.567 | 0.791 |
-| **HGB with weather** | **1.575** | **2.549** | **0.794** |
-| XGBoost with weather | 1.597 | 2.580 | 0.789 |
+![First predefined historical redistribution scenario comparing no transfer, greedy and MILP under the same assumptions](docs/assets/static-redistribution-20260927.png)
 
-![Track A model comparison: December 2023 holdout MAE across seven models](docs/assets/track-a-model-comparison.svg)
+Actual published interface: September 14, 2026, 07:00 Asia/Taipei, the first predefined scenario, with the base 12-bike / 30 bike-km budget. Its objective values are 76.877 without transfer and 71.343 for either active method. The 16.65% headline is the mean-objective reduction across all 12 base scenarios, not this single case. These are hypothetical transfers, not live dispatch instructions.
 
-*December 2023 holdout, 74,282 rows, training-defined top-100 stations. Lower MAE is better. Source: [`results/model_comparison_metrics.csv`](results/model_comparison_metrics.csv). R² is not an accuracy percentage.*
+### Historical holdout comparison
 
-### Track B — fixed 28-day station-availability regression
+![Track A model comparison on the December 2023 holdout](docs/assets/track-a-model-comparison.svg)
 
-Completed analysis window:
+December 2023, 74,282 station-hour rows across 100 training-selected stations; lower MAE is better. The existing figure uses [saved model metrics](results/model_comparison_metrics.csv), not the live station data. R² is not an accuracy percentage.
 
-```text
-[2026-08-21 09:45:02 UTC, 2026-09-18 09:45:02 UTC)
-```
+## Research questions, methods and conclusions
 
-| Data-quality measure | Result |
-|---|---:|
-| Station rows | 14,490,149 |
-| Snapshots | 8,058 |
-| Distinct stations | 1,803 |
-| Duplicate station-time keys | 0 |
-| Estimated missing five-minute slots | 7 |
-| 30m / 60m future-target coverage | 97.971% / 97.750% |
+### Track A — hourly transfer-related borrowing
 
-The fixed chronological split is 18 days training, 5 days validation, and 5 days holdout test. Future labels crossing a boundary are purged. HGB candidates are selected by validation MAE, and the learned model is compared with persistence on identical complete-case test rows.
+Can calendar, station identity, past demand and weather explain hourly borrowing demand?
 
-| Horizon | Model | Test rows | MAE | RMSE | R² |
-|---:|---|---:|---:|---:|---:|
-| 30m | **Persistence** | 2,518,633 | **2.043** | 3.702 | 0.846 |
-| 30m | HGB | 2,518,633 | 2.057 | **3.454** | **0.866** |
-| 60m | Persistence | 2,507,965 | 3.012 | 5.190 | 0.697 |
-| 60m | **HGB** | 2,507,965 | **2.922** | **4.645** | **0.757** |
+The dataset contains 7,388,479 official 2023 transfer-related trips, joined with 8,760 hours of Open-Meteo reanalysis weather. It does not cover all YouBike trips. Stations are selected using training activity only. January–September is training, October–November validation, and December holdout. Lag and rolling features use past demand.
 
-At 30 minutes, HGB improves RMSE but is 0.68% worse on MAE, so it does not establish a general improvement over persistence. At 60 minutes, HGB improves MAE by 2.98% and RMSE by 10.51%. These are first fixed-holdout results, not live production or shortage-risk metrics. Track A and Track B have different targets, units, and evaluation scopes and are never placed in one ranking.
+HGB with weather achieved MAE 1.575, RMSE 2.549 and R² 0.794. Its three rolling-origin MAEs are 1.636, 1.592 and 1.606. XGBoost was evaluated but did not outperform HGB. Calendar and historical demand carry more signal than weather; peak hours and high-demand stations remain harder to predict. [Research summary, ablation and error analysis](docs/STAGE_13_TRACK_A_RESEARCH_SUMMARY.md).
 
-繁中摘要：固定 28 天資料有 0 筆重複鍵、估計缺 7 個五分鐘時槽；第一版 HGB 僅在 60 分鐘 MAE 小幅優於 persistence，30 分鐘 MAE 未超越基準，因此尚不可宣稱已完成可靠的即時預測。
+### Track B — available bikes in 30 or 60 minutes
 
-### Track B — independent seven-day validation
+Does a learned model improve on assuming that current station inventory stays unchanged?
 
-Executed on **2026-09-27** using unchanged Stage 17 models and pre-registered rules. Evaluation window: `[2026-09-18 18:30 UTC, 2026-09-25 18:30 UTC)`; the preceding hour is feature warm-up only. The evaluation contains 3,636,105 raw station rows, 2,016 / 2,016 expected snapshots, 1,807 observed stations, and zero duplicate station-time keys or missing slots. After eligibility rules, 1,783 stations are evaluated.
+The first study uses `[2026-08-21 09:45:02 UTC, 2026-09-18 09:45:02 UTC)`: 14,490,149 station rows, 8,058 snapshots, 1,803 stations, no duplicate station-time keys and seven estimated missing five-minute slots. The chronological split is 18/5/5 days. Targets crossing split boundaries are purged; HGB is selected on validation data.
 
-| Horizon | Eligible rows | Persistence MAE | Frozen HGB MAE | HGB RMSE vs persistence | Conclusion |
-|---:|---:|---:|---:|---|---|
-| 30m | 3,567,488 | **1.950** | 1.981 | 3.253 vs 3.455 | Persistence retained; HGB MAE is 1.56% worse |
-| 60m | 3,556,778 | 2.862 | **2.813** | 4.389 vs 4.833 | HGB MAE is 1.71% lower; all independent gates pass |
+The unchanged models were then evaluated on `[2026-09-18 18:30 UTC, 2026-09-25 18:30 UTC)`, with an earlier hour used only for feature warm-up. This independent window contains 3,636,105 raw rows and all 2,016 expected snapshots. Eligible comparisons use 3,567,488 rows at 30m and 3,556,778 at 60m, covering 1,783 stations.
 
-Usable target coverage is 99.696% / 99.397% of active current rows. HGB improves station-level MAE at 34.10% / 58.78% of evaluated stations. The 60m result supports the modest Stage 17 gain; the 30m result does not. These are two fixed-window findings, not a significance claim or a guarantee of long-term performance. Source: [metrics](results/track_b_independent_metrics.csv), [coverage and decisions](results/track_b_independent_summary.json), and [full report / provenance](docs/STAGE_19_TRACK_B_INDEPENDENT_VALIDATION.md).
+- At 30m, persistence MAE is 1.950 versus HGB 1.981: retain persistence.
+- At 60m, HGB MAE is 2.813 versus persistence 2.862: a modest 1.71% improvement, consistent with the earlier holdout direction.
+- These are fixed-window results, not evidence of continuous learning, seasonal generalization or statistical significance.
 
-繁中摘要：獨立驗證不重訓、不調門檻；30 分鐘仍以 persistence 為基準，60 分鐘 HGB 通過事前訂定規則，但改善幅度小，不能包裝成 production-ready 或缺車風險預測。
+The live section serves the original Stage 17 HGB validated in Stage 19, not a replacement from the later LSTM experiment. [Initial study](docs/STAGE_17_TRACK_B_28_DAY_REGRESSION.md) · [Independent protocol and results](docs/STAGE_19_TRACK_B_INDEPENDENT_VALIDATION.md).
 
-### Supplementary Phase 3–4 — fixed-data retrospective research
+### LSTM and static redistribution — separate retrospective experiments
 
-The existing 28-day dataset and 18/5/5-day split are reused. Select 64 stations using training coverage only; compare 60-minute availability on **89,600 common valid sequences**, September 13–18, 2026 (09:45:02 UTC boundaries). HGB and LSTM receive the same 13-step history; new artifacts do not replace Stage 17/19. This previously inspected data is **not a new independent test**.
+The existing 28-day data are reused for a 64-station, 60m comparison with 13-step history. On 89,600 common sequences in `[2026-09-13 09:45:02 UTC, 2026-09-18 09:45:02 UTC)`, LSTM ensemble MAE is 3.326271 versus aligned HGB 3.249886. Two preset learning rates and three fixed seeds were compared using validation-only selection. LSTM was not adopted; previously inspected data are not presented as a new independent test.
 
-| Model | MAE (bikes) | RMSE | R² |
-|---|---:|---:|---:|
-| Persistence | 3.431339 | 6.083467 | 0.676325 |
-| HGB, aligned sequence information | **3.249886** | **5.322193** | **0.752265** |
-| LSTM, equal-weight three-seed ensemble | 3.326271 | 5.504263 | 0.735025 |
+The validation-selected retrospective HGB supplies the static simulator. Twelve stations are selected from training-period coordinates, and twelve decision times are fixed in advance: September 14–17 at 07:00, 12:00 and 17:00 Asia/Taipei. Base mean objective is 92.1952 without transfer and 76.8478 for both greedy and MILP. All 216 saved plans across resource/cost variants pass the modeled constraints; zero resources or high cost can make no transfer the best result. [Full methods, negative results and sensitivity](docs/PHASE_3_4_OFFLINE_RESEARCH.md).
 
-Two preset learning rates, one architecture, three fixed seeds, validation-only selection. **LSTM is not adopted.** The new HGB was selected for simulation before retrospective evaluation. These scope-specific scores are not comparable to the broader Stage 17/19 tables above.
-
-Static MILP uses 12 preselected stations and 12 predetermined decision times. With a 12-bike / 30 bike-km budget, mean objective is **92.1952 without transfer vs 76.8478 for both greedy and MILP**. The 16.65% reduction is in an assumed objective, not measured operational benefit. MILP ties greedy in all base cases; zero-resource and high-cost settings produce no transfer. All 216 plans satisfy the modeled constraints. [Full protocol, seeds, costs, errors and sensitivity](docs/PHASE_3_4_OFFLINE_RESEARCH.md).
-
-繁中摘要：Phase 3／4 已真實執行，不以模型勝出作結案條件。調度只是假設立即搬運的離線模擬；距離是座標代理、成本與半容量目標是研究設定，不是道路路線、缺車機率或真實損失旅次。
-
-## Research tracks
-
-### Track A: problem, data, method, and findings
-
-**Question.** Can station identity, calendar patterns, past demand, and weather predict a station's transfer-related borrowing count for a specified hour?
-
-**Data.** The study uses the official twelve-month 2023 transfer-related YouBike trip dataset and 8,760 hourly Open-Meteo reanalysis observations from one Taipei reference point. It does not cover all YouBike trips.
-
-**Method.** Station selection is training-only. Lag and rolling features look backward. Model choices use validation data, while December remains the final holdout. Compared methods include previous-hour and previous-week baselines, Ridge, Histogram Gradient Boosting, and XGBoost, followed by rolling-origin validation, permutation importance, feature-group ablation, and contextual error analysis.
-
-**Findings.** HGB with weather is the strongest evaluated Track A model. Calendar, recent history, station identity, and daily history carry the most useful signal; weather adds a smaller incremental gain. Errors remain larger during commuting peaks, at high-demand stations, and for high-demand hours. Full evidence is in the [Track A research summary](docs/STAGE_13_TRACK_A_RESEARCH_SUMMARY.md).
-
-### Track B: problem, data infrastructure, and current evidence
-
-**Question.** After enough continuous observations are available, can station inventory be forecast 30 or 60 minutes ahead?
-
-**Data infrastructure.** A Cloudflare Worker fetches the official feed without cache reuse, validates the live schema, retries bounded API failures, and writes five-minute station snapshots to D1. A database primary key prevents duplicate station-time rows; structured run logs, safe response diagnostics, and a protected, paginated CSV export support audit and Python analysis. Local collectors remain testing and fallback tools, not the formal long-running solution.
-
-**Current evidence.** The fixed 28-day window passed its audit with seven isolated missing slots. Regularized HGB uses current state, location, Taipei calendar, past-only lag, and rolling features. The unchanged models were independently evaluated on September 27: 30m still does not beat persistence on MAE; 60m passes the pre-registered gates and shows a modest improvement in both windows. Full evidence is in the [Stage 17 report](docs/STAGE_17_TRACK_B_28_DAY_REGRESSION.md) and [Stage 19 results](docs/STAGE_19_TRACK_B_INDEPENDENT_VALIDATION.md). v7 serves the original 60m model, not the supplementary Phase 3 HGB, with [fixed scope and parity checks](docs/LIVE_DEMO_PROTOCOL.md).
-
-### Version boundary and stop rule
-
-v6 completed the bounded fixed-data Deep Learning/Optimization study and froze local research. The owner explicitly reopened only v7 live demonstration engineering, version preservation and publication. Shareable delivery and required acceptance are complete; implementation stops here: no new models, windows, tuning, features, reminders or autonomous work. Risk classification, fleet routing, causal validation and seasonal generalization are limitations, not queued tasks.
+繁中解讀：Track A 預測每站每小時轉乘相關借車量；Track B 預測未來庫存。Track A 的輸出不直接輸入 Track B 或調度。庫存差值不等於實際借車量；Phase 4 是固定假設的歷史模擬。
 
 ## Architecture and technology
 
 ```mermaid
 flowchart LR
-  subgraph A[Track A · completed research chain]
-    A1[2023 transfer trips] --> A2[Station-hour demand]
-    A3[Hourly weather reanalysis] --> A4[Past-only features]
-    A2 --> A4 --> A5[Naive · Ridge · HGB · XGBoost]
-    A5 --> A6[Chronological evaluation]
-    A6 --> A7[Historical Dashboard]
-  end
-
-  subgraph B[Track B · fixed-data research]
-    B1[Official live station API] --> B2[Worker validation + retry]
-    B2 --> B3[5-minute Cron]
-    B3 --> B4[(Cloudflare D1)]
-    B4 --> B5[Protected CSV export]
-    B5 --> B6[28-day audit + persistence]
-    B6 --> B7[First learned availability regression]
-    B7 --> B8[Independent 7-day validation completed]
-    B5 --> B9[Retrospective 60m persistence / HGB / LSTM]
-    B9 --> B10[Static MILP + greedy + no transfer]
-    B10 --> B11[Recorded research simulation panel]
-    B4 --> B12[Bounded 12-station read-only API]
-    B12 --> B13[Original frozen HGB 60m + persistence 30m]
-    B13 --> B14[Live research demonstration]
-  end
+  A["2023 transfer trips + reanalysis weather"] --> AF["Past-only features · Ridge / HGB / XGBoost"]
+  AF --> AH["Chronological evaluation → historical display"]
+  B["Official live station API"] --> C["5-minute Worker Cron · validation / retry"]
+  C --> D[("D1 snapshots + run logs")]
+  D --> E["Protected export → fixed-window Python research"]
+  E --> V["Original HGB → independent validation"]
+  E --> R["Separate retrospective HGB / LSTM → static MILP + baselines"]
+  D --> L["Bounded 12-station read-only endpoint"]
+  L --> F["30m persistence + frozen original 60m HGB"]
+  F --> UI["React / Vinext live section"]
+  AH --> UI2["Historical and recorded research panels"]
+  R --> UI2
 ```
 
-| Technology | Purpose in this project |
+| Technology | Use |
 |---|---|
-| Python, pandas, NumPy | Data validation, station-hour aggregation, time alignment, feature engineering, and analysis |
-| scikit-learn | Ridge and Histogram Gradient Boosting pipelines and evaluation |
-| XGBoost | Controlled tree-model comparison on the Track A scope |
-| PyTorch, SciPy/HiGHS MILP | Bounded LSTM sequence comparison and constrained integer-transfer simulation |
-| Jupyter, Matplotlib | Executed research notebooks and evidence visualization |
-| Cloudflare Worker, Cron, D1 | Long-running Track B collection, validation, logging, deduplication, and storage |
-| React 19, Vinext, TypeScript, Vite | Historical, live availability and recorded simulation panels |
-| Python `unittest`, Node test runner | Data, feature, model, export, and collector checks |
+| Python, pandas, NumPy | Cleaning, time alignment, past-only features, audit and analysis |
+| scikit-learn, XGBoost | Baselines, HGB and controlled Track A comparison |
+| PyTorch | Bounded LSTM experiment; not the deployed predictor |
+| SciPy / HiGHS | Integer redistribution with conservation, stock, capacity and resource constraints |
+| Cloudflare Workers, Cron, D1 | Collection, deduplication, run logs, protected CSV export and server-side inference |
+| React 19, Vinext, TypeScript | Live observations/estimates, historical holdout and recorded simulation panels |
+| unittest, Node tests, SHA-256 manifests | Automated checks and traceable data/model/delivery artifacts |
 
-## Minimal local start and verification
+D1 stores UTC timestamps; calendar features and displayed times use Asia/Taipei. The public endpoint returns only 12-station summaries, not export credentials or full history. The page refreshes each minute; collection runs every five minutes. Stale or invalid data suppress forecasts with a reason. The local collector remains a testing/debugging fallback.
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements-research.txt
-python -m unittest discover -s tests -v
-```
+### Evidence index
 
-Run the research Dashboard locally (historical panels work without the live endpoint):
+| Topic | Entry |
+|---|---|
+| Research design and full experiment history | [Documentation index](docs/README.md) |
+| Track A results and limitations | [Research summary](docs/STAGE_13_TRACK_A_RESEARCH_SUMMARY.md) · [Model card](docs/MODEL_CARD.md) |
+| Track B fixed-window and independent results | [28-day study](docs/STAGE_17_TRACK_B_28_DAY_REGRESSION.md) · [Seven-day validation](docs/STAGE_19_TRACK_B_INDEPENDENT_VALIDATION.md) |
+| LSTM, simulation and negative results | [Phase 3–4 report](docs/PHASE_3_4_OFFLINE_RESEARCH.md) · [Offline model card](docs/TRACK_B_OFFLINE_MODEL_CARD.md) |
+| Live inference contract and use | [Serving protocol](docs/LIVE_DEMO_PROTOCOL.md) · [Dashboard guide](dashboard/README.md) |
+| Exact deployed versions and executed acceptance | [September 27 delivery record](docs/LIVE_DEMO_DELIVERY.md) |
+| Original freeze and later documentation changes | [Documentation revision and integrity](docs/DOCUMENTATION_REVISION.md) |
+
+## Run locally
+
+To view the website, no training or dataset export is needed:
 
 ```bash
 cd dashboard
-pnpm install
+pnpm install --frozen-lockfile
 pnpm run dev
 ```
 
-Detailed data preparation, training, inference, Track B export, audit, and dashboard checks are centralized in the [reproducibility guide](docs/REPRODUCIBILITY.md).
+Open the local URL printed by the server. Historical panels work without the live API; only the live section needs network access. Verification from the repository root:
 
-## Evidence map
+```bash
+python3 scripts/verify_publication.py
+python3 -m unittest tests.test_publication_integrity -v
+```
 
-| Evidence | Document or artifact |
-|---|---|
-| Track A consolidated design and findings | [Research summary](docs/STAGE_13_TRACK_A_RESEARCH_SUMMARY.md) |
-| Full holdout model table | [`model_comparison_metrics.csv`](results/model_comparison_metrics.csv) |
-| Rolling-origin stability | [HGB metrics](results/tree_rolling_origin_metrics.csv) · [XGBoost metrics](results/xgboost_rolling_origin_metrics.csv) |
-| Feature-group ablation and contextual errors | [Analysis report](docs/STAGE_12_FEATURE_ABLATION_ERROR_ANALYSIS.md) |
-| Model scope and artifact integrity | [Model card](docs/MODEL_CARD.md) |
-| Historical prediction interface | [Prediction guide](docs/STAGE_8_PREDICTION_INTERFACE.md) |
-| Historical Dashboard | [Dashboard guide](docs/STAGE_9_HISTORICAL_DASHBOARD.md) |
-| Track B cloud architecture | [Collection and deployment record](docs/STAGE_11_TRACK_B_CLOUD_COLLECTION.md) |
-| Track B seven-day historical checkpoint | [Audit](docs/STAGE_14_TRACK_B_FIRST_COVERAGE_AUDIT.md) · [Preliminary baseline](docs/STAGE_15_TRACK_B_PRELIMINARY_BASELINE.md) |
-| Track B fourteen-day historical checkpoint | [Stability analysis](docs/STAGE_16_TRACK_B_14_DAY_STABILITY.md) |
-| Track B first learned-model checkpoint | [28-day audit and learned regression](docs/STAGE_17_TRACK_B_28_DAY_REGRESSION.md) |
-| Track B current completed checkpoint | [Independent validation and cross-window conclusion](docs/STAGE_19_TRACK_B_INDEPENDENT_VALIDATION.md) |
-| Supplementary deep learning and optimization | [Phase 3–4 report](docs/PHASE_3_4_OFFLINE_RESEARCH.md) · [offline model card](docs/TRACK_B_OFFLINE_MODEL_CARD.md) |
+Research environments, data preparation, protected export, model reproduction and full software tests are documented in the [reproducibility guide](docs/REPRODUCIBILITY.md). Reproduction is separate from viewing the demo and must not overwrite frozen artifacts.
 
 ## Scope and limitations
 
-- Track A predicts **hourly transfer-related borrowing demand**, not all YouBike trips or current station inventory.
-- The Track A scope is limited to 100 stations selected from training-period activity.
-- Historical weather is reanalysis from one Taipei reference point. Future deployment requires weather information available at prediction time.
-- Peak hours, high-demand stations, and high-demand events retain larger errors.
-- Track A shows 10 representative December holdout times, not the full 74,282-row test set. Only the clearly labeled live section reads current inventory; Phase 3/4 remain recorded research and simulations.
-- R² is not converted to an “accuracy” percentage, and demand rankings are not redistribution recommendations.
-- Track B snapshot changes mix rentals, returns, operational redistribution, and data corrections.
-- The original 28-day window has seven missing five-minute slots; the independent seven-day window has none. Neither establishes seasonal or long-term stability.
-- Complete scheduling does not guarantee fresh upstream inventory: four independent snapshots have source updates over five minutes older than their scheduled timestamps (maximum 18.2 minutes).
-- The 30-minute learned model does not beat persistence on MAE, and the 60-minute gain is modest.
-- No shortage/full-station classifier, operational optimizer, or production-ready live prediction is claimed.
-- Supplementary LSTM results are retrospective, limited to 64 stations, and do not erase prior exposure. Static redistribution assumes immediate additive transfers, usable modeled empty capacity and synthetic costs; it does not establish real-world benefit.
+- Track A covers transfer-related trips at 100 selected stations in 2023. Single-point reanalysis weather is retrospective; future use would need weather available at prediction time. The website shows ten holdout timepoints, not the full test set.
+- Track B inventory changes mix rentals, returns, redistribution and corrections. Five-minute collection does not guarantee fresh upstream observations. Its small 60m gain does not establish seasonal robustness or improvement at every station.
+- Live observations, future estimates and recorded simulation are separate. Forecast targets are measured from the scheduled snapshot, not page-load time; unavailable is not zero.
+- Static transfers assume immediate effects, usable modeled empty capacity, a half-capacity target and synthetic distance/cost penalties. No causal benefit, calibrated shortage/full-station risk, truck routing or arrival-time guarantee is claimed.
+- The research and demonstration are complete and frozen. The original collector may continue operating independently; hosting, API availability and storage still require maintenance.
 
-繁中限制摘要：Track A 不是全部旅次或即時庫存；Track B 尚無可靠的 30 分鐘 MAE 改善、缺車／滿站分類或營運服務。已完成的是固定資料比較與調度模擬，不能把目標函數改善宣稱為真實營運效益。
+## Data and licensing
 
-## Data sources and licensing
-
-- [2023 transfer-related YouBike trip dataset](https://data.gov.tw/dataset/169174) — Government Data Open License, Taiwan, version 1.0; source-specific details are recorded in [`config/historical_sources.json`](config/historical_sources.json).
-- [Taipei City YouBike 2.0 real-time dataset](https://data.taipei/dataset/detail?id=c6bc8aed-557d-41d5-bfb1-8da24f78f2fb) — official live station source; consult the source page for current terms.
-- [Open-Meteo Historical Weather API](https://open-meteo.com/en/docs/historical-weather-api) — one Taipei reanalysis grid point; consult the provider documentation for current attribution and licensing requirements.
-- Repository code and original documentation are released under the [MIT License](LICENSE). Upstream datasets retain their own terms and are not relicensed by this repository.
-
-## Project state
-
-- **Documentation updated:** 2026-09-27
-- **Original 28-day analysis window:** `[2026-08-21 09:45:02 UTC, 2026-09-18 09:45:02 UTC)`
-- **Completed independent evaluation window:** `[2026-09-18 18:30 UTC, 2026-09-25 18:30 UTC)`
-- **Earlier cumulative-size checkpoint (v6):** observed September 27; then-latest snapshot 2026-09-27 01:00:28 Asia/Taipei, successful run completed at 01:00:48 with one attempt and 1,807 stations; 10,450 cumulative snapshots and 18,805,167 cumulative station rows
-
-This earlier cloud checkpoint is dated, not a continuously refreshed total or proof that every past attempt succeeded. v7 adds a read-only demo endpoint to the same collector without changing Cron/schema/export authorization. New deployment checkpoints are in the [delivery record](docs/LIVE_DEMO_DELIVERY.md). Original audits, Stage 17/19 models/results, Track A results and both static Dashboard bundles remain unchanged.
+- [Official 2023 transfer-related trips](https://data.gov.tw/dataset/169174): Government Data Open License, Taiwan, version 1.0; source details in [historical sources](config/historical_sources.json).
+- [Taipei YouBike 2.0 live data](https://data.taipei/dataset/detail?id=c6bc8aed-557d-41d5-bfb1-8da24f78f2fb): official station feed; upstream terms apply.
+- [Open-Meteo historical weather](https://open-meteo.com/en/docs/historical-weather-api): one Taipei reanalysis reference point; provider attribution and terms apply.
+- Original code/documentation use the [MIT License](LICENSE). Upstream datasets retain their own rights. Screenshots show this project's actual interface and are demonstration material, not new evaluation evidence.

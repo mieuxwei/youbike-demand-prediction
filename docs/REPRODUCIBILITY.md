@@ -4,7 +4,19 @@ This guide collects the repository's supported local commands. The public README
 
 Large raw and processed datasets are intentionally excluded from Git. Commands that depend on those datasets require the corresponding source files or an authorized Track B export.
 
-The final fixed-data version has a [freeze record](RESEARCH_FREEZE.md). Commands below are reproducibility documentation, not instructions to resume development or mutate frozen outputs. Use an isolated copy/directory for intentional reproductions; do not rerun old research as routine verification.
+Research and public demonstration are complete and frozen. The [original research freeze](RESEARCH_FREEZE.md) and [published delivery record](LIVE_DEMO_DELIVERY.md) describe separate accepted versions. Later documentation changes are recorded in a [separate revision](DOCUMENTATION_REVISION.md), without replacing either original manifest. Use an isolated copy/directory for intentional reproductions; do not rerun old research as routine verification.
+
+## Verify the current documentation revision
+
+These standard-library checks need no datasets, model loading, cloud access or training:
+
+```bash
+python3 scripts/verify_publication.py
+python3 -m unittest tests.test_publication_integrity -v
+git diff --check
+```
+
+The verifier compares every original delivery file with the immutable September 27 manifest, allowing only the exact documentation changes/deletions recorded in the additive amendment. It also verifies new files, relative links and anchors. Original whole-delivery verifiers remain unchanged: they deliberately report later documentation edits as differences. For their exact original checkouts, see [version boundaries](DOCUMENTATION_REVISION.md#original-version-checks).
 
 ## Environment
 
@@ -82,7 +94,7 @@ pnpm run lint
 pnpm test
 ```
 
-The interface is a historical holdout demonstration, not a live inventory display. See the [dashboard guide](STAGE_9_HISTORICAL_DASHBOARD.md) and [dashboard-local README](../dashboard/README.md).
+The Track A section is a historical holdout demonstration, not live inventory. The current website separately includes live Track B observations/forecasts and recorded simulations. See the [original historical dashboard guide](STAGE_9_HISTORICAL_DASHBOARD.md) and [current dashboard README](../dashboard/README.md).
 
 ## Track B: station availability
 
@@ -217,10 +229,10 @@ Run from the repository root. Install the separate research dependency set (Pyth
 ```bash
 python -m pip install -r requirements-research.txt
 python -m unittest discover -s tests -v
-python src/freeze_offline_research.py verify
+python3 scripts/verify_publication.py
 ```
 
-`verify` checks versioned artifact hashes from the local freeze manifest, without training or cloud access. Saved research is under `models/offline_research/` and `results/offline_research/`. The original Stage 17/19 models/results and Track A bundle must remain unchanged. The [data manifest](../results/offline_research/data_manifest.json) records all exact versions and hashes; install only trusted model files.
+The publication check verifies the original research/runtime files and the separately recorded documentation revision without training or cloud access. Saved research is under `models/offline_research/` and `results/offline_research/`. The original Stage 17/19 models/results and Track A bundle remain unchanged. The [data manifest](../results/offline_research/data_manifest.json) records exact versions and hashes; install only trusted model files. The original `freeze_offline_research.py verify` applies to preservation commit `159f059`, not to later documentation revisions.
 
 ### Data prerequisite
 
@@ -242,7 +254,7 @@ Review the pilot before formal training; fixed budgets/settings are in [the prot
 
 ### Reloaded inference and checks without retraining
 
-On the original workstation with the recorded ignored cache and prediction CSV:
+At preservation commit `159f059`, on the original workstation with the recorded ignored cache and prediction CSV (the baseline checks predate live-serving changes):
 
 ```bash
 python src/freeze_offline_research.py check

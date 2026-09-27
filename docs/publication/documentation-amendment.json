@@ -1,0 +1,47 @@
+{
+  "revision_date": "2026-09-27",
+  "scope": "Public documentation and real interface screenshots only; research and runtime unchanged",
+  "base_commit": "176f8c594f24bf5f35037bf78974069c9863a576",
+  "original_manifest": "results/live_demo/freeze_manifest.json",
+  "changes": {
+    "HANDOFF.md": {
+      "action": "removed",
+      "before_sha256": "5d165fde11311c5b964264ade2390d35d409589e26bfd1bc2e2c792ddc6dc8b5",
+      "after_sha256": null
+    },
+    "PROJECT_PLAN.md": {
+      "action": "removed",
+      "before_sha256": "cdbfd6acbcb8b6e9c098e709f380b8ab0d7d8d460fbe7c7530d93863e70bf604",
+      "after_sha256": null
+    },
+    "README.md": {
+      "action": "modified",
+      "before_sha256": "96865540c71a80b0258418553cf504d438ab08cea1d46846111a46f0fdda4533",
+      "after_sha256": "a3303803523dad4c4181565a7289b33ce0273e60e3e43850ad4ef10884746e42"
+    },
+    "docs/MODEL_CARD.md": {
+      "action": "modified",
+      "before_sha256": "fece7d87d93b01e7d3cc4e010e98a451d5909308d9dfe1ac21ee84b92788f1f0",
+      "after_sha256": "b5991657c78a81a7e70bc01e56ab3b2cfd0a27986c35d1257ba5ebb124b87a79"
+    },
+    "docs/PROJECT_OVERVIEW_STATUS_AND_TECHNOLOGY.md": {
+      "action": "modified",
+      "before_sha256": "7e92cd9cf7cd22199500f7901bc9944988503eee82f60b2035313bf9f603a341",
+      "after_sha256": "1a29668f9859545d74d2b386922b29f1045713664d5239e7a61eabc7147d9001"
+    },
+    "docs/REPRODUCIBILITY.md": {
+      "action": "modified",
+      "before_sha256": "2f7263978670fe0c3e096bd0e26fb8139e4619efe6d55ed8f30ba27b252b8174",
+      "after_sha256": "0e5c46c3278f1a79a8bc3481b9704c4b65563c393ff0dbaf0f66d37c7723e656"
+    }
+  },
+  "added_files": {
+    "docs/DOCUMENTATION_REVISION.md": "617d1400ea3e1096bf532d298b2e27378e72ae90e6522c5b2cd8ea7b079e8889",
+    "docs/README.md": "bff70a88c2362005be54a25f6a46aeaa7428465bbe46d82a23caa6a6e643fee1",
+    "docs/assets/README.md": "d3e7569328399ad021696be80bad2e670484065d7063366e9eaf35f5b9889de7",
+    "docs/assets/live-availability-20260927.png": "a657e38d4069db7d3efabf4775e999feaccdc453b5babf8f454438c3f6c50a5f",
+    "docs/assets/static-redistribution-20260927.png": "77e0e786b9e556fb39583b0587869551c2e141d7998c6564f1da1d2557feb505",
+    "scripts/verify_publication.py": "37511b87ac16af094420f8ac839629031a6d45efe001f0fb6c6b7f08c72d78a9",
+    "tests/test_publication_integrity.py": "5f91cee4a15a49a47e61d3eb51de3bc5d2b40cad31ec928e0df0c9f721b3bd99"
+  }
+}
