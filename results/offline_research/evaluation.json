@@ -1,0 +1,13 @@
+{
+  "scope": "retrospective, previously inspected fixed dataset",
+  "selection_sha256": "8136ea2b8d0775d6ef150a7eb1875464c480d6215db4c7232d3cf1455813f6cb",
+  "rows": 89600,
+  "sample_keys_sha256": "9ce318863a41eba6fd5add86ff7e5a3c3b77c8dbb82a8865eb0cc1a9246eea88",
+  "station_count": 64,
+  "seed_mae_mean": 3.3543636004130044,
+  "seed_mae_std_population": 0.022933189103158714,
+  "selected_on_validation": "hgb",
+  "prediction_file_sha256": "1c5ba17933c6b4204dd1e010ae499c6e3a746f722cf9f59ee182aca544246c14",
+  "inference_cost_scope": "predict calls on CPU, excluding artifact load/scaling; ensemble is sum of seed calls",
+  "all_candidate_training_seconds": 34.78383995799999
+}

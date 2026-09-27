@@ -240,3 +240,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Fixed-data research sequence cache (regenerate from the authorized CSV).
+data/processed/offline_research.npz

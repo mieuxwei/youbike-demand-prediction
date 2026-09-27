@@ -1,0 +1,58 @@
+{
+  "execution_date_asia_taipei": "2026-09-27",
+  "protocol_commit": "3055c856b246680efbda2383d2fbf8e401816f4e",
+  "protocol_commit_time": "2026-09-19T02:12:22+08:00",
+  "protocol_path": "config/track_b_temporal_validation.json",
+  "protocol_sha256": "830ec73239d3d5e7ad89db58b0adf6a583d52c746e16b7b98f5278a39e00ed88",
+  "input": {
+    "path": "data/processed/track_b_independent_7d.csv",
+    "git_ignored": true,
+    "sha256": "7411c066535d3562d76e84d18bac4b915387e817dccca5d5c68ec4a141d67943",
+    "export_start_utc": "2026-09-18T17:30:00Z",
+    "export_end_exclusive_utc": "2026-09-25T18:30:00Z",
+    "row_count_including_warmup": 3657741,
+    "snapshot_count_including_warmup": 2028,
+    "distinct_stations_including_warmup": 1807,
+    "evaluation_row_count_before_eligibility_filters": 3636105,
+    "evaluation_snapshot_count": 2016,
+    "first_snapshot_utc": "2026-09-18T17:30:01.000Z",
+    "last_snapshot_utc": "2026-09-25T18:25:04.000Z",
+    "min_rows_per_snapshot": 1803,
+    "max_rows_per_snapshot": 1807,
+    "duplicate_station_time_keys": 0,
+    "evaluation_distinct_five_minute_slots": 2016,
+    "evaluation_distinct_stations": 1807,
+    "snapshots_with_multiple_source_update_times": 0
+  },
+  "source_freshness_diagnostic": {
+    "definition": "snapshot_time minus source_update_time; snapshot_time is the scheduled event time, not fetch completion",
+    "all_export_snapshots_age_seconds_min": -51.0,
+    "all_export_snapshots_age_seconds_median": 69.0,
+    "all_export_snapshots_age_seconds_max": 1092.0,
+    "evaluation_snapshots_age_negative": 1,
+    "evaluation_snapshots_age_over_300_seconds": 4,
+    "evaluation_snapshots_age_over_600_seconds": 2,
+    "scope_note": "Descriptive post-export diagnostic, not a new exclusion rule or a change to pre-registered gates. Uniform source_update_time within each snapshot was checked."
+  },
+  "runtime": {
+    "python": "3.9.6",
+    "pandas": "2.3.3",
+    "numpy": "2.0.2",
+    "scipy": "1.13.1",
+    "scikit_learn": "1.6.1",
+    "joblib": "1.5.3"
+  },
+  "cloud_health_observation": {
+    "observed_date_asia_taipei": "2026-09-27",
+    "latest_run_scheduled_time_utc": "2026-09-26T17:00:28.000Z",
+    "latest_run_finished_at_utc": "2026-09-26T17:00:48.196Z",
+    "latest_run_status": "success",
+    "latest_run_attempts": 1,
+    "latest_run_station_count": 1807,
+    "latest_run_inserted_count": 1807,
+    "cumulative_snapshot_count": 10450,
+    "cumulative_station_rows": 18805167,
+    "first_snapshot_utc": "2026-08-21T07:50:02.000Z",
+    "scope_note": "Dated /health observation, not a current total or proof that every historical collection attempt succeeded."
+  }
+}

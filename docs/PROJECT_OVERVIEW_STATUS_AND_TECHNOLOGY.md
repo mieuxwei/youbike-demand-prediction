@@ -2,23 +2,23 @@
 
 ## 專案介紹、技術架構與目前狀態
 
-- **文件更新日期：** 2026-09-19
-- **作品性質：** Independent Time-Series Research Project · In Progress
-- **專案狀態：** Track A 主要研究鏈已完成並進入維護；Track B 固定 28 天 audit 與第一版 30／60 分鐘 learned regression 已完成，未來七天獨立驗證規則已先行凍結，仍在研究與驗證階段
+- **文件更新日期：** 2026-09-27
+- **作品性質：** Independent Time-Series Research Project · Research Complete — Implementation Frozen
+- **專案狀態：** Track A 與 Stage 17／19 原成果保留；新增 Phase 3 LSTM 比較、Phase 4 靜態整數調度與本機展示必要驗收完成，本版已凍結。定位為固定資料研究原型，不是即時預測或營運服務；新成果未提交或部署
 - **Repository：** `youbike-demand-prediction`
 
 ---
 
 ## 1. 專案摘要
 
-本專案研究如何利用 YouBike 歷史旅次、即時站點庫存、時間序列特徵與天氣資訊，建立可重現的需求與可用車預測流程，並為未來的缺車風險分析及車輛調度最佳化建立資料基礎。
+本專案研究如何利用 YouBike 歷史旅次、站點庫存、時間序列特徵與天氣資訊，建立可重現的需求與可用車預測比較，並完成有限資源下的靜態車輛調度模擬。2026-09-27 依使用者決策停止等待新資料，以既有固定資料補完原始 Phase 3／4，驗收後結束本版開發。
 
 專案分成兩條研究問題不同、不可混用 target 的主線：
 
 | 研究線 | 研究問題 | Target | 目前狀態 |
 |---|---|---|---|
 | Track A：歷史轉乘需求 | 預測某站在指定小時的轉乘相關借車量 | 每站每小時轉乘相關借車量 | 主要研究、模型評估、error analysis 與歷史 Dashboard 已完成 |
-| Track B：即時可用車 | 預測某站 30／60 分鐘後的可借車數 | Future available bikes | 固定 28 天 audit 與第一版 HGB regression 已完成；60m 小幅超越 persistence，30m MAE 未超越 |
+| Track B：即時可用車 | 預測某站 30／60 分鐘後的可借車數 | Future available bikes | 28 天研究與獨立七天驗證完成；30m 保留 persistence，60m HGB 跨兩窗小幅改善 |
 
 Track A 的「歷史借車需求」不等於 Track B 的「未來剩餘車輛」。兩者不能共用 target，也不能直接把 Track A demand 解讀成即時 shortage、surplus 或補車數量。
 
@@ -33,8 +33,8 @@ YouBike 站點的借還需求會受到時段、平假日、地點、歷史使用
 1. 建立可靠、可重現的資料蒐集與清理流程。
 2. 預測歷史轉乘相關的小時借車需求。
 3. 蒐集連續即時站點快照，建立 30／60 分鐘可用車預測。
-4. 在 target 與 threshold 定義清楚後，研究缺車／滿站風險。
-5. 只有在有效預測及營運限制都建立後，才研究車輛調度最佳化。
+4. 使用既有資料完成 60m LSTM／HGB／persistence 公平比較。
+5. 使用 validation 選定預測器，在明確研究假設下比較不調度、簡單規則與 MILP。
 
 可能的未來應用包括：
 
@@ -44,7 +44,7 @@ YouBike 站點的借還需求會受到時段、平假日、地點、歷史使用
 - 調度人員的決策輔助。
 - 歷史需求與模型研究的互動式展示。
 
-目前尚未宣稱完成即時 shortage prediction 或 redistribution optimization。
+已執行離線整數調度模擬；未宣稱完成即時 shortage prediction、真實車隊調度或營運效益驗證。上述可能應用不是本版自動續做的工作。
 
 ---
 
@@ -88,9 +88,17 @@ Python gap／duplicate／target coverage audit
                 ↓
 二十八天 audit + learned regression（已完成第一版）
                 ↓
-七天獨立時間窗驗證（已 pre-register，9/26 執行）
+七天獨立時間窗驗證（9/27 已按凍結規則執行）
                 ↓
-risk target 定義（條件式下一步）
+保留原事前規則與歷史結論
+
+既有固定 28 天資料（另開補充回溯研究，不冒稱獨立驗證）
+                ↓
+共同 64 站／60m：Persistence、HGB、LSTM 比較
+                ↓
+validation 選定 HGB → 靜態整數調度與敏感度模擬
+                ↓
+本機 React/Vinext 新增研究面板 → 驗收後 freeze
 ```
 
 本機 `collect_youbike.py` 與 `collect_history.py` 保留為測試、除錯及備援工具；正式長期蒐集由 Cloudflare 執行，因此使用者電腦關機後仍能持續收集。
@@ -138,15 +146,38 @@ risk target 定義（條件式下一步）
 
 | 項目 | 最新狀態 |
 |---|---:|
-| 查核日期 | 2026-09-19 |
-| 最新 snapshot | 2026-09-19 02:00:01 Asia/Taipei |
-| 累積 snapshots | 8,158 |
-| 累積 station rows | 14,670,350 |
-| 最新一輪 station count | 1,803 |
-| 最新一輪狀態 | 2026-09-19 02:00:01 scheduled run success，1 attempt；post-deployment 連續第九輪成功 |
+| 查核日期 | 2026-09-27 |
+| 最新 snapshot | 2026-09-27 01:00:28 Asia/Taipei |
+| 累積 snapshots | 10,450 |
+| 累積 station rows | 18,805,167 |
+| 最新一輪 station count | 1,807 |
+| 最新一輪狀態 | success，1 attempt，01:00:48 完成 |
 | Collector 執行位置 | Cloudflare 雲端 |
 
-上述累積數字是有日期的查核紀錄，不是持續刷新的即時總量。2026-09-19 部署 collector resilience repair 後，前九輪 Cron 已連續成功；仍需持續觀察長期排程。固定 28 天分析終點早於這次 incident，資料集與模型評估不受影響。30m HGB 的 MAE 未超越 persistence，60m 只有小幅改善，因此不可描述成 production live prediction 完成。
+上述數字是有日期的查核紀錄，不是持續刷新的總量，也不代表已逐輪核對所有歷史執行。本次未重啟／部署 collector；原固定 28 天資料與模型結果維持原樣。
+
+### 4.3 Track B：獨立七天驗證（2026-09-27 完成）
+
+評估期間為 `[2026-09-18 18:30 UTC, 2026-09-25 18:30 UTC)`，即臺北時間 9/19 02:30 至 9/26 02:30（不含終點）。9/19 01:30 起的前一小時只供歷史特徵暖身。模型、特徵、時間窗與決策規則均沿用 9/19 在評估開始前 commit 的版本；沒有重訓或調參。
+
+| 項目 | 結果 |
+|---|---:|
+| 含暖身完整匯出 | 3,657,741 rows、2,028 snapshots |
+| 七天評估原始資料 | 3,636,105 rows、2,016 snapshots、1,807 stations |
+| 預期時槽涵蓋率 | 100%（2,016／2,016） |
+| 重複鍵／估計缺少時槽 | 0／0 |
+| 實際納入模型評估站點 | 1,783 |
+| 30m 有效 rows／active-row coverage | 3,567,488／99.696% |
+| 60m 有效 rows／active-row coverage | 3,556,778／99.397% |
+
+| Horizon | Persistence MAE | HGB MAE | Persistence RMSE | HGB RMSE | 結論 |
+|---|---:|---:|---:|---:|---|
+| 30m | **1.950** | 1.981 | 3.455 | **3.253** | HGB MAE 較差 1.56%，保留 persistence |
+| 60m | 2.862 | **2.813** | 4.833 | **4.389** | HGB MAE 改善 1.71%，通過全部 independent gates |
+
+資料門檻兩者皆過。30m／60m 分別有 34.10%／58.78% 站點 MAE 改善，只有 60m 通過至少 50% 站點改善的規則。結合 Stage 17，研究結論固定為 **30m persistence、60m HGB 小幅跨窗改善**，不是模型持續自動學習、統計顯著性或 production-ready 證明。
+
+來源：[Stage 19 完整報告](STAGE_19_TRACK_B_INDEPENDENT_VALIDATION.md)、[metrics](../results/track_b_independent_metrics.csv)、[coverage／decision](../results/track_b_independent_summary.json)、[輸入 hash 與環境紀錄](../results/track_b_independent_provenance.json)。時槽完整不代表來源永遠新鮮：4 份 snapshot 的官方更新落後排程超過五分鐘，最長 18.2 分鐘；此診斷未用來事後改動篩選規則。
 
 快照間的可用車變化可能同時包含租借、還車、人工調度與資料修正，不能直接稱為實際租借需求。
 
@@ -250,7 +281,7 @@ prediction(t + horizon) = available_bikes(t)
 
 Week 2 誤差較低不代表模型變好：persistence 定義在兩週完全相同，也沒有 fitting。差異表示 station-state dynamics 會跨週變動。
 
-### 6.6 固定二十八天第一版 learned regression（目前檢查點）
+### 6.6 固定二十八天第一版 learned regression（Stage 17 歷史檢查點）
 
 固定期間為 `[2026-08-21 09:45:02 UTC, 2026-09-18 09:45:02 UTC)`，共 14,490,149 rows、8,058 snapshots、1,803 stations、0 duplicates 與 7 個 isolated missing slots。使用 18 日 train／5 日 validation／5 日 test；所有 future targets 必須留在自己的 split。
 
@@ -350,7 +381,7 @@ D1 的核心資料表：
 | Cloudflare Vite Plugin／Wrangler | Cloudflare build 與部署 |
 | Drizzle ORM | 專案內資料庫 schema／integration tooling |
 
-目前 Dashboard 是 **Interactive Historical Prediction Dashboard**，展示 2023 年 12 月 holdout 回測，不是即時 shortage dashboard。
+Dashboard 沿用 **Interactive Historical Prediction Dashboard**，保留 2023 年 12 月 holdout；本機新增 Track B 固定資料比較與調度模擬，不是即時 shortage dashboard，也未重新部署。
 
 ### 7.7 測試與可重現性
 
@@ -358,7 +389,7 @@ D1 的核心資料表：
 - Node test runner：Worker transformation、validation、timestamp、retry、logging 與 export range。
 - 固定 config、model metadata 與 SHA-256 artifact validation。
 - 大型 raw／processed dataset 不放入 Git；Git 保存 source、schema、config、tests、metrics 與文件。
-- 最後一次 Stage 17 完整驗證：Python 66 tests passed、collector 9 tests passed。
+- 歷史 Stage 17 驗證：Python 66 tests、collector 9 tests；本輪已通過 Python 80 tests、collector 11 tests、Dashboard 2 SSR／資料一致性 tests 與 production build。最終完整清單及未驗證項目見 [freeze 紀錄](RESEARCH_FREEZE.md)。
 
 ---
 
@@ -399,9 +430,10 @@ youbike-demand-prediction/
 | Track B 30／60m persistence baseline | 已完成 |
 | Track B 十四天平假日／穩定性分析 | 已完成 |
 | Track B 28 天 learned regression | 已完成第一版；30m 未超越 persistence，60m 小幅改善 |
+| Track B 獨立七天驗證 | 已完成；30m 保留 persistence，60m 通過事前門檻，研究結論已固定 |
 | Shortage／full-station classification | 尚未開始，label／threshold 尚未定義 |
-| Optimization | 尚未開始，等待有效 Track B prediction 與營運限制 |
-| Deep Learning | 未開始／非優先 |
+| Optimization | 靜態 MILP 模擬已執行，216 組方案通過限制檢查；非營運系統 |
+| Deep Learning | 60m 單層 LSTM、兩設定、三種子比較已執行；未超越 HGB，不採用 |
 
 ---
 
@@ -411,16 +443,17 @@ youbike-demand-prediction/
 2. Track A 模型只評估 training-defined top-100 stations。
 3. Track A 尚未完成跨年度驗證。
 4. 歷史天氣是單一臺北參考點的事後再分析資料。
-5. Track B 二十八天仍無法代表季節、特殊事件與長期站點變化。
+5. Track B 二十八天研究加上獨立七天驗證，仍無法代表季節、特殊事件與長期站點變化；也沒有進行時間相依性下的顯著性檢定。
 6. Persistence baseline 不是 trained AI model。
 7. 快照車數差異不是純租借事件。
 8. Shortage／full-station label 與 threshold 尚未完成研究定義。
 9. Dashboard 是歷史回測，不是 live availability prediction。
-10. Optimization 尚缺有效 risk prediction、車輛與人力資源、距離、成本、安全庫存等營運限制。
+10. Optimization 採用半容量目標、立即調度、座標距離代理與合成成本；假設容量減當下車數皆可接收，未完整建模不可用車柱。缺乏真實車隊、人力、道路、成本與行為回饋，不能宣稱營運效益。
+11. 排程時間並非每筆實際擷取完成時間；官方 feed 偶有延遲。模型結果針對記錄的 feed，不是保證在精確實體時間觀測的庫存。
 
 ---
 
-## 11. 下一步規劃
+## 11. 已執行里程碑與結案範圍
 
 ### 2026-09-04 17:45：固定十四天門檻（已完成）
 
@@ -439,11 +472,25 @@ youbike-demand-prediction/
 
 日期到達不等於資料通過，也不等於模型完成。
 
-### 後續研究
+### 2026-09-27：獨立七天驗證（已完成，保留原結論）
 
-- 明確定義 shortage／full-station threshold 後才建立 classification。
-- Availability／risk model 有效後，才設計 redistribution optimization。
-- Track A 未來優先加入新年度資料做跨年度驗證，而不是堆疊相近模型。
+- 保留 Stage 17 模型與 metrics，按 Stage 19 的事前規則完成獨立驗證。
+- 30m 保留 persistence；60m HGB 於兩窗都有小幅改善，但不宣稱適用所有站點或長期季節。
+- Stage 19 規則、模型與原結論固定，不重寫歷史。
+- 隨後的補充回溯研究明確揭露既有資料已看過，不冒稱新獨立驗證，不於回溯評估後再調參。
+
+### 2026-09-27：Phase 3／4 固定資料研究
+
+- 重用 28 天資料及原 18／5／5 切分；訓練期選出 64 站，13 步約一小時歷史。訓練 54,656、validation 86,912、共同回溯評估 89,600 序列。
+- 回溯 MAE：persistence 3.431339、同序列 HGB 3.249886、LSTM 三種子平均預測 3.326271。HGB 是看回溯結果前依 validation 選定；LSTM 不採用。
+- PyTorch：單層 32 units、兩 learning rates、三固定 seeds；scikit-learn：另存的同範圍 HGB；SciPy/HiGHS：真正整數規劃。
+- 12 站 × 12 預定決策情境；基本資源 12 輛／30 bike-km。平均目標值不調度 92.1952、greedy 與 MILP 都是 76.8478；基本案例全數同分，不宣稱 MILP 全面較好。
+- 資源為零或高成本時不調度；所有 216 組方案通過整數、守恆、容量與資源驗證。敏感度與分站／分時誤差皆保留。
+- 完整方法、種子、成本及限制：[Phase 3–4 報告](PHASE_3_4_OFFLINE_RESEARCH.md)、[model card](TRACK_B_OFFLINE_MODEL_CARD.md)。
+
+### 本版停止規則
+
+完成本機展示、重現與文件驗收後 freeze；不自動展開 risk、跨年度、跨季節、新模型或即時服務，不建立監控／提醒／背景研究。既有 collector 不停、不重啟、不改權限，與研究結案分開。只有使用者明確提出新要求才重開。驗收實況以 [freeze 紀錄](RESEARCH_FREEZE.md) 為準。
 
 ---
 
@@ -451,7 +498,7 @@ youbike-demand-prediction/
 
 目前專案已完成一條完整、可重現的 Track A 歷史需求研究鏈，包含全年資料、天氣整合、baselines、HGB／XGBoost、rolling-origin validation、ablation、error analysis、prediction interface 與 Web Dashboard。
 
-Track B 已從短時間本機測試進展為正式雲端資料系統，並完成固定 28 天 audit 與第一版 learned availability regression。30m MAE 尚未超越 persistence，60m 只有小幅改善；shortage risk、production live prediction 與 optimization 仍未完成，也不應提前宣稱完成。
+Track B 已完成雲端資料系統、28 天研究、原獨立七天驗證，並依新範圍完成固定資料 LSTM 比較及靜態整數調度模擬。原 30m persistence／60m HGB 小幅跨窗改善結論不變。新增比較不支持採用 LSTM；最佳化完成不代表超越所有簡單規則或證明真實營運效益。Shortage classifier、production live serving、多車路線不在本版範圍。
 
 此專案目前最重要的價值不只是單一模型分數，而是建立了清楚分離研究問題、避免時間洩漏、可持續蒐集、可重現評估且能誠實表達成果邊界的完整研究與工程流程。
 

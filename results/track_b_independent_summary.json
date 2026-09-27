@@ -1,0 +1,101 @@
+{
+  "status": "independent_temporal_validation_complete",
+  "window_utc": {
+    "history_start": "2026-09-18T17:30:00+00:00",
+    "evaluation_start": "2026-09-18T18:30:00+00:00",
+    "evaluation_end_exclusive": "2026-09-25T18:30:00+00:00"
+  },
+  "schedule": {
+    "expected_snapshots": 2016,
+    "observed_snapshots": 2016,
+    "snapshot_coverage_percent": 100.0,
+    "first_snapshot_utc": "2026-09-18T18:30:01+00:00",
+    "latest_snapshot_utc": "2026-09-25T18:25:04+00:00",
+    "gaps_over_threshold": 0,
+    "estimated_missing_slots": 0,
+    "max_gap_minutes": 5.05,
+    "duplicate_station_snapshot_rows": 0
+  },
+  "coverage": [
+    {
+      "horizon_minutes": 30,
+      "active_current_rows": 3578354,
+      "complete_feature_rows": 3578198,
+      "usable_rows": 3567488,
+      "complete_feature_coverage_percent": 99.99564045368345,
+      "usable_target_coverage_percent": 99.69634083156669
+    },
+    {
+      "horizon_minutes": 60,
+      "active_current_rows": 3578354,
+      "complete_feature_rows": 3578198,
+      "usable_rows": 3556778,
+      "complete_feature_coverage_percent": 99.99564045368345,
+      "usable_target_coverage_percent": 99.39704120944994
+    }
+  ],
+  "pre_registered_thresholds": {
+    "minimum_snapshot_coverage_percent": 99.0,
+    "minimum_usable_target_coverage_percent": 95.0,
+    "minimum_station_improvement_percent": 50.0,
+    "minimum_mae_improvement_percent": 0.0,
+    "minimum_rmse_improvement_percent": 0.0
+  },
+  "frozen_models": {
+    "30m": {
+      "artifact_sha256": "47f37095e1ee8e2d208fa8e0136a75e20005aecfd81afda6ffe33f8685bd202b",
+      "metadata_sha256": "1d6d0d72be3510c55adef1d552f76142e1e92ce128c7fffa59045de7866f9a41",
+      "stage_17_holdout": {
+        "learned_mae": 2.0566721849490963,
+        "persistence_mae": 2.04286174285813,
+        "learned_rmse": 3.4544435900033723,
+        "persistence_rmse": 3.702379077691145,
+        "primary_mae_gate_passed": false
+      }
+    },
+    "60m": {
+      "artifact_sha256": "d4bc2df1c815a7c722e900891b668d3b2a7124f66966913081cb957b5ec7e6f6",
+      "metadata_sha256": "b583107f9416cf161e3d937c3b09f1b20e433f6579c62651c5e2cf09068cf356",
+      "stage_17_holdout": {
+        "learned_mae": 2.922088209016867,
+        "persistence_mae": 3.0119511237198284,
+        "learned_rmse": 4.644551813222179,
+        "persistence_rmse": 5.189885448989986,
+        "primary_mae_gate_passed": true
+      }
+    }
+  },
+  "decisions": {
+    "30m": {
+      "status": "persistence_remains_primary_baseline",
+      "mae_improvement_percent": -1.559033496292707,
+      "rmse_improvement_percent": 5.837566002793276,
+      "stations_improved_percent": 34.09983174425126,
+      "gates": {
+        "data_quality_passed": true,
+        "mae_improvement_passed": false,
+        "rmse_improvement_passed": true,
+        "station_majority_passed": false
+      },
+      "combined_with_stage_17": "persistence_baseline_supported_across_current_evidence"
+    },
+    "60m": {
+      "status": "frozen_learned_model_passes_temporal_gate",
+      "mae_improvement_percent": 1.711282092462884,
+      "rmse_improvement_percent": 9.190121589818647,
+      "stations_improved_percent": 58.77734155916994,
+      "gates": {
+        "data_quality_passed": true,
+        "mae_improvement_passed": true,
+        "rmse_improvement_passed": true,
+        "station_majority_passed": true
+      },
+      "combined_with_stage_17": "learned_model_confirmed_across_both_windows"
+    }
+  },
+  "limitations": [
+    "This is a fixed independent temporal evaluation, not model retraining.",
+    "Future inventory is not rental demand and does not define shortage risk.",
+    "A passing temporal gate is not a production deployment guarantee."
+  ]
+}

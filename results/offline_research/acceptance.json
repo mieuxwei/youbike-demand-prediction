@@ -1,0 +1,29 @@
+{
+  "date": "2026-09-27",
+  "timezone": "Asia/Taipei",
+  "all_required_checks_passed": true,
+  "scope": "Fixed-data retrospective 60m comparison, static integer simulation, local Dashboard; not production",
+  "checks": {
+    "python_unittest": {"status": "passed", "tests": 80, "command": ".venv/bin/python -m unittest discover -s tests -q"},
+    "collector_node_tests": {"status": "passed", "tests": 11, "command": "node --test test/collector.test.mjs", "cwd": "cloudflare/track-b-collector", "cloud_requests": false},
+    "research_integrity": {"status": "passed", "command": ".venv/bin/python src/freeze_offline_research.py check", "common_evaluation_rows": 89600, "common_station_count": 64, "saved_plans_checked": 216, "protected_original_files": 137, "checks": ["raw/config/cache/model hashes", "full origin/target/label alignment", "metric recomputation", "common sample-key hash", "reloaded predictions", "integer transfers/current stock/conservation/capacity/resources", "certified optimal solver statuses"]},
+    "standalone_inference": {"status": "passed", "rows": 10, "predictors": 6, "command": ".venv/bin/python src/offline_forecasting.py predict --input-npy /tmp/youbike-offline-inference-smoke.npy --output /tmp/youbike-offline-predictions.csv", "comparison": "matches recorded prediction CSV with atol=1e-5, rtol=1e-6"},
+    "isolated_output_paths": {"status": "passed", "scope": "shared forecasting/optimization path contract and CLI help; no duplicate full retraining"},
+    "dashboard_build": {"status": "passed", "command": "WRANGLER_LOG_PATH=.wrangler/wrangler.log node node_modules/vinext/dist/cli.js build", "cwd": "dashboard", "publication": "local dist only"},
+    "dashboard_ssr_and_artifact_tests": {"status": "passed", "tests": 2, "command": "node --test tests/rendered-html.test.mjs", "cwd": "dashboard"},
+    "changed_component_typecheck": {"status": "passed", "command": "node node_modules/typescript/bin/tsc --noEmit --target ES2017 --lib dom,dom.iterable,esnext --strict --esModuleInterop --module esnext --moduleResolution bundler --resolveJsonModule --isolatedModules --jsx react-jsx --skipLibCheck --types react app/page.tsx app/offline-research.tsx", "cwd": "dashboard"},
+    "changed_component_lint": {"status": "not_completed_optional", "command": "node node_modules/eslint/bin/eslint.js app/offline-research.tsx app/page.tsx", "cwd": "dashboard", "reason": "Stopped after more than 13 minutes still loading existing lint-plugin dependencies; no lint result claimed. Strict changed-component typecheck, build, SSR and browser checks passed."},
+    "browser": {"status": "passed", "url": "http://localhost:3000/#track-b", "checks": ["HTTP 200", "Track A intact", "Stage 19 disclosure", "first and last fixed scenario", "all three methods", "zero-resource no-transfer", "high-cost no-transfer", "desktop screenshot", "390x844 mobile controls and no document-wide horizontal overflow", "no observed console error/warning"], "viewport_restored": true},
+    "documentation": {"status": "passed", "relative_links_checked": 133, "files": 11, "missing_targets": 0, "balanced_fences": true, "whitespace": "git diff --check passed"}
+  },
+  "not_claimed": {
+    "whole_project_typecheck": "Stopped after more than 12 minutes reading unrelated unchanged Drizzle schemas; strict changed-component check completed instead",
+    "hosted_page_availability": "Direct HEAD request timed out after 30 seconds; read-only Sites lookup reports active/custom access; no new panel deployment",
+    "cross_platform_full_retraining": "Not performed; exact versions and CPU reload tolerance recorded",
+    "operational_effectiveness": "Not studied; objective/sensitivity are simulations, not observed post-intervention outcomes"
+  },
+  "cloud_mutations": "none",
+  "publication_actions": "No commit, push, tag, release or deployment",
+  "preview_teardown": "Task-owned local dev server stopped after browser acceptance; Cloudflare untouched",
+  "pending_required_research_or_implementation": []
+}

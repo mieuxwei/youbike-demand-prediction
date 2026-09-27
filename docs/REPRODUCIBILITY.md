@@ -4,6 +4,8 @@ This guide collects the repository's supported local commands. The public README
 
 Large raw and processed datasets are intentionally excluded from Git. Commands that depend on those datasets require the corresponding source files or an authorized Track B export.
 
+The final fixed-data version has a [freeze record](RESEARCH_FREEZE.md). Commands below are reproducibility documentation, not instructions to resume development or mutate frozen outputs. Use an isolated copy/directory for intentional reproductions; do not rerun old research as routine verification.
+
 ## Environment
 
 From the repository root:
@@ -166,7 +168,7 @@ The command uses the committed boundaries in `config/track_b_regression.json`, p
 
 ### Pre-registered independent temporal validation
 
-Stage 19 uses frozen Stage 17 artifacts. Do not retrain or edit the validation config after inspecting the independent data. After `2026-09-26 02:30 Asia/Taipei`, export the committed warm-up and evaluation range:
+Stage 19 uses frozen Stage 17 artifacts and was executed on **2026-09-27**. Do not retrain or edit the validation config after inspecting the independent data. The window ended at `2026-09-26 02:30 Asia/Taipei`; reproduce the committed warm-up and evaluation range as follows:
 
 Verify the frozen configuration without needing the future CSV:
 
@@ -196,6 +198,8 @@ python src/validate_track_b_temporal.py \
 
 The tool verifies model, metadata, and training-config hashes before loading, evaluates HGB and persistence on identical rows, applies the pre-registered data/model gates, and writes compact coverage, metric, station, hour, and decision outputs. See the [Stage 19 protocol](STAGE_19_TRACK_B_INDEPENDENT_VALIDATION.md).
 
+The September 27 input SHA-256, runtime versions, exact counts, and dated cloud checkpoint are in [`results/track_b_independent_provenance.json`](../results/track_b_independent_provenance.json). Use `--output-dir /tmp/youbike-stage19-reproduction` to compare a repeat run without overwriting the committed results. Raw export files remain local and Git-ignored. The completed decision retains persistence at 30m and supports a modest HGB gain at 60m across the two evaluated windows; this is not a live-serving deployment.
+
 ## Cloud collector checks
 
 From `cloudflare/track-b-collector/`:
@@ -205,3 +209,77 @@ pnpm test
 ```
 
 Deployment, D1 migration, secret rotation, and production export procedures are intentionally kept in the [Track B cloud guide](STAGE_11_TRACK_B_CLOUD_COLLECTION.md). They require the project owner's Cloudflare authorization and are not part of routine local verification.
+
+## Phase 3–4 fixed-data research
+
+Run from the repository root. Install the separate research dependency set (Python 3.9+; recorded run used 3.9.6, Apple M4, CPU):
+
+```bash
+python -m pip install -r requirements-research.txt
+python -m unittest discover -s tests -v
+python src/freeze_offline_research.py verify
+```
+
+`verify` checks versioned artifact hashes from the local freeze manifest, without training or cloud access. Saved research is under `models/offline_research/` and `results/offline_research/`. The original Stage 17/19 models/results and Track A bundle must remain unchanged. The [data manifest](../results/offline_research/data_manifest.json) records all exact versions and hashes; install only trusted model files.
+
+### Data prerequisite
+
+The exact existing `data/processed/track_b_28_days.csv` SHA-256 is `ab55b75f7ecccc3395b4f90f48f0236e4e49f1d993956e81985dc987b74559d4`. Obtain this authorized archived export from the owner, or use the exact 28-day export command above if access remains available. No data waiting is necessary. A new export may differ in serialization/content: do not label a hash-mismatched file the frozen dataset. Raw CSV, sequence cache and row-level prediction CSV are ignored, not distributed in Git.
+
+### Execute a separate reproduction
+
+The following was the executed pipeline; `--run-dir` directs intentional repeats away from frozen outputs. Defaults were used for the original run. The new directory must not contain previous results. Config and raw input remain the checked-in/root paths; do not change settings to pursue better scores.
+
+```bash
+python src/offline_forecasting.py prepare --run-dir /tmp/youbike-phase34-reproduction
+python src/offline_forecasting.py pilot --run-dir /tmp/youbike-phase34-reproduction
+python src/offline_forecasting.py train --run-dir /tmp/youbike-phase34-reproduction
+python src/offline_forecasting.py evaluate --run-dir /tmp/youbike-phase34-reproduction
+python src/offline_optimization.py --run-dir /tmp/youbike-phase34-reproduction
+```
+
+Review the pilot before formal training; fixed budgets/settings are in [the protocol](OFFLINE_RESEARCH_PROTOCOL.md). There is one architecture, two learning rates, seeds 11/29/47, and no post-evaluation tuning. `prepare`, `train`, `evaluate` and optimization refuse existing finalized outputs. Retraining can show version/hardware numerical differences; CPU reloaded prediction tolerance is `atol=1e-5, rtol=1e-6`. Equal-objective MILP tie plans may differ; compare feasibility and objective, not only exact edge lists. Timings vary.
+
+### Reloaded inference and checks without retraining
+
+On the original workstation with the recorded ignored cache and prediction CSV:
+
+```bash
+python src/freeze_offline_research.py check
+python src/offline_forecasting.py predict \
+  --input-npy /tmp/youbike-offline-inference-smoke.npy \
+  --output /tmp/youbike-offline-predictions.csv
+```
+
+`check` validates protected original artifacts, raw/config/cache/model hashes, common evaluation scope, saved-versus-reloaded predictions and every recorded simulation plan; it creates the ten-sequence smoke input in `/tmp`. `predict` needs no labels and returns all methods in CSV. For caller-supplied input, use raw `[N,13,9]` arrays in the [model card's feature order](TRACK_B_OFFLINE_MODEL_CARD.md), enforcing per-station chronology, activity and past-only inputs. The tensor-only interface cannot prove timestamps are valid.
+
+The checks and standalone prediction CLI were actually run. The isolated path option uses the same pipeline but the entire experiment was not repeated merely to duplicate results.
+
+### Research Dashboard
+
+The new static panel reads `dashboard/app/offline-research-data.json`; it does not load Python models or require a live cloud/API/token connection. The recorded result-to-panel build is:
+
+```bash
+python src/build_offline_dashboard.py
+cd dashboard
+pnpm run dev
+```
+
+Do not rebuild the original Track A bundle for this work. Open the server's printed local URL and use the “Track B 模型與調度模擬” link / `#track-b`. The 12 fixed scenarios, resource/cost variants and three methods are selectable. Rebuilding the panel after freeze is unnecessary unless verifying byte-identical output in an isolated copy.
+
+With already installed Dashboard dependencies, the equivalent direct commands avoid a package-manager wrapper reinstalling packages:
+
+```bash
+cd dashboard
+WRANGLER_LOG_PATH=.wrangler/wrangler.log node node_modules/vinext/dist/cli.js dev --host 127.0.0.1
+# In a separate terminal, for build and SSR assertions:
+WRANGLER_LOG_PATH=.wrangler/wrangler.log node node_modules/vinext/dist/cli.js build
+node --test tests/rendered-html.test.mjs
+node node_modules/typescript/bin/tsc --noEmit --target ES2017 \
+  --lib dom,dom.iterable,esnext --strict --esModuleInterop \
+  --module esnext --moduleResolution bundler --resolveJsonModule \
+  --isolatedModules --jsx react-jsx --skipLibCheck --types react \
+  app/page.tsx app/offline-research.tsx
+```
+
+Production artifacts are local build outputs only. No deployment, commit, push, tag, release or cloud mutation is part of these verification commands. See [acceptance](RESEARCH_FREEZE.md) for actual passed checks and environment limitations.

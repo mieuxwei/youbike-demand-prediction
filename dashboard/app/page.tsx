@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import data from "./dashboard-data.json";
+import OfflineResearch from "./offline-research";
 
 type Station = (typeof data.targets)[number]["stations"][number];
 
@@ -57,6 +58,7 @@ export default function Home() {
           <a href="#forecast">需求預測</a>
           <a href="#model">模型表現</a>
           <a href="#method">研究說明</a>
+          <a href="#track-b">可用車與調度模擬</a>
         </nav>
         <span className="status-pill"><i />歷史回測模式</span>
       </header>
@@ -71,6 +73,7 @@ export default function Home() {
           <div className="hero-actions">
             <a className="primary-button" href="#forecast">探索預測 <span>↘</span></a>
             <a className="text-link" href="#method">了解資料限制 <span>→</span></a>
+            <a className="text-link" href="#track-b">Track B 模型與調度模擬 <span>→</span></a>
           </div>
         </div>
         <div className="hero-visual" aria-label="模型摘要">
@@ -256,6 +259,8 @@ export default function Home() {
           <span>歷史旅次</span><i>→</i><span>時間＋Lag 特徵</span><i>→</i><span>HGB 模型</span><i>→</i><span>站點需求排名</span>
         </div>
       </section>
+
+      <OfflineResearch />
 
       <footer>
         <div className="brand"><Mark /><span><strong>YouBike</strong><small>需求觀測站</small></span></div>

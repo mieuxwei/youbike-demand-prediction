@@ -100,7 +100,9 @@ Metadata 保存：
 
 推論程式會先比對 SHA-256，再載入模型。這能偵測檔案錯置或損壞，但不是數位簽章；若 artifact 與 metadata 同時遭竄改，仍需依賴可信任的 Git 來源與發布流程。
 
-## 監控與更新建議
+## 歷史監控與更新建議（非本版續做指令）
+
+以下保留原 Track A model card 的工程展望。2026-09-27 的固定資料結案以 [v6 計畫](../PROJECT_PLAN.md) 及 [freeze 紀錄](RESEARCH_FREEZE.md) 為準；不建立監控或自動續訓。新增 Track B LSTM／HGB 比較另見 [offline model card](TRACK_B_OFFLINE_MODEL_CARD.md)，不改本卡的原 Track A 模型。
 
 - 持續監控整體、站點與尖峰時段 MAE。
 - 監控輸入站點、時間與天氣欄位缺漏。

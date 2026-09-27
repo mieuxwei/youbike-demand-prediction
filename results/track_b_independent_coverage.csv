@@ -1,0 +1,3 @@
+horizon_minutes,active_current_rows,complete_feature_rows,usable_rows,complete_feature_coverage_percent,usable_target_coverage_percent
+30,3578354,3578198,3567488,99.99564045368345,99.69634083156669
+60,3578354,3578198,3556778,99.99564045368345,99.39704120944994

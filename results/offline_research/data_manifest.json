@@ -1,0 +1,436 @@
+{
+  "study_type": "supplementary_retrospective_fixed_dataset",
+  "input": "data/processed/track_b_28_days.csv",
+  "input_sha256": "ab55b75f7ecccc3395b4f90f48f0236e4e49f1d993956e81985dc987b74559d4",
+  "input_rows": 14490149,
+  "input_snapshots": 8058,
+  "cohort_raw_rows": 515712,
+  "training_eligible_station_count": 1752,
+  "stations": [
+    {
+      "station_id": "500101001",
+      "station_name": "YouBike2.0_捷運科技大樓站",
+      "latitude": 25.02605,
+      "longitude": 121.5436
+    },
+    {
+      "station_id": "500101031",
+      "station_name": "YouBike2.0_臺大男七舍前",
+      "latitude": 25.01537,
+      "longitude": 121.54698
+    },
+    {
+      "station_id": "500101109",
+      "station_name": "YouBike2.0_臺灣師範大學(圖書館)",
+      "latitude": 25.0266,
+      "longitude": 121.52973
+    },
+    {
+      "station_id": "500101141",
+      "station_name": "YouBike2.0_捷運信義安和站(2號出口)",
+      "latitude": 25.03304,
+      "longitude": 121.55171
+    },
+    {
+      "station_id": "500101171",
+      "station_name": "YouBike2.0_仁愛延吉街口",
+      "latitude": 25.03748,
+      "longitude": 121.55564
+    },
+    {
+      "station_id": "500101201",
+      "station_name": "YouBike2.0_信義路三段134巷口",
+      "latitude": 25.03333,
+      "longitude": 121.53968
+    },
+    {
+      "station_id": "500101231",
+      "station_name": "YouBike2.0_大安國小",
+      "latitude": 25.02014,
+      "longitude": 121.55084
+    },
+    {
+      "station_id": "500101260",
+      "station_name": "YouBike2.0_建國南路二段瑞安街264巷口",
+      "latitude": 25.02716,
+      "longitude": 121.53782
+    },
+    {
+      "station_id": "500103020",
+      "station_name": "YouBike2.0_民權迪化街口",
+      "latitude": 25.06327,
+      "longitude": 121.50943
+    },
+    {
+      "station_id": "500103048",
+      "station_name": "YouBike2.0_南京太原路口",
+      "latitude": 25.05366,
+      "longitude": 121.51638
+    },
+    {
+      "station_id": "500103076",
+      "station_name": "YouBike2.0_玉泉公園(忠孝西路)",
+      "latitude": 25.04888,
+      "longitude": 121.50745
+    },
+    {
+      "station_id": "500104015",
+      "station_name": "YouBike2.0_明勝公園",
+      "latitude": 25.08009,
+      "longitude": 121.51895
+    },
+    {
+      "station_id": "500104044",
+      "station_name": "YouBike2.0_蘭雅公園",
+      "latitude": 25.10991,
+      "longitude": 121.53039
+    },
+    {
+      "station_id": "500104073",
+      "station_name": "YouBike2.0_士林新天地",
+      "latitude": 25.08899,
+      "longitude": 121.51751
+    },
+    {
+      "station_id": "500104102",
+      "station_name": "YouBike2.0_啟明學校",
+      "latitude": 25.11742,
+      "longitude": 121.53472
+    },
+    {
+      "station_id": "500104130",
+      "station_name": "YouBike2.0_福林路100巷11弄口",
+      "latitude": 25.09601,
+      "longitude": 121.53262
+    },
+    {
+      "station_id": "500104158",
+      "station_name": "YouBike2.0_社子公園(永平街80巷)",
+      "latitude": 25.09128,
+      "longitude": 121.50662
+    },
+    {
+      "station_id": "500105028",
+      "station_name": "YouBike2.0_世新大學",
+      "latitude": 24.98859,
+      "longitude": 121.54336
+    },
+    {
+      "station_id": "500105058",
+      "station_name": "YouBike2.0_明道國小東南側",
+      "latitude": 24.98695,
+      "longitude": 121.56456
+    },
+    {
+      "station_id": "500105089",
+      "station_name": "YouBike2.0_仙岩路22巷口",
+      "latitude": 24.99892,
+      "longitude": 121.54887
+    },
+    {
+      "station_id": "500105119",
+      "station_name": "YouBike2.0_樟新社會住宅",
+      "latitude": 24.97735,
+      "longitude": 121.55603
+    },
+    {
+      "station_id": "500106019",
+      "station_name": "YouBike2.0_孫立人將軍官邸",
+      "latitude": 25.02933,
+      "longitude": 121.51854
+    },
+    {
+      "station_id": "500106055",
+      "station_name": "YouBike2.0_臺北市立大學(博愛校區)",
+      "latitude": 25.03545,
+      "longitude": 121.51327
+    },
+    {
+      "station_id": "500106087",
+      "station_name": "YouBike2.0_台北市替代役中心",
+      "latitude": 25.01808,
+      "longitude": 121.5275
+    },
+    {
+      "station_id": "500106115",
+      "station_name": "YouBike2.0_臺灣文學基地",
+      "latitude": 25.04148,
+      "longitude": 121.5287
+    },
+    {
+      "station_id": "500106147",
+      "station_name": "YouBike2.0_羅斯福路三段210巷口",
+      "latitude": 25.01884,
+      "longitude": 121.52994
+    },
+    {
+      "station_id": "500107024",
+      "station_name": "YouBike2.0_捷運中山國中站",
+      "latitude": 25.06106,
+      "longitude": 121.54406
+    },
+    {
+      "station_id": "500107053",
+      "station_name": "YouBike2.0_新喜公園",
+      "latitude": 25.06533,
+      "longitude": 121.53177
+    },
+    {
+      "station_id": "500107086",
+      "station_name": "YouBike2.0_植福樂群路口",
+      "latitude": 25.08303,
+      "longitude": 121.5604
+    },
+    {
+      "station_id": "500107115",
+      "station_name": "YouBike2.0_臺北市立美術館_1",
+      "latitude": 25.07063,
+      "longitude": 121.52327
+    },
+    {
+      "station_id": "500107142",
+      "station_name": "YouBike2.0_朱崙公園",
+      "latitude": 25.04919,
+      "longitude": 121.54198
+    },
+    {
+      "station_id": "500107172",
+      "station_name": "YouBike2.0_朱昌公園",
+      "latitude": 25.0554,
+      "longitude": 121.53908
+    },
+    {
+      "station_id": "500107200",
+      "station_name": "YouBike2.0_臺北市立美術館(中山北路三段)",
+      "latitude": 25.07177,
+      "longitude": 121.52395
+    },
+    {
+      "station_id": "500108020",
+      "station_name": "YouBike2.0_捷運西湖站(1號出口)",
+      "latitude": 25.08301,
+      "longitude": 121.56638
+    },
+    {
+      "station_id": "500108049",
+      "station_name": "YouBike2.0_扶輪親恩公園",
+      "latitude": 25.06709,
+      "longitude": 121.58002
+    },
+    {
+      "station_id": "500108079",
+      "station_name": "YouBike2.0_民權東路六段245巷口",
+      "latitude": 25.06708,
+      "longitude": 121.60059
+    },
+    {
+      "station_id": "500108111",
+      "station_name": "YouBike2.0_新湖國小",
+      "latitude": 25.06874,
+      "longitude": 121.58923
+    },
+    {
+      "station_id": "500108142",
+      "station_name": "YouBike2.0_康寧路三段99巷17弄口",
+      "latitude": 25.0721,
+      "longitude": 121.60991
+    },
+    {
+      "station_id": "500108174",
+      "station_name": "YouBike2.0_捷運葫洲站(2號出口)",
+      "latitude": 25.07264,
+      "longitude": 121.60692
+    },
+    {
+      "station_id": "500108203",
+      "station_name": "YouBike2.0_西湖公園(內湖路一段387巷)",
+      "latitude": 25.08409,
+      "longitude": 121.57066
+    },
+    {
+      "station_id": "500108235",
+      "station_name": "YouBike2.0_成功路三段12巷口",
+      "latitude": 25.07579,
+      "longitude": 121.59009
+    },
+    {
+      "station_id": "500109023",
+      "station_name": "YouBike2.0_捷運新北投站",
+      "latitude": 25.13733,
+      "longitude": 121.50339
+    },
+    {
+      "station_id": "500109053",
+      "station_name": "YouBike2.0_捷運明德站(3號出口)",
+      "latitude": 25.11,
+      "longitude": 121.51841
+    },
+    {
+      "station_id": "500109084",
+      "station_name": "YouBike2.0_崇仰公園(公舘路255巷)",
+      "latitude": 25.12595,
+      "longitude": 121.51098
+    },
+    {
+      "station_id": "500109112",
+      "station_name": "YouBike2.0_榮華公園",
+      "latitude": 25.11138,
+      "longitude": 121.52212
+    },
+    {
+      "station_id": "500110005",
+      "station_name": "YouBike2.0_中崙高中",
+      "latitude": 25.04878,
+      "longitude": 121.56087
+    },
+    {
+      "station_id": "500110033",
+      "station_name": "YouBike2.0_光復南路22巷口",
+      "latitude": 25.04693,
+      "longitude": 121.55771
+    },
+    {
+      "station_id": "500110061",
+      "station_name": "YouBike2.0_南京東興路口",
+      "latitude": 25.05149,
+      "longitude": 121.56535
+    },
+    {
+      "station_id": "500110091",
+      "station_name": "YouBike2.0_新中街4巷口",
+      "latitude": 25.05779,
+      "longitude": 121.56167
+    },
+    {
+      "station_id": "500111008",
+      "station_name": "YouBike2.0_成德國中",
+      "latitude": 25.04592,
+      "longitude": 121.5882
+    },
+    {
+      "station_id": "500111038",
+      "station_name": "YouBike2.0_世貿公園",
+      "latitude": 25.05831,
+      "longitude": 121.61422
+    },
+    {
+      "station_id": "500111066",
+      "station_name": "YouBike2.0_昆陽公園",
+      "latitude": 25.0483,
+      "longitude": 121.59425
+    },
+    {
+      "station_id": "500111095",
+      "station_name": "YouBike2.0_玉成街(中坡北路50巷口)",
+      "latitude": 25.04691,
+      "longitude": 121.58192
+    },
+    {
+      "station_id": "500112001",
+      "station_name": "YouBike2.0_黎忠區民活動中心",
+      "latitude": 25.02035,
+      "longitude": 121.55769
+    },
+    {
+      "station_id": "500112029",
+      "station_name": "YouBike2.0_臺北市政府",
+      "latitude": 25.03801,
+      "longitude": 121.56541
+    },
+    {
+      "station_id": "500112059",
+      "station_name": "YouBike2.0_虎林永吉路口",
+      "latitude": 25.04519,
+      "longitude": 121.57712
+    },
+    {
+      "station_id": "500112089",
+      "station_name": "YouBike2.0_富生公園",
+      "latitude": 25.04116,
+      "longitude": 121.5706
+    },
+    {
+      "station_id": "500112117",
+      "station_name": "YouBike2.0_逸仙松高路口",
+      "latitude": 25.03942,
+      "longitude": 121.56149
+    },
+    {
+      "station_id": "500113016",
+      "station_name": "YouBike2.0_艋舺大道146巷口",
+      "latitude": 25.03301,
+      "longitude": 121.5016
+    },
+    {
+      "station_id": "500113047",
+      "station_name": "YouBike2.0_臺北市電影主題公園(峨眉街)",
+      "latitude": 25.04445,
+      "longitude": 121.50306
+    },
+    {
+      "station_id": "500113080",
+      "station_name": "YouBike2.0_祥安水岸景觀大廈",
+      "latitude": 25.01907,
+      "longitude": 121.50219
+    },
+    {
+      "station_id": "500119009",
+      "station_name": "YouBike2.0_臺大水源舍區B棟",
+      "latitude": 25.01525,
+      "longitude": 121.53009
+    },
+    {
+      "station_id": "500119070",
+      "station_name": "YouBike2.0_臺大椰林小舖",
+      "latitude": 25.01561,
+      "longitude": 121.53583
+    },
+    {
+      "station_id": "500119102",
+      "station_name": "YouBike2.0_臺大普通教學館東側",
+      "latitude": 25.01861,
+      "longitude": 121.53717
+    }
+  ],
+  "features": [
+    "available_bikes",
+    "available_return_bikes",
+    "capacity",
+    "latitude",
+    "longitude",
+    "hour_sin",
+    "hour_cos",
+    "weekday_sin",
+    "weekday_cos"
+  ],
+  "config_sha256": "2a735737a4913c68f22c9e4bf1cdcc78414529e3adc7dc4a80bc3f6aeeffe445",
+  "cache": "data/processed/offline_research.npz",
+  "cache_sha256": "68f3e0add7e28d4e9e9ce22b2c6e16263f7f62e7608060682999031211878097",
+  "sampled_training_rows": 54656,
+  "split_rows": {
+    "train": 327680,
+    "validation": 86912,
+    "retrospective": 89600
+  },
+  "window": {
+    "window_start": "2026-08-21T09:45:02Z",
+    "train_end": "2026-09-08T09:45:02Z",
+    "validation_end": "2026-09-13T09:45:02Z",
+    "test_end": "2026-09-18T09:45:02Z"
+  },
+  "environment": {
+    "python": "3.9.6",
+    "platform": "macOS-27.0-arm64-arm-64bit",
+    "machine": "arm64",
+    "hardware_observed": "Apple M4, 10 cores, 16 GiB RAM",
+    "versions": {
+      "numpy": "2.0.2",
+      "pandas": "2.3.3",
+      "scipy": "1.13.1",
+      "scikit-learn": "1.6.1",
+      "joblib": "1.5.3",
+      "torch": "2.8.0"
+    }
+  },
+  "known_prior_exposure": "Stage 17 and Stage 19 results already inspected; not independent validation"
+}

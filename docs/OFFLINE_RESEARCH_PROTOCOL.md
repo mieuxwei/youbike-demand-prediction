@@ -1,0 +1,47 @@
+# Fixed-data Phase 3 / Phase 4 protocol
+
+Recorded 2026-09-27 before the new pilot, training, or optimization results. Status at recording: **In Progress**; eventual acceptance is tracked in [RESEARCH_FREEZE.md](RESEARCH_FREEZE.md). This implements the owner's explicit scope change from v5: finish the original deep-learning comparison, static redistribution simulation, and local demonstration with existing data, then stop development. It is not a new pre-registered independent validation. Stage 17/19 protocols, artifacts, and historical conclusions remain unchanged.
+
+## Data and prior exposure
+
+Use the existing official-feed Cloudflare export `data/processed/track_b_28_days.csv`, 14,490,149 station rows, interval `[2026-08-21 09:45:02Z, 2026-09-18 09:45:02Z)`. Preparation records the actual SHA-256, row counts, cohort, and environment in `results/offline_research/data_manifest.json` before training. No new cloud data is needed. Stage 17 metrics, station/hour errors, and Stage 19's later seven-day results have already been inspected. This supplementary comparison is retrospective and subject to researcher-selection bias, even though new settings are selected only on development data.
+
+## Phase 3: bounded common-scope comparison
+
+Machine-readable rules: [`config/offline_research.json`](../config/offline_research.json).
+
+- Keep Stage 17 chronological boundaries: 18 training days, 5 validation days, 5 retrospective evaluation days. Do not use a random temporal split.
+- Choose 64 station IDs at evenly spaced positions among sorted stations active in at least 95% of observed training snapshots, with positive capacity and valid coordinates. Only training rows determine eligibility and station coordinates. This is a compute-bounded cohort, not a citywide estimate or an error-ranked sample.
+- Input: 13 consecutive observations from one station (approximately 60 minutes including the origin). Each step must be 270–330 seconds, every input station record active and finite. Reject gaps; no imputation. Current recorded inventory is assumed available at the modeled decision origin, subject to the scheduled-time/fetch-latency limitation below.
+- Predictors per step: bikes, return spaces, capacity, latitude, longitude, Taipei hour and weekday sine/cosine. HGB receives the same full flattened sequence as LSTM, not old metrics from a larger scope. Both learn the 60m change from current inventory and clip final predictions to current capacity. No future target enters an input.
+- Target: first active observation at or after origin +60m, no later than +62m; purge labels at/after each split end. Earlier-split observations may supply history for validation/evaluation because they were already observable; no labels cross boundaries. Sequences never cross stations or inactive/gapped input records.
+- Training uses every sixth global snapshot; validation/evaluation use all common eligible observations. Fit scaling only on sampled training inputs. Persist sample-key hashes and split coverage. Future capacity changes are not used to select favorable evaluation rows.
+- One single-layer LSTM (32 hidden units), two learning rates (0.003/0.001), seeds 11/29/47. Adam/MSE on train-standardized inventory change; batch 512; maximum 10 epochs; validation MAE early stopping with patience 3 and minimum improvement 0.0001. CPU, two threads, deterministic algorithms.
+- Pilot: seed 11, first candidate, one epoch, at most 4,096 training / 2,048 validation rows. This is a runtime/implementation check, not model selection. No retrospective evaluation predictions until all configuration and selection are fixed.
+- Initial hard budget: 180 seconds per fit and 1,200 seconds total training, assessed at epoch boundaries. Pilot timing will be recorded before formal training. If this budget is unsuitable, record a prospective reduced epoch ceiling before formal fitting; never add candidates/seeds or extend budget based on evaluation results. Require all six fits to complete at least one epoch; otherwise report blocked, not complete.
+- Select learning rate by mean validation MAE over **all three seeds**, ties by config order. Report each seed; primary LSTM uses their mean prediction, never the best evaluation seed. Save the selected candidate's three validation-best checkpoints.
+- Fit one new HGB with the fixed settings in config on identical training rows and history. Save under a new directory, never overwrite Stage 17. Compare persistence, new HGB, selected LSTM ensemble on identical rows. Select the simulation forecaster by validation MAE among these three; ties prefer persistence, then HGB, then LSTM. Lock this choice before retrospective evaluation.
+- Report MAE/RMSE/R², training/inference wall time, seed mean/std, station/hour errors, and whether LSTM earns adoption. No tuning after evaluation.
+
+### Pilot decision recorded before formal fitting
+
+The one-epoch pilot executed on 2026-09-27: 4,096 training rows, 2,048 validation rows, 0.053 seconds inside the fit loop; simple training-row extrapolation is 0.705 seconds per full epoch (excludes full-validation scaling and startup, so not a runtime guarantee). The original ceilings remain unchanged: 10 epochs, 180 seconds per fit, 1,200 seconds total, two candidates × three seeds. No evaluation predictions were inspected to set this budget. Exact pilot values are in `results/offline_research/pilot.json`.
+
+## Phase 4: static integer redistribution
+
+- Choose the 12 cohort stations closest by great-circle distance to its first sorted ID, using training coordinates. Scenario requests are Taipei 07:00/12:00/17:00 on September 14–17 (12 requests). Use the first common eligible origin within 15 minutes; record and do not replace any missing scenario. The first valid request is the demonstration; no selection by benefit. Require at least one valid scenario for completion.
+- No depot, external bikes, routes, vehicle fleet, or inferred operator rules. Decision variables are nonnegative integer bikes moved on directed station pairs. Transfers happen simultaneously at the origin; outgoing total cannot exceed current bikes, and incoming total cannot exceed currently empty dock capacity (a conservative no-relay assumption). Post-transfer state remains within station capacity; bikes are conserved. Total moved ≤12, distance resource ≤30 bike-km in the base simulation. These are synthetic resource budgets, not a real truck plan.
+- Future effect assumption: each station's fixed forecast is shifted additively by net immediate transfers, ignoring behavioral feedback. Constrain projected forecast inventory to `[0, current capacity]`. Target is 50% of each current capacity. Minimize total absolute target deviation plus 0.1 per bike-km great-circle distance proxy and 0.05 per moved bike handling cost. These are dimensionless research penalties, not money or lost trips.
+- Use SciPy/HiGHS mixed integer programming. Validate integrality, conservation, current-stock availability, capacities, both resources, and projected bounds. A zero-transfer feasible solution is always available for valid bounded inputs. Respect a ten-second solve limit; do not label a time-limit incumbent optimal. If no certified improving plan is returned, report the solver status and use a validated no-transfer fallback.
+- Compare no transfer, deterministic one-bike-at-a-time greedy improvement (same objective/constraints, ties by sorted directed pair), and MILP on the same forecasts. No future actual values are available to either policy.
+- Predefined one-factor sensitivity: moved-bike budgets 0/6/12/24, distance penalties 0/0.1/10, and exogenous forecast-error shocks −5/0/+5 bikes (alternating station signs for spatial heterogeneity). Do not add cases to make a method win. Actual recorded +60m inventory can serve as an additional *unintervened historical reference*, with additive transfer and clipping explicitly labeled a simulated counterfactual assumption, never an observed operational outcome. Report clipping and target deviation separately from costs and optimization objectives.
+
+## Display, evidence, and stop rule
+
+Extend the existing React/Vinext dashboard with a bounded Track B comparison and selectable recorded simulation cases; preserve the Track A bundle. Distinguish historical observations, predictions, and simulated states; no real-time claim. Local build, interaction checks, leakage/common-scope tests, and solver-constraint tests must pass. No deployment, cloud changes, commit, push, release, or background tasks.
+
+Freeze only after executed Phase 3/4 results, working display, verified artifacts, traceable data, meaningful tests, and synchronized docs. Record local uncommitted state and hashes in a freeze manifest. Label **Research Complete — Implementation Frozen** only then; stop new features, training, stages, and automatic follow-ups. Cloud collection is operationally separate and unchanged.
+
+Limitations: observed scheduling is not fetch completion, feed freshness varies, inventory differences mix rentals/returns/redistribution/corrections, four weeks and a 64-station cohort do not establish generalization, and simulation does not prove real-world operational benefit.
+
+Implementation references: [PyTorch state-dictionary persistence](https://docs.pytorch.org/tutorials/beginner/saving_loading_models.html), [SciPy MILP interface](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.milp.html). Exact installed versions are recorded with the run.
