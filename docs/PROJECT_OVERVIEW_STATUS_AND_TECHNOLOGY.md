@@ -1,11 +1,12 @@
-# YouBike Demand Prediction
+# YouBike 站點需求分析、短期可用車預測與調度模擬
 
 ## 專案介紹、技術架構與目前狀態
 
 - **文件更新日期：** 2026-09-27
-- **作品性質：** Independent Time-Series Research Project · Research Complete — Implementation Frozen
-- **專案狀態：** Track A 與 Stage 17／19 原成果保留；新增 Phase 3 LSTM 比較、Phase 4 靜態整數調度與本機展示必要驗收完成，本版已凍結。定位為固定資料研究原型，不是即時預測或營運服務；新成果未提交或部署
+- **作品性質：** Independent Time-Series Research Project · 研究 frozen／展示交付驗收中
+- **專案狀態：** 原本機研究版已驗證並保存於 `159f059`；v7 只重開 live demo 工程與公開部署，不重訓或重寫成績。新增固定 12 站目前觀測、30m persistence、原 Stage 17／19 的 60m HGB；不是正式營運服務。實際發佈、非擁有者存取與再次 freeze 見 [v7 交付紀錄](LIVE_DEMO_DELIVERY.md)
 - **Repository：** `youbike-demand-prediction`
+- **公開展示：** [開啟即時車況、歷史需求及調度模擬](https://youbike-demand-observatory.rwhqgqfdk2.chatgpt.site/#live)；Sites version 3，免登入。匿名 HTTP 200 與部署後桌面／手機 viewport 已驗證；不是實體手機或全瀏覽器認證。
 
 ---
 
@@ -20,7 +21,7 @@
 | Track A：歷史轉乘需求 | 預測某站在指定小時的轉乘相關借車量 | 每站每小時轉乘相關借車量 | 主要研究、模型評估、error analysis 與歷史 Dashboard 已完成 |
 | Track B：即時可用車 | 預測某站 30／60 分鐘後的可借車數 | Future available bikes | 28 天研究與獨立七天驗證完成；30m 保留 persistence，60m HGB 跨兩窗小幅改善 |
 
-Track A 的「歷史借車需求」不等於 Track B 的「未來剩餘車輛」。兩者不能共用 target，也不能直接把 Track A demand 解讀成即時 shortage、surplus 或補車數量。
+Track A 的「歷史借車需求」不等於 Track B 的「未來剩餘車輛」。Track A 預測不直接輸入 Track B 或調度；Phase 4 使用另存的回溯 HGB 與固定假設。三者同一研究主題、不同資料／target／模型。庫存差值不是實際借車量，也不能直接把 Track A demand 解讀成 shortage 或補車數量。
 
 ---
 
@@ -98,7 +99,14 @@ Python gap／duplicate／target coverage audit
                 ↓
 validation 選定 HGB → 靜態整數調度與敏感度模擬
                 ↓
-本機 React/Vinext 新增研究面板 → 驗收後 freeze
+React/Vinext 固定研究面板（保留）
+
+v7 展示工程（不重開研究）
+既有 D1 → 固定 12 站唯讀端點 → Worker 原 Stage 17 HGB / persistence
+                ↓
+React/Vinext 即時展示：目前觀測／未來估計，與歷史研究／模擬分開
+                ↓
+公開存取與實際部署驗收 → 再次 freeze
 ```
 
 本機 `collect_youbike.py` 與 `collect_history.py` 保留為測試、除錯及備援工具；正式長期蒐集由 Cloudflare 執行，因此使用者電腦關機後仍能持續收集。
@@ -142,7 +150,7 @@ validation 選定 HGB → 靜態整數調度與敏感度模擬
 | 30m persistence／HGB test MAE | 2.043／2.057 |
 | 60m persistence／HGB test MAE | 3.012／2.922 |
 
-最後一次雲端查核（與固定分析期間不同）：
+v6 當時的雲端累積量查核（與固定分析期間不同，保留歷史紀錄）：
 
 | 項目 | 最新狀態 |
 |---|---:|
@@ -154,7 +162,7 @@ validation 選定 HGB → 靜態整數調度與敏感度模擬
 | 最新一輪狀態 | success，1 attempt，01:00:48 完成 |
 | Collector 執行位置 | Cloudflare 雲端 |
 
-上述數字是有日期的查核紀錄，不是持續刷新的總量，也不代表已逐輪核對所有歷史執行。本次未重啟／部署 collector；原固定 28 天資料與模型結果維持原樣。
+上述數字是 v6 當時有日期的查核紀錄，不是今日持續刷新的總量，也不代表已逐輪核對所有歷史執行。v7 已部署 Worker 唯讀展示與原模型推論，排程、schema 與原固定資料／模型結果不變；本輪最新有時間戳的端點查核與部署版本見 [v7 交付紀錄](LIVE_DEMO_DELIVERY.md)，未重新計算整份 live dataset 的累積總量。
 
 ### 4.3 Track B：獨立七天驗證（2026-09-27 完成）
 
@@ -336,13 +344,13 @@ Week 2 誤差較低不代表模型變好：persistence 定義在兩週完全相�
 | Feature-group ablation | 驗證 station、calendar、history、weather 等資訊群的增量價值 |
 | Rolling-origin validation | 檢查模型跨時間區段穩定性 |
 
-Random Forest、LSTM／GRU 等深度學習不是目前必要工作；只有在資料量與新增研究價值足夠時才重新評估。
+LSTM 已完成固定兩設定、三種子比較，未超越同範圍 HGB，不採用；不追加 Random Forest／GRU 或模型搜尋。
 
 ### 7.4 Cloud 與即時資料基礎設施
 
 | 技術 | 用途 |
 |---|---|
-| Cloudflare Worker | 抓取 YouBike API、驗證 schema、retry、寫入 D1、提供 health／export endpoint |
+| Cloudflare Worker | 抓取 YouBike API、驗證／retry／D1、health／protected export；v7 新增固定 12 站唯讀 live summaries 與原 HGB 伺服端推論 |
 | Cron Trigger | `*/5 * * * *`，每五分鐘在雲端執行 |
 | Cloudflare D1 | 保存結構化 station-time series 與 collection logs |
 | Wrangler | Worker、D1 migration、secret 與部署管理 |
@@ -381,7 +389,7 @@ D1 的核心資料表：
 | Cloudflare Vite Plugin／Wrangler | Cloudflare build 與部署 |
 | Drizzle ORM | 專案內資料庫 schema／integration tooling |
 
-Dashboard 沿用 **Interactive Historical Prediction Dashboard**，保留 2023 年 12 月 holdout；本機新增 Track B 固定資料比較與調度模擬，不是即時 shortage dashboard，也未重新部署。
+Dashboard 沿用 React/Vinext，保留 2023 年 12 月 holdout 與固定 Phase 3／4；v7 新增即時區，不是 shortage dashboard。完整 12 站沿用訓練期座標選擇、不挑成績。30m 為車數保持不變的基準，60m 是原 Stage 17 HGB；23 特徵與 Python 經 72 個保存樣本完全一致。樹結構只在 Worker，不把 token／歷史送到瀏覽器。每分鐘更新、顯示來源／排程／擷取時間與資料年齡；過舊、缺歷史或錯誤停止預測。實際部署與驗收見 [交付紀錄](LIVE_DEMO_DELIVERY.md)。
 
 ### 7.7 測試與可重現性
 
@@ -389,7 +397,7 @@ Dashboard 沿用 **Interactive Historical Prediction Dashboard**，保留 2023 �
 - Node test runner：Worker transformation、validation、timestamp、retry、logging 與 export range。
 - 固定 config、model metadata 與 SHA-256 artifact validation。
 - 大型 raw／processed dataset 不放入 Git；Git 保存 source、schema、config、tests、metrics 與文件。
-- 歷史 Stage 17 驗證：Python 66 tests、collector 9 tests；本輪已通過 Python 80 tests、collector 11 tests、Dashboard 2 SSR／資料一致性 tests 與 production build。最終完整清單及未驗證項目見 [freeze 紀錄](RESEARCH_FREEZE.md)。
+- 歷史 Stage 17 驗證：Python 66 tests、collector 9 tests；v6 為 Python 80、collector 11、Dashboard 2。v7 已通過 Python 80、collector／live server 18、Dashboard 4 tests、production build 與改動元件 strict TypeScript。72 組歷史樣本以及 12 組真實雲端輸出與原 Python 模型差異皆為 0，這是推論一致性，不是新研究成績。公開頁及本機故障測試、未驗證項目見 [v7 交付紀錄](LIVE_DEMO_DELIVERY.md)；[v6 紀錄](RESEARCH_FREEZE.md) 保留當時證據。
 
 ---
 
@@ -399,7 +407,7 @@ Dashboard 沿用 **Interactive Historical Prediction Dashboard**，保留 2023 �
 youbike-demand-prediction/
 ├── cloudflare/track-b-collector/  # Track B Worker、Cron、D1、migration、tests
 ├── config/                        # 資料來源與可重現設定
-├── dashboard/                     # React 19 + Vinext 歷史回測網站
+├── dashboard/                     # React/Vinext 歷史、live 與固定模擬展示
 ├── data/                          # raw／processed data（大型資料由 Git ignore）
 ├── docs/                          # Stage、model card 與研究文件
 ├── models/                        # Ridge、HGB、XGBoost artifacts
@@ -431,6 +439,7 @@ youbike-demand-prediction/
 | Track B 十四天平假日／穩定性分析 | 已完成 |
 | Track B 28 天 learned regression | 已完成第一版；30m 未超越 persistence，60m 小幅改善 |
 | Track B 獨立七天驗證 | 已完成；30m 保留 persistence，60m 通過事前門檻，研究結論已固定 |
+| v7 公開 live 研究展示 | 固定 12 站目前觀測、30m persistence 與原 60m HGB 已部署；資料不合格即停止預測，非營運保證 |
 | Shortage／full-station classification | 尚未開始，label／threshold 尚未定義 |
 | Optimization | 靜態 MILP 模擬已執行，216 組方案通過限制檢查；非營運系統 |
 | Deep Learning | 60m 單層 LSTM、兩設定、三種子比較已執行；未超越 HGB，不採用 |
@@ -447,7 +456,7 @@ youbike-demand-prediction/
 6. Persistence baseline 不是 trained AI model。
 7. 快照車數差異不是純租借事件。
 8. Shortage／full-station label 與 threshold 尚未完成研究定義。
-9. Dashboard 是歷史回測，不是 live availability prediction。
+9. 只有明確標示的 live 區提供 12 站短期可用車估計；歷史 A 面板與 Phase 3／4 仍是固定研究，不可混稱即時。Live 不保證到站有車，且資料失效時刻意停止預測。
 10. Optimization 採用半容量目標、立即調度、座標距離代理與合成成本；假設容量減當下車數皆可接收，未完整建模不可用車柱。缺乏真實車隊、人力、道路、成本與行為回饋，不能宣稱營運效益。
 11. 排程時間並非每筆實際擷取完成時間；官方 feed 偶有延遲。模型結果針對記錄的 feed，不是保證在精確實體時間觀測的庫存。
 
@@ -490,7 +499,7 @@ youbike-demand-prediction/
 
 ### 本版停止規則
 
-完成本機展示、重現與文件驗收後 freeze；不自動展開 risk、跨年度、跨季節、新模型或即時服務，不建立監控／提醒／背景研究。既有 collector 不停、不重啟、不改權限，與研究結案分開。只有使用者明確提出新要求才重開。驗收實況以 [freeze 紀錄](RESEARCH_FREEZE.md) 為準。
+v6 本機 freeze 保留於 [原紀錄](RESEARCH_FREEZE.md)，v7 依後續明確授權只重開展示工程、版本保存與公開部署。網站／文件／非擁有者桌面手機／實際端點與故障驗收完成後，才再次標記「研究與展示交付完成，實作 frozen」。不新增模型、資料窗、功能、提醒或自動續做。既有 collector 繼續運作，但不代表研究仍未完成；token、schema、排程不變。實際版本與狀態以 [v7 紀錄](LIVE_DEMO_DELIVERY.md) 為準。
 
 ---
 

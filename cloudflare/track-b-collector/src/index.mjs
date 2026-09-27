@@ -1,3 +1,5 @@
+import { liveResponse } from './live.mjs';
+
 const DEFAULT_API_URL =
   "https://tcgbusfs.blob.core.windows.net/dotapp/youbike/v2/youbike_immediate.json";
 const DEFAULT_TIMEOUT_MS = 15_000;
@@ -578,8 +580,9 @@ export default {
   async scheduled(controller, env, ctx) {
     ctx.waitUntil(runScheduledCollection(env, new Date(controller.scheduledTime)));
   },
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const path = new URL(request.url).pathname;
+    if (path === '/demo/live') return liveResponse(request, env, ctx);
     if (request.method === "GET" && path === "/health") return health(env);
     if (request.method === "GET" && path === "/export.csv") return exportCsv(request, env);
     return Response.json({ error: "Not found" }, { status: 404 });

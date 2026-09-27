@@ -3,6 +3,7 @@
 import { useState } from "react";
 import data from "./dashboard-data.json";
 import OfflineResearch from "./offline-research";
+import LiveAvailability from "./live-availability";
 
 type Station = (typeof data.targets)[number]["stations"][number];
 
@@ -55,23 +56,24 @@ export default function Home() {
           </span>
         </a>
         <nav aria-label="主要導覽">
-          <a href="#forecast">需求預測</a>
+          <a href="#live">即時車況與預測</a>
+          <a href="#forecast">歷史需求</a>
           <a href="#model">模型表現</a>
           <a href="#method">研究說明</a>
           <a href="#track-b">可用車與調度模擬</a>
         </nav>
-        <span className="status-pill"><i />歷史回測模式</span>
+        <span className="status-pill">研究展示 · 非營運服務</span>
       </header>
 
       <section className="hero" id="top">
         <div className="hero-copy">
-          <p className="eyebrow">TAIPEI · 2023 TRANSFER DEMAND</p>
+          <p className="eyebrow">TAIPEI · DEMAND / AVAILABILITY / SIMULATION</p>
           <h1>看見城市<br /><em>下一小時</em>的流動</h1>
           <p className="hero-lead">
-            用 2023 全年歷史轉乘資料與天氣，預測臺北 100 個高需求站點的每小時借車需求。
+            YouBike 站點需求分析、短期可用車預測與調度模擬。從 2023 歷史轉乘需求，到 2026 站點車況；不同資料與模型，共同探索城市的借還挑戰。
           </p>
           <div className="hero-actions">
-            <a className="primary-button" href="#forecast">探索預測 <span>↘</span></a>
+            <a className="primary-button" href="#live">體驗即時預測 <span>↘</span></a>
             <a className="text-link" href="#method">了解資料限制 <span>→</span></a>
             <a className="text-link" href="#track-b">Track B 模型與調度模擬 <span>→</span></a>
           </div>
@@ -81,7 +83,7 @@ export default function Home() {
           <div className="orbit orbit-two" />
           <div className="bike-glyph"><Mark /></div>
           <div className="metric-float metric-r2">
-            <span>TEST R²</span><strong>{data.meta.testMetrics.r2}</strong>
+            <span>TRACK A · TEST R²</span><strong>{data.meta.testMetrics.r2}</strong>
           </div>
           <div className="metric-float metric-stations">
             <strong>{data.meta.stationCount}</strong><span>個觀測站點</span>
@@ -89,17 +91,19 @@ export default function Home() {
           <div className="route route-a" /><div className="route route-b" />
         </div>
         <div className="hero-footnote">
-          <span>MODEL</span>
+          <span>TRACK A · HISTORICAL MODEL</span>
           <strong>{data.meta.model}</strong>
           <span>HOLDOUT</span>
           <strong>{data.meta.testPeriod}</strong>
         </div>
       </section>
 
+      <LiveAvailability />
+
       <section className="forecast-section" id="forecast">
         <div className="section-heading">
           <div>
-            <p className="section-index">01 / 歷史預測</p>
+            <p className="section-index">01 / TRACK A · 歷史回測模式</p>
             <h2>選一個時刻，看看站點需求</h2>
           </div>
           <label className="target-select">
@@ -249,7 +253,7 @@ export default function Home() {
       </section>
 
       <section className="method-section" id="method">
-        <div className="method-title"><p className="section-index">03 / 研究說明</p><h2>把模型成果，放回正確的脈絡</h2></div>
+        <div className="method-title"><p className="section-index">03 / TRACK A 研究說明</p><h2>把模型成果，放回正確的脈絡</h2></div>
         <div className="method-grid">
           <article><span>01</span><h3>預測的是什麼</h3><p>100 個高需求站點、每小時、與公車或捷運轉乘相關的借車量。</p></article>
           <article><span>02</span><h3>資料來自哪裡</h3><p>2023 官方轉乘旅次，搭配臺北單一參考點的歷史天氣再分析資料。</p></article>
@@ -264,7 +268,7 @@ export default function Home() {
 
       <footer>
         <div className="brand"><Mark /><span><strong>YouBike</strong><small>需求觀測站</small></span></div>
-        <p>資料科學作品集 · 歷史回測展示</p>
+        <p>歷史研究 · 即時可用車估計 · 假設性調度模擬</p>
         <a href="#top">回到頁首 ↑</a>
       </footer>
     </main>

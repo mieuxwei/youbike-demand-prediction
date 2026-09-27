@@ -12,6 +12,8 @@ __pycache__/
 # Distribution / packaging
 .Python
 build/
+!dashboard/build/
+!dashboard/build/sites-vite-plugin.ts
 develop-eggs/
 dist/
 downloads/

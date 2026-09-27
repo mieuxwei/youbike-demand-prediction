@@ -1,12 +1,14 @@
-# YouBike Demand Prediction — Fixed-Data Research Plan v6
+# YouBike Demand Prediction — Research & Live Demonstration Plan v7
 
-更新日期：2026-09-27。**Research Complete — Implementation Frozen**。Phase 3／4、必要本機展示、研究完整性及相稱驗收已完成；這是未提交／未部署的本機工作目錄版本。驗收及未驗證的額外項目見 [freeze 紀錄](docs/RESEARCH_FREEZE.md)。
+更新日期：2026-09-27。**研究維持 frozen；展示工程重新開啟，最終公開驗收中。** 原本機研究版已保存於 `159f059`。原 [研究 freeze 紀錄](docs/RESEARCH_FREEZE.md) 保留不改寫；本輪展示的版本、部署、驗收與再次 freeze 另見 [live demo 交付紀錄](docs/LIVE_DEMO_DELIVERY.md)。
 
 ## 1. 本版定位與範圍決策
 
-本版是「固定資料集上的預測比較與調度最佳化模擬研究原型」，不是正式營運系統。使用者於 2026-09-27 明確要求完成原始 Phase 3、Phase 4 與必要展示後結案，取代 v5 只固定初版結論、延後 LSTM／Optimization 的優先順序。
+本版對外定位為「**YouBike 站點需求分析、短期可用車預測與調度模擬**」，不是正式營運系統。v6 已依 2026-09-27 授權補完 Phase 3／4。v7 依後續明確要求，只重開有限的 live demo 工程、文件、版本整理與公開部署；不重開研究。
 
-只用現有資料，不等待新的七天、十四天、二十八天或跨季節資料。不得把 Phase 3／4 改列 Future Work 來替代實作；也不要求 LSTM 必須勝出。既有雲端 collector、secret、排程、權限及部署維持原狀。
+不等待新研究資料、不重訓、不擴大搜尋；原模型、評估、資料窗與 Phase 3／4 結論不變。Collector 只增加固定 12 站唯讀展示端點及既有模型推論；D1 schema、資料定義、五分鐘 Cron、匯出 secret 不變。網站已由 owner-restricted 改為可分享公開展示，允許必要 commit／push／deploy。
+
+Track A 使用 2023 轉乘相關借車量，Track B 使用 2026 站點可用車數，Phase 4 使用另一個 validation 選定的回溯 HGB 及固定模擬假設。三者同屬一個研究主題，但不是 A → B → 調度的直接模型串接。庫存差值不是實際借車量。
 
 ## 2. 原始 Phase 1–5 對照
 
@@ -18,7 +20,7 @@
 | Phase 2 — Machine Learning | Track A Naive／Ridge／HGB／XGBoost 與完整分析；Track B persistence／HGB、固定 28 天研究與獨立七天驗證 | 已完成；保存原始證據 |
 | Phase 3 — Deep Learning | Track B 60m persistence／HGB／LSTM 的共同範圍比較、固定種子、成本及結論 | 已執行；LSTM 未勝 HGB，不採用 |
 | Phase 4 — Optimization | 小型靜態整數調度、無調度／greedy／MILP 比較、限制驗證及敏感度分析 | 已執行；基本設定 MILP／greedy 同分 |
-| Phase 5 — Visualization / Demo | 保留歷史 Dashboard，加入新比較與可重現調度模擬，清楚區分觀測／預測／模擬 | 本機整合及驗收完成；未部署 |
+| Phase 5 — Visualization / Demo | React/Vinext 保留 A 歷史與 Phase 3／4 面板，增加固定 12 站目前觀測、30m persistence、原 Stage 17 60m HGB 與安全失效處理 | v7 新增 live serving 與公開部署；驗收見交付紀錄 |
 
 Random Forest／GRU 為非必要例子或選做項，不增加新模型。原範例的「缺車警報」不冒充已校準風險機率；本版 Phase 4 使用明確模擬庫存目標，不需要 classifier。
 
@@ -71,9 +73,15 @@ Random Forest／GRU 為非必要例子或選做項，不增加新模型。原範
 
 ## 6. 展示與文件
 
-沿用 React 19 + Vinext；新增 Track B 模型比較與調度情境輸入／限制／方案／基準比較。沿用樣式與本機啟動，不重做網站、不新增 Streamlit、API 服務或部署架構。歷史觀測、預測、模擬分開標示，不稱即時車況。
+沿用 React 19 + Vinext，不重做網站、不新增 Streamlit。歷史觀測、目前觀測、未來估計、假設性模擬分開標示。Phase 4 維持固定歷史情境，不增即時 what-if。
 
-同步 README、中文總覽、HANDOFF、重現 guide、model documentation、Phase 3／4 報告與 freeze manifest。保留歷史 Stage 文件；其舊優先順序屬當時決策，不阻止本次已授權離線研究。
+本輪 [live 規約](docs/LIVE_DEMO_PROTOCOL.md)：沿用 Phase 4 訓練期座標選出的完整 12 站；30m 用 persistence，60m 用 SHA 已驗證的原 Stage 17 HGB。23 特徵、UTC／臺北日曆、backward lag、past-only rolling、容量裁切維持原定義。既有樹結構轉為 Worker 伺服端數值推論；以保存的 72 組歷史樣本驗證 Python／Worker 一致性，非新模型評估。
+
+`GET /demo/live` 僅回傳 12 站最新觀測與預測，不接受站點／日期查詢，不公開歷史或 token。快照／來源超過十分鐘、時間異常、停用、缺歷史或推論錯誤時 fail closed；前端每 60 秒更新，資料年齡每秒更新。公開分享、匿名存取、桌面／手機、既有面板與實際部署均須驗收。
+
+v7 同步 README、中文總覽、HANDOFF、Dashboard 說明及新的展示 freeze 紀錄。原重現 guide、model documentation、Phase 3／4 報告、研究 manifest 與 Stage 文件保持原樣；此次不是再開離線研究。
+
+公開網址：[YouBike 研究展示](https://youbike-demand-observatory.rwhqgqfdk2.chatgpt.site/#live)。Sites version 3 已部署，匿名 HTTP 200、桌面／手機 viewport、更新與舊面板已驗證；12 組真實雲端 HGB 輸出與原 Python 模型差異為 0。未驗證的 Safari private／實體手機與所有實際版本見交付紀錄，不推定全瀏覽器相容。
 
 ## 7. 已知限制與本版不含項目
 
@@ -83,21 +91,21 @@ Random Forest／GRU 為非必要例子或選做項，不增加新模型。原範
 - 有限站點／四週研究不能推論全年或全部站點；不主張統計顯著或正式營運效益。
 - 本版不含 shortage/full classifier、校準風險機率、多車路線、即時重排、營運部署、新年度／跨季節資料、GRU／Transformer 或 RL。
 
-## 8. Freeze 與停止條件
+## 8. v7 展示 freeze 與停止條件
 
-只有以下全部完成才標為 **Research Complete — Implementation Frozen**：
+只有以下全部完成才標為 **研究與展示交付完成，實作 frozen**：
 
 1. Phase 3 真實比較、跨種子／成本／誤差與採用結論完成。
 2. Phase 4 真實最佳化、基準與敏感度完成，守恆／容量／資源檢查通過。
-3. 必要展示能在本機運作，且和研究結果一致。
+3. 歷史面板與 live demo 實際部署，非 owner 也可開啟；30m／60m 有真實端點與已驗證推論，故障時明示原因。
 4. 資料／模型／設定／程式／結果校驗碼與環境可追溯，重現入口經檢查。
 5. 相稱測試、build、文件與 artifact 檢查完成，沒有影響結論的未解洩漏或錯誤。
-6. Freeze 紀錄誠實標示工作目錄及未發布狀態，不虛構 commit／tag／release。
+6. 新 freeze 紀錄包含真實 Git／Sites／Worker 版本、分享權限、URL、部署後 E2E、桌面／手機、故障及未驗證項目。保留 v6 本機 freeze 的原始紀錄。
 
 達標後停止本版功能、模型、特徵、調參、訓練、新資料窗與自動研究；不建立提醒或背景任務。只有使用者另行明確要求才重開。
 
-不自行 commit、push、release、部署或改雲端 collector。研究 freeze 與持續蒐集獨立，collector 繼續執行不影響結案。
+本輪必要 commit、push、部署已獲明確授權；不建立 tag／Release 或自動續做。研究／展示交付與持續蒐集分開，collector 繼續執行不表示仍需研究開發。
 
-## 9. 已完成執行與停止
+## 9. v6 已完成研究（保留）
 
 規約與資料核對 → pilot／固定運算預算 → development-only 模型選擇 → retrospective evaluation → 固定情境調度模擬 → Dashboard 本機整合 → 測試／重現／文件驗收 → freeze 與停止，均已完成。Phase 3 MAE：persistence 3.431339、HGB 3.249886、LSTM ensemble 3.326271；Phase 4 基本平均目標值：不調度 92.1952、greedy／MILP 76.8478。詳見 [正式結果](docs/PHASE_3_4_OFFLINE_RESEARCH.md)。不再自動進入下一階段。

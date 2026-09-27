@@ -102,3 +102,10 @@ pipeline when calendar features are built.
 
 See `docs/STAGE_11_TRACK_B_CLOUD_COLLECTION.md` for the architecture decision,
 data-volume estimate, limitations, and owner deployment checklist.
+# v7 read-only live demonstration (2026-09-27)
+
+The collector now also serves `GET /demo/live`: only the fixed 12 Phase 4 stations' latest observations, 30m persistence and original Stage 17 60m HGB. No parameters, arbitrary dates/stations, historical rows, model trees or secrets are returned. POST is rejected. Existing `/export.csv` authorization, scheduled collection, D1 schema and `*/5 * * * *` remain unchanged.
+
+The frozen numerical HGB export is server-only. `src/export_live_hgb.py` in the repository root verifies original joblib/metadata/config hashes and generates trees plus 72 historical serving-parity fixtures without fitting. `node --test test/*.test.mjs` includes feature/output parity, current/history freshness, missing-history, station/inference failures, clipping and endpoint access tests. [Protocol](../../docs/LIVE_DEMO_PROTOCOL.md) · [deployment and acceptance](../../docs/LIVE_DEMO_DELIVERY.md).
+
+Queries use the existing `(station_id, snapshot_time)` key, at most 16 rows per station within 65 minutes, with a 30-second edge cache. This adds bounded reads, not new stored data or schema. D1/Worker usage remains billed under the account's existing plan; this record makes no free-tier guarantee. Deployment handover may create closely spaced scheduled keys; no rows are deleted and strict live history gates can suppress HGB until a continuous one-hour history is available. This is separate from the frozen research dataset.

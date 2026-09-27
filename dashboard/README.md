@@ -1,55 +1,51 @@
-# Historical Dashboard & Offline Research／歷史回測與離線研究展示
+# YouBike — 歷史研究、即時可用車預測與調度模擬
 
-This React 19 + Vinext interface explores 10 representative timepoints from the December 2023 Track A holdout. It reads the checked-in static prediction bundle and shows predictions, post-inference actual values, errors, model comparisons, rolling-origin results, and feature importance for the training-defined top-100 stations.
+Existing React 19 + Vinext website, extended without rebuilding research bundles or fitting models. Track A, Track B and Phase 4 use different targets/models; they are not one direct prediction pipeline.
 
-這是 Stage 9 的互動式歷史回測展示，不是即時站點庫存、缺車預警或補車建議。網站讀取由既有模型產生的靜態資料包，讓使用者切換 2023 年 12 月代表性時段，查看 100 個站點的預測、實際值與誤差。
+**[Open the public demonstration](https://youbike-demand-observatory.rwhqgqfdk2.chatgpt.site/#live)** — no login, token or local setup. Sites version 3; public access and deployed desktop/mobile viewport checks are recorded below.
 
-![YouBike historical demand observatory artwork](public/og.png)
+- `#live`: fixed 12-station current observations, explicit 30m persistence and original Stage 17 / independently validated Stage 19 60m HGB.
+- `#forecast`: ten representative 2023 December holdout times for historical hourly transfer-related borrowing demand, not current inventory.
+- `#track-b`: unchanged recorded Phase 3 LSTM comparison and Phase 4 no-transfer/greedy/MILP simulations. No live optimization or operational recommendations.
 
-The original hosted deployment remains access-restricted; the September 27 read-only Sites lookup confirms an active existing site with custom access. The new research panel is **local-only, not deployed**. Use the local instructions below; no public access is claimed.
+Site project: `appgprj_6a87dd803dd48191b841e9d24dea3366`. Deployment/access evidence and exact versions: [v7 delivery record](../docs/LIVE_DEMO_DELIVERY.md). Original local-only acceptance remains in the [v6 research freeze](../docs/RESEARCH_FREEZE.md); it does not describe v7 publication.
 
-## 新增 Phase 3／4 研究面板
+## Live serving
 
-點選「Track B 模型與調度模擬」或進入本機 URL 的 `#track-b`。可查看原 Stage 19 結論、共同 64 站／89,600 序列的 60m LSTM 比較，以及 12 個預定情境的輸入、資源／成本設定、不調度／greedy／MILP 比較和站點間搬運。畫面區分歷史觀測、預測、模擬，不是即時車況。
+The browser anonymously reads only `https://youbike-track-b-collector.mieuxander.workers.dev/demo/live`. No export token, full history or model trees are shipped to it. The existing Worker reads bounded private D1 history and runs the frozen tree export; collector cron and schema remain unchanged. No extra Python inference host or API key.
 
-新資料包只由保存的研究結果建立，不重訓、不呼叫雲端、不修改 Track A 的 `dashboard-data.json`：
+Refresh every 60 seconds, age labels every second. Source, scheduled origin, fetch-start and completion timestamps are displayed in Asia/Taipei (UTC+8). Horizon is measured from scheduled snapshot, not page-load time. Ten-minute freshness, complete one-hour history, source-time/cadence/activity/station consistency and inference checks fail closed. Network failure clears the live display; expired responses stop forecasts even without another fetch. Decimal forecasts are estimates, not guaranteed bikes or risk probabilities.
 
-```bash
-python src/build_offline_dashboard.py
-```
+All 12 stations come from the prior Phase 4 training-coordinate selection, not forecast performance. [Serving protocol, station rationale and parity](../docs/LIVE_DEMO_PROTOCOL.md). Existing independent-window metrics are not this subset's live metrics.
 
-已產生的 `app/offline-research-data.json` 可直接使用，freeze 後不需重建。完整證據：[Phase 3–4 報告](../docs/PHASE_3_4_OFFLINE_RESEARCH.md)、[freeze 紀錄](../docs/RESEARCH_FREEZE.md)。
-
-## 原 Track A 資料包重建（本輪未執行）
-
-在專案根目錄執行：
-
-```bash
-python src/build_dashboard_data.py
-```
-
-這會驗證模型檔案、讀取 target 前 168 小時歷史、重新推論 10 個時段，再更新 `dashboard/app/dashboard-data.json`。
-
-## 本機執行
+## Local start and verification
 
 ```bash
 cd dashboard
 pnpm install
 pnpm run dev
+pnpm run build
+node --test tests/*.test.mjs
 ```
 
-正式檢查：
+The historical panels work without the live endpoint. Live network access is required only for `#live`. SSR artifact tests run from this repository's `dashboard/` directory because they also check saved research source hashes. The standalone Sites checkout contains website source only; copy its build into the repository's ignored `dashboard/dist/` for the same repository tests.
+
+Strict changed-component verification:
 
 ```bash
-pnpm run lint
-pnpm test
+node node_modules/typescript/bin/tsc --noEmit --target ES2017 --lib dom,dom.iterable,esnext --strict --esModuleInterop --module esnext --moduleResolution bundler --resolveJsonModule --isolatedModules --jsx react-jsx --skipLibCheck --types react app/page.tsx app/offline-research.tsx app/live-availability.tsx
 ```
 
-## 解讀限制
+`pnpm run lint` remains an optional full-project check; do not infer it passed from build success. Actual executed checks are listed in the delivery record.
 
-- 預測目標是每小時「轉乘相關借車需求」，不是所有 YouBike 旅次。
-- 預測範圍只包含訓練期選出的 100 個高需求站點。
-- 畫面是歷史 holdout 回測，不是即時可借車數、缺車預警或補車建議。
-- 天氣是臺北單一參考點的歷史再分析資料；未來部署必須改用預測當下可取得的天氣預報。
-- 新 Track B 評估沿用已被檢視的固定資料，不能稱新的獨立驗證。LSTM 未超越 HGB；主要設定下 MILP 與 greedy 同分。
-- 調度是半容量目標、立即搬運、座標距離代理與合成成本的靜態模擬，不是道路路線、真實車隊或營運效益。
+The optional local-only `tests/live-fault-server.mjs` harness accepts a saved public `/demo/live` response as its argument and serves `127.0.0.1:3091/?mode=failure#live`. Explicit modes are `failure`, `stale`, `missing-history`, `inference-failure`, and `loading` (15-second timeout). It visibly labels responses **LOCAL QA ONLY**, is not imported by the app, and never changes cloud data. It requires an existing production build; stop it after testing. Do not deploy its simulated responses as live data.
+
+## Frozen bundles — no rebuild needed for viewing
+
+`app/dashboard-data.json` (Track A) and `app/offline-research-data.json` (Phase 3/4) are preserved. Historical reproduction tools remain `python src/build_dashboard_data.py` and `python src/build_offline_dashboard.py` from the research repo root; do not run them merely to start or publish the demo. Neither was rerun for v7.
+
+The server model converter is `python src/export_live_hgb.py` (existing exact library versions and archived CSV required). It validates original artifact/metadata/config SHA and does no fitting. Worker tests compare 72 saved origins against the original Python features and predictions.
+
+## Interpretation
+
+Track A covers transfer-related trips at 100 training-selected stations; weather is one-point historical reanalysis. The 60m original HGB's independent MAE gain is only 1.71%; seasonal generalization and significance are unproven. LSTM did not beat the separate aligned retrospective HGB. Static MILP ties greedy in base cases; immediate transfers, half-capacity target and synthetic distance/costs do not establish operational benefits. Current bikes, future estimates and hypothetical simulation are labeled separately.

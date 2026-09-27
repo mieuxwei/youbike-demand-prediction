@@ -1,0 +1,12 @@
+export type Forecast = { bikes: number; target_time: string; method: string };
+export type LiveStation = { station_id: string; station_name: string; valid_until: string | null;
+  status_30m: string; status_60m: string; forecast_30m: Forecast | null; forecast_60m: Forecast | null;
+  observation: null | { snapshot_time: string; source_update_time: string; station_update_time: string;
+    available_bikes: number; available_return_bikes: number; capacity: number; is_active: number } };
+export type LiveData = { schema_version: number; generated_at: string; model_sha256: string;
+  run: { scheduled_time: string; started_at: string; finished_at: string }; stations: LiveStation[] };
+export const LIVE_URL: string;
+export const MODEL_SHA: string;
+export const IDS: string[];
+export function validateLive(value: unknown): LiveData;
+export function clientBlock(payload: LiveData, station: LiveStation, now: number): string | null;

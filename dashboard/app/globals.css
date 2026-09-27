@@ -97,3 +97,31 @@ footer { min-height:150px; padding:36px clamp(24px,7vw,110px); display:flex; ali
 .simulation-controls select { display:block; margin-top:8px; padding:12px; width:100%; border:1px solid var(--line); background:white; color:var(--ink); font-size:14px; }
 .hero-actions { flex-wrap:wrap; }
 @media(max-width:760px) { .simulation-controls { grid-template-columns:1fr; } .offline-research { padding:40px 20px; } }
+/* Live serving is visually separate from recorded Track A and Phase 3/4 panels. */
+.live-section { padding: 80px 6%; background: #e9eddf; scroll-margin-top: 24px; }
+.live-intro { max-width: 850px; line-height: 1.8; }
+.live-state { margin: 20px 0; font-size: 14px; }
+.live-select { display: flex; gap: 16px; align-items: center; font-weight: 600; }
+.live-select select { max-width: 100%; padding: 12px; border: 1px solid #8d9781; border-radius: 4px; background: #fffdf5; color: #20291e; font: inherit; }
+.live-station-id { font-size: 13px; color: #505c48; margin: 12px 0 24px; }
+.live-cards { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; }
+.live-card { padding: 24px; background: #fffdf5; border: 1px solid #bac1ad; border-radius: 6px; }
+.live-card h3 { margin: 12px 0; font-size: 20px; }
+.live-card p { line-height: 1.65; font-size: 14px; }
+.live-card .live-number { font-size: clamp(30px,3.5vw,48px); line-height: 1.2; margin: 18px 0; font-weight: 700; }
+.live-number small { font-size: 14px; font-weight: 400; }
+.live-model { border-top: 4px solid #526a3c; }
+.live-times { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin: 24px 0; font-size: 13px; }
+.live-times dt { color: #526049; margin-bottom: 6px; }
+.live-times dd { margin: 0; overflow-wrap: anywhere; line-height: 1.6; }
+.live-warning { font-size: 14px; border-left: 3px solid #687c4a; padding-left: 12px; line-height: 1.8; }
+.live-details { margin-top: 24px; max-width: 1000px; font-size: 14px; line-height: 1.8; }
+.live-details summary { cursor: pointer; font-weight: 600; }
+.live-sha { overflow-wrap: anywhere; }
+.live-section button:disabled { opacity: .65; cursor: wait; }
+@media (max-width: 700px) {
+  .live-section { padding: 48px 6%; }
+  .live-cards, .live-times { grid-template-columns: 1fr; }
+  .live-select { align-items: stretch; flex-direction: column; gap: 8px; }
+  .live-section .section-heading { align-items: flex-start; gap: 20px; }
+}

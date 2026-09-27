@@ -1,18 +1,20 @@
 # YouBike Demand Prediction
 
-> Historical transfer-demand forecasting, station-availability comparison, and offline redistribution simulation
+> Station-demand analysis, short-term bike-availability forecasting, and redistribution simulation
 
-**Independent Time-Series Research Project · Research Complete — Implementation Frozen**
+**Independent Time-Series Research Project · Research Frozen / Final Demo Acceptance in Progress**
 
-This repository is a fixed-data forecasting and redistribution-simulation research prototype. Track A studies historical hourly transfer-related borrowing demand. Track B includes a fixed 28-day availability study, pre-registered independent validation, a supplementary retrospective 60-minute LSTM comparison, and static integer redistribution simulations. Required local acceptance is complete and this implementation is frozen; it is not an operational dispatch or live prediction service. The final changes are local and unpublished.
+This project studies YouBike station demand, short-term availability and assumed redistribution. Track A analyzes and forecasts 2023 transfer-related hourly borrowing demand. Track B predicts 2026 station inventory, with fixed-window research and independent validation. Phase 4 compares static redistribution under explicit assumptions. Their data, targets and models differ: Track A predictions do not directly feed Track B or redistribution. Research is frozen; v7 reopens only live demonstration engineering and publication, not training or evaluation.
 
-本專案保留 Track A 歷史需求研究及 Track B 原獨立驗證，另以既有資料完成有界限的 LSTM 比較與靜態整數調度模擬。LSTM 未超越同範圍 HGB；基本調度情境中 MILP 與簡單規則同分。新增研究屬回溯分析，不冒稱新的獨立驗證或真實營運效益。本機必要驗收完成，本版已凍結；尚未 commit、push 或部署。
+本專案為「YouBike 站點需求分析、短期可用車預測與調度模擬」。保留原研究與負面結果；只重開展示工程，加入固定 12 站的目前觀測、30m persistence 基準及原 Stage 17／19 的 60m HGB。庫存變化不是實際借車量，模擬改善不是營運收益；不重訓或更改歷史成績。
 
 ## Quick links
 
 | Entry | What it contains |
 |---|---|
-| [Historical Dashboard / 歷史回測展示](dashboard/README.md) | Local Track A holdout demo plus Track B comparison and static simulation panel |
+| [Open the demonstration / 開啟展示](https://youbike-demand-observatory.rwhqgqfdk2.chatgpt.site/#live) | Public, no login: live availability, historical demand and recorded simulation |
+| [Dashboard guide / 展示說明](dashboard/README.md) | Live observations/forecasts, Track A historical holdout, and fixed Phase 3/4 research panels |
+| [Live demo delivery / v7 交付紀錄](docs/LIVE_DEMO_DELIVERY.md) | Verified deployment/access, model parity, limitations and five-minute demonstration order |
 | [中文總覽](docs/PROJECT_OVERVIEW_STATUS_AND_TECHNOLOGY.md) | Complete Traditional Chinese project overview, architecture, evidence, and current status |
 | [Track A research summary](docs/STAGE_13_TRACK_A_RESEARCH_SUMMARY.md) | Experiment design, model comparison, rolling-origin validation, ablation, and error analysis |
 | [Reproducibility guide](docs/REPRODUCIBILITY.md) | Data, training, inference, dashboard, Track B export, and verification commands |
@@ -22,7 +24,7 @@ This repository is a fixed-data forecasting and redistribution-simulation resear
 | [Track B collector resilience repair](docs/STAGE_18_TRACK_B_COLLECTOR_RESILIENCE.md) | Production incident, bounded retry changes, deployment evidence, and current monitoring boundary |
 | [Track B independent validation and conclusion](docs/STAGE_19_TRACK_B_INDEPENDENT_VALIDATION.md) | Frozen protocol, seven-day results executed September 27, data gates, and cross-window decisions |
 
-The existing hosted dashboard was last page-verified on 2026-09-09. A September 27 read-only Sites lookup reports active/custom access, but the direct hosted request timed out, so current page availability is unverified. No restricted URL is presented as a public demo. The new panel is local-only; source, static bundles, share artwork and local entry point are provided.
+The earlier v6 was local-only and the previous site owner-restricted. v7 is publicly deployed as Sites version 3, with credential-free HTTP 200 and deployed desktop/mobile viewport checks. Actual versions and acceptance limitations are recorded in the delivery record, not inferred from a local build. Data-quality gates can intentionally make an individual forecast unavailable.
 
 ## Current status
 
@@ -31,9 +33,10 @@ The existing hosted dashboard was last page-verified on 2026-09-09. A September 
 | **Track A — historical transfer demand** | Research complete; preserved unchanged | 2023 transfer-related trips, training-defined top-100 stations, chronological holdout, historical dashboard |
 | **Track B — station availability** | Original research plus bounded retrospective LSTM comparison executed | Original 30m persistence / 60m modest HGB gain retained; new 64-station comparison does not promote LSTM |
 | **Static redistribution simulation** | Research and local display acceptance complete | 12 stations × 12 predefined scenarios; no transfer / greedy / MILP; resources, cost and forecast-error sensitivity |
-| **Shortage/full classifier and operational service** | Not in this version | No calibrated risks, causal operational-benefit claim, truck routing or live serving |
+| **Live research demonstration** | Final publication acceptance in progress | 12 fixed stations, constant-state 30m baseline and unchanged Stage 17 60m HGB; conservative failure gates |
+| **Shortage/full classifier and operational service** | Not in this version | No calibrated risks, causal operational-benefit claim or truck routing |
 
-Required local acceptance is complete; see the [freeze record](docs/RESEARCH_FREEZE.md) for actual checks and unverified optional checks. Cloud collection is operationally separate and unchanged. Freeze does not mean production-ready or published.
+Original research acceptance is preserved in the [v6 freeze record](docs/RESEARCH_FREEZE.md), saved at commit `159f059`; v7 deployment and final acceptance are separate. Ongoing cloud collection is not continuing research development. Freeze does not mean production-ready.
 
 ## Results at a glance
 
@@ -140,11 +143,11 @@ Static MILP uses 12 preselected stations and 12 predetermined decision times. Wi
 
 **Data infrastructure.** A Cloudflare Worker fetches the official feed without cache reuse, validates the live schema, retries bounded API failures, and writes five-minute station snapshots to D1. A database primary key prevents duplicate station-time rows; structured run logs, safe response diagnostics, and a protected, paginated CSV export support audit and Python analysis. Local collectors remain testing and fallback tools, not the formal long-running solution.
 
-**Current evidence.** The fixed 28-day window passed its audit with seven isolated missing slots. Regularized HGB uses current state, location, Taipei calendar, past-only lag, and rolling features. The unchanged models were independently evaluated on September 27: 30m still does not beat persistence on MAE; 60m passes the pre-registered gates and shows a modest improvement in both windows. Full evidence is in the [Stage 17 report](docs/STAGE_17_TRACK_B_28_DAY_REGRESSION.md) and [Stage 19 results](docs/STAGE_19_TRACK_B_INDEPENDENT_VALIDATION.md). Collection continues; this is not a deployed prediction service.
+**Current evidence.** The fixed 28-day window passed its audit with seven isolated missing slots. Regularized HGB uses current state, location, Taipei calendar, past-only lag, and rolling features. The unchanged models were independently evaluated on September 27: 30m still does not beat persistence on MAE; 60m passes the pre-registered gates and shows a modest improvement in both windows. Full evidence is in the [Stage 17 report](docs/STAGE_17_TRACK_B_28_DAY_REGRESSION.md) and [Stage 19 results](docs/STAGE_19_TRACK_B_INDEPENDENT_VALIDATION.md). v7 serves the original 60m model, not the supplementary Phase 3 HGB, with [fixed scope and parity checks](docs/LIVE_DEMO_PROTOCOL.md).
 
 ### Version boundary and stop rule
 
-The owner explicitly replaced the v5 deferral of Deep Learning/Optimization with a bounded fixed-data study. After local acceptance, this version stops development: no automatic new models, windows, tuning, deployment, monitoring or research stages. Risk classification, real fleet constraints, causal validation and seasonal generalization are outside this version, not queued work. Reopening requires an explicit owner request.
+v6 completed the bounded fixed-data Deep Learning/Optimization study and froze local research. The owner explicitly reopened only v7 live demonstration engineering, version preservation and publication. After verified shareable delivery, stop: no new models, windows, tuning, features, reminders or autonomous work. Risk classification, fleet routing, causal validation and seasonal generalization are limitations, not queued tasks.
 
 ## Architecture and technology
 
@@ -168,7 +171,10 @@ flowchart LR
     B7 --> B8[Independent 7-day validation completed]
     B5 --> B9[Retrospective 60m persistence / HGB / LSTM]
     B9 --> B10[Static MILP + greedy + no transfer]
-    B10 --> B11[Local research simulation panel]
+    B10 --> B11[Recorded research simulation panel]
+    B4 --> B12[Bounded 12-station read-only API]
+    B12 --> B13[Original frozen HGB 60m + persistence 30m]
+    B13 --> B14[Live research demonstration]
   end
 ```
 
@@ -180,7 +186,7 @@ flowchart LR
 | PyTorch, SciPy/HiGHS MILP | Bounded LSTM sequence comparison and constrained integer-transfer simulation |
 | Jupyter, Matplotlib | Executed research notebooks and evidence visualization |
 | Cloudflare Worker, Cron, D1 | Long-running Track B collection, validation, logging, deduplication, and storage |
-| React 19, Vinext, TypeScript, Vite | Interactive historical holdout dashboard |
+| React 19, Vinext, TypeScript, Vite | Historical, live availability and recorded simulation panels |
 | Python `unittest`, Node test runner | Data, feature, model, export, and collector checks |
 
 ## Minimal local start and verification
@@ -192,7 +198,7 @@ python -m pip install -r requirements-research.txt
 python -m unittest discover -s tests -v
 ```
 
-Run the Historical Dashboard locally:
+Run the research Dashboard locally (historical panels work without the live endpoint):
 
 ```bash
 cd dashboard
@@ -226,7 +232,7 @@ Detailed data preparation, training, inference, Track B export, audit, and dashb
 - The Track A scope is limited to 100 stations selected from training-period activity.
 - Historical weather is reanalysis from one Taipei reference point. Future deployment requires weather information available at prediction time.
 - Peak hours, high-demand stations, and high-demand events retain larger errors.
-- The Track A panel shows 10 representative December holdout times, not the full 74,282-row test set. The new Track B panel shows recorded forecasts and simulations, not live station inventory.
+- Track A shows 10 representative December holdout times, not the full 74,282-row test set. Only the clearly labeled live section reads current inventory; Phase 3/4 remain recorded research and simulations.
 - R² is not converted to an “accuracy” percentage, and demand rankings are not redistribution recommendations.
 - Track B snapshot changes mix rentals, returns, operational redistribution, and data corrections.
 - The original 28-day window has seven missing five-minute slots; the independent seven-day window has none. Neither establishes seasonal or long-term stability.
@@ -251,4 +257,4 @@ Detailed data preparation, training, inference, Track B export, audit, and dashb
 - **Completed independent evaluation window:** `[2026-09-18 18:30 UTC, 2026-09-25 18:30 UTC)`
 - **Last verified cloud checkpoint:** observed September 27; latest snapshot 2026-09-27 01:00:28 Asia/Taipei, successful run completed at 01:00:48 with one attempt and 1,807 stations; 10,450 cumulative snapshots and 18,805,167 cumulative station rows
 
-The cloud checkpoint is a dated observation, not a continuously refreshed total or proof that every past attempt succeeded. This round did not query, restart or redeploy the collector. The original 28-day audit, Stage 17/19 models/results, Track A results and Track A Dashboard bundle are unchanged. The new research panel is local-only, not published.
+This earlier cloud checkpoint is dated, not a continuously refreshed total or proof that every past attempt succeeded. v7 adds a read-only demo endpoint to the same collector without changing Cron/schema/export authorization. New deployment checkpoints are in the [delivery record](docs/LIVE_DEMO_DELIVERY.md). Original audits, Stage 17/19 models/results, Track A results and both static Dashboard bundles remain unchanged.
